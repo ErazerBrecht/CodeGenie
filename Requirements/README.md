@@ -7,19 +7,19 @@ CodeGenie Requirements
 
 ###Technologie
 Gebruik maken van Meanstack
-
 MySQL / MongoDB???
 
 
 ###Data
-Studenten
+
+**_Studenten_**
 * Naam
 * Voornaam
 * Wachtwoord
 * Klas
 * Email
 
-Opdrachten
+**_Opdrachten_**
 * Bool voor aan te duiden normaal / extra oefening
 * Vragen
 * Classificatie
