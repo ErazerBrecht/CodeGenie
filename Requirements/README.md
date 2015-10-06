@@ -5,8 +5,13 @@ CodeGenie Requirements
 * Minimum eisen
 * Extra 
 
+###Technologie
 Gebruik maken van Meanstack
 
+MySQL / MongoDB???
+
+
+###Data
 Studenten
 * Naam
 * Voornaam
