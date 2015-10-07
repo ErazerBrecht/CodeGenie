@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="js/beautify.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <meta charset="utf-8" />
+
+    <style>
+        textarea
+        {
+            width : 800px;
+            height: 250px;
+
+            margin-bottom: 25px;
+        }
+    </style>
+
+</head>
+<body>
+    <textarea type="text" id="source"></textarea>
+    <br />
+    <button onclick="Test()">Click Me</button>
+
+    <pre id="test"></pre>
+
+    <script type="text/javascript">
+        function Test() {
+            alert("YOLO");
+            var array = ($("#source").val().split(/\n/));
+            array[0] = array[0].trim();
+            $("#source").val(array.join("\n"));
+            $('#test').html(js_beautify($('#source').val()));
+        }
+    </script>
+</body>
+</html>
