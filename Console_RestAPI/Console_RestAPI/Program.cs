@@ -17,11 +17,20 @@ namespace Console_RestAPI
 
         static void Main(string[] args)
         {
-            string apikey = ConfigurationManager.ConnectionStrings[KEY_API].ConnectionString;
+            string apikey = "";
+
+            try
+            {
+                apikey = ConfigurationManager.ConnectionStrings[KEY_API].ConnectionString;
+            }
+            catch
+            {
+                Console.WriteLine("No API code found.");
+                Environment.Exit(0);
+            }
 
             var client = new RestClient("https://api.mongolab.com/api/1");
-            var request = new
-            RestRequest("databases/{database}/collections/{collection}/?apiKey={apikey}&q={'username':'admin'}", Method.GET);
+            var request = new RestRequest("databases/{database}/collections/{collection}/?apiKey={apikey}&q={'username':'admin'}", Method.GET);
             request.AddParameter("apikey", apikey, ParameterType.UrlSegment);
             request.AddParameter("database", "MongoLab_Mat", ParameterType.UrlSegment);
             request.AddParameter("collection", "users", ParameterType.UrlSegment);
