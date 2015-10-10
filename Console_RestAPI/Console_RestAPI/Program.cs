@@ -25,7 +25,12 @@ namespace Console_RestAPI
             }
             catch
             {
-                Console.WriteLine("No API code found.");
+                Console.WriteLine("False config file, get a key and check the -TEMPLATE config file");
+                Environment.Exit(0);
+            }
+            if (apikey == "Put api key here")
+            {
+                Console.WriteLine("Fill in the correct API key.");
                 Environment.Exit(0);
             }
 
