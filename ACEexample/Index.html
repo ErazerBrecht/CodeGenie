@@ -30,7 +30,13 @@
             var array = val.split(/\n/);
             array[0] = array[0].trim();
             val = array.join("\n");
-            val = js_beautify(val);
+
+            var options =
+            {
+                "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
+            }
+
+            val = js_beautify(val, options);
             editor.session.setValue(val);
         }
     </script>
