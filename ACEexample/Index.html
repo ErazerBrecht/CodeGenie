@@ -4,11 +4,7 @@
     <title>ACE in Action</title>
     <style type="text/css" media="screen">
         #editor {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            height: 200px;
         }
     </style>
 </head>
@@ -20,11 +16,23 @@
         }
     </div>
 
+    <input type="button" value="Beautify ME" onclick="beatify()" />
+
     <script src="JS/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="JS/beautify.js"></script>
     <script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/csharp");
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/sqlserver");
+        editor.getSession().setMode("ace/mode/csharp");
+
+        function beatify() {
+            var val = editor.session.getValue();
+            var array = val.split(/\n/);
+            array[0] = array[0].trim();
+            val = array.join("\n");
+            val = js_beautify(val);
+            editor.session.setValue(val);
+        }
     </script>
 </body>
 </html>
