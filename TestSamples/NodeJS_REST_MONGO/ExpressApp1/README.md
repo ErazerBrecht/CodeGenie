@@ -12,8 +12,8 @@ This is a first test. Nothing real yet.
 This solution uses Monk to talk with db instead of Mongoose.
 
 TODO:
-Users: Post answers
-Admin: Make questions / Edit questions
 
-Changed to Mongoose
+- Users: Post answers / edit them
+- Admin: Make questions / Edit questions
+- Change to Mongoose
 
