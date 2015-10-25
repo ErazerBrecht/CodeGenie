@@ -1,0 +1,18 @@
+{
+  "name": "ExpressApp1",
+  "version": "0.0.0",
+  "description": "ExpressApp1",
+  "main": "app.js",
+  "author": {
+    "name": "Brecht Carlier",
+    "email": ""
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "express": "~4.13.1",
+    "jade": "~1.11.0",
+    "serve-favicon": "~2.3.0",
+    "mongodb": "~2.0.33",
+    "monk": "~1.0.1"
+  }
+}
