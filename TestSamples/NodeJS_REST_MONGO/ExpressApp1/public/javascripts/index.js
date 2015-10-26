@@ -14,8 +14,15 @@ function populatePage() {
         $.each(data, function () {
             content += '<h3>' + questionCounter + '. ' + this.QuestionTitle + '</h3>';
             $.each(this.Questions, function () {
-                content += '<div>' + this + '</div>';
-                content += '<div class="editor"></div>';
+                if (this.Extra)
+                    content += '<div> <span style="color:red; font-weight:bolder">EXTRA: </span>' + this.Question + '</div>';
+                else
+                    content += '<div>' + this.Question + '</div>';
+
+                if (this.Code)
+                    content += '<div class="editor"></div>';
+                else
+                    content += '<div contenteditable="true" class="answer"></div>';
             });
 
             questionCounter++;
