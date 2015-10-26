@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
     
 });
 
-router.get('/json', function (req, res) {
+router.get('/questions', function (req, res) {
     var db = req.db;
     var collection = db.get('questions');
     collection.find({}, {}, function (e, docs) {

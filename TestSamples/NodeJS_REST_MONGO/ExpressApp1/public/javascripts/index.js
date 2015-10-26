@@ -8,7 +8,7 @@ function populatePage() {
     var questionCounter = 1;
 
     // jQuery AJAX call for JSON
-    $.getJSON('/json', function (data) {
+    $.getJSON('/questions', function (data) {
 
         // For each item in our JSON, add a div and a code editor
         $.each(data, function () {

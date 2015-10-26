@@ -36,7 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
-    <Content Include="README.md" />
     <Content Include="views\index.jade" />
   </ItemGroup>
   <ItemGroup>
