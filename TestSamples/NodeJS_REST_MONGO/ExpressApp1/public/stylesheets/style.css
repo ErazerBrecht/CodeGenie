@@ -1,5 +1,14 @@
+#questionList{
+    margin-top: 20px;
+}
+
 .editor, .answer {
     height: 100px;
     margin-top: 10px;
     margin-bottom: 40px;
+}
+
+input
+{
+    margin-right: 20px;
 }

@@ -15,4 +15,16 @@ router.get('/questions', function (req, res) {
     });
 });
 
+router.get('/questions/:id', function (req, res) {
+    var db = req.db;
+    db.get('questions').find({ _id : req.params.id }, function(err, result) {
+        if (err) {
+            res.send("Didn't found that question");
+        } 
+        else {
+            res.json(result);
+        }
+    });
+});
+
 module.exports = router;

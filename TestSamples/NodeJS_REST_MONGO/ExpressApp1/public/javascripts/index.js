@@ -12,7 +12,34 @@ function populatePage() {
 
         // For each item in our JSON, add a div and a code editor
         $.each(data, function () {
-            content += '<h3>' + questionCounter + '. ' + this.QuestionTitle + '</h3>';
+            content += '<input type="button" onclick="getQuestion(\'' + this._id + '\')" value="' + questionCounter + '. ' + this.QuestionTitle + '"/>';
+            questionCounter++;
+        });
+
+        // Inject the whole content string into our existing HTML 
+        $('#buttonList').html(content);
+    });
+};
+
+function initEditors() {
+    var editor;
+    $('.editor').each(function (index) {
+        editor = ace.edit(this);
+        editor.setTheme("ace/theme/sqlserver");
+        editor.getSession().setMode("ace/mode/csharp");
+    });
+}
+
+function getQuestion(id) {
+    //alert(id);
+
+    var content = '';
+
+    // jQuery AJAX call for JSON
+    $.getJSON('/questions/' + id, function (data) {
+
+        // For each item in our JSON, add a div and a code editor
+        $.each(data, function () {
             $.each(this.Questions, function () {
                 if (this.Extra)
                     content += '<div> <span style="color:red; font-weight:bolder">EXTRA: </span>' + this.Question + '</div>';
@@ -24,21 +51,10 @@ function populatePage() {
                 else
                     content += '<div contenteditable="true" class="answer"></div>';
             });
-
-            questionCounter++;
         });
 
         // Inject the whole content string into our existing HTML 
         $('#questionList').html(content);
         initEditors();
-    });
-};
-
-function initEditors() {
-    var editor;
-    $('.editor').each(function (index) {
-        editor = ace.edit(this);
-        editor.setTheme("ace/theme/sqlserver");
-        editor.getSession().setMode("ace/mode/csharp");
     });
 }
