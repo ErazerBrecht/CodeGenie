@@ -5,15 +5,13 @@
 function populatePage() {
 
     var content = '';
-    var questionCounter = 1;
 
     // jQuery AJAX call for JSON
     $.getJSON('/questions', function (data) {
-
+        content += '<div class="row">';
         // For each item in our JSON, add a div and a code editor
         $.each(data, function () {
-            content += '<input type="button" onclick="getQuestion(\'' + this._id + '\')" value="' + questionCounter + '. ' + this.QuestionTitle + '"/>';
-            questionCounter++;
+            content += '<div onclick="getQuestion(\'' + this._id + '\')" class="col-sm-6 col-md-4 col-lg-3" ><div class="tile blue"><div class="title"><h3>' + this.QuestionTitle + '</h1></div></div></div>';
         });
 
         // Inject the whole content string into our existing HTML 
