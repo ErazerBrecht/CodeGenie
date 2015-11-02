@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 
 //DB + Mongoose
-var mongo = require('mongodb');
 var mongoose = require('./mongoose/dbconnection');
 var schemas = require("./mongoose/schemas");
 
@@ -23,11 +22,6 @@ app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(function (req, res, next) {
-    req.db = mongoose.db;
-    next();
-});
 
 app.use('/', indexRoutes);
 app.use('/users/', userRoutes);

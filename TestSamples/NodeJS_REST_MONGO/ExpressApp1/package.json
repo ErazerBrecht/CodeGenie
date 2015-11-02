@@ -12,7 +12,6 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "moment": "^2.10.6",
-    "mongodb": "~2.0.33",
     "mongoose": "^4.2.3",
     "serve-favicon": "~2.3.0",
     "validator": "^4.2.1"
