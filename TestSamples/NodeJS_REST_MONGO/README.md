@@ -82,7 +82,7 @@ Not required but field is available:
 * questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
 
 
-<a name="questionobject"></a>####question object
+####question object<a name="answerobject"></a>
 The question object exists out of 4 fields, 3 of which are required and 1 which has a default.
 
 Required:
@@ -93,7 +93,7 @@ Required:
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
 
-<a name="answerobject"></a>####answer object
+####answer object<a name="answerobject"></a>
 The answer object exists out of 5 fields, 3 of which are required and 2 which have a default.
 
 Required:
