@@ -1,5 +1,5 @@
 ﻿var mongoose = require("mongoose");
-var fs = require("fs").readFile("./mongoose/connectioninfo.config", function (err, data) {
+var fs = require("fs").readFile("./mongoose/connectioninfo.config", 'UTF-8', function (err, data) {
     if (err) return console.log(err);
     mongoose.connect(data);
 });
