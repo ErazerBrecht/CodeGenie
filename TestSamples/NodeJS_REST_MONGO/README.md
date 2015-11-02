@@ -25,10 +25,12 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 
 
 **All dates have the format of DD/MM/YYYY (e.g. 20/02/2015)**
+
 **All emails must pass email-validation.*
 
 
 *Defaults do not need need to be filled in, if the field is missing the server will default these.*
+
 *All of these objects also have an internal _id field which can be used but I won't mention them again.*
 
 
