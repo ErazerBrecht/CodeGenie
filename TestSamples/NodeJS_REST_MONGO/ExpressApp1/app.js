@@ -2,13 +2,19 @@
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
-//Database
+
+//DB + Mongoose
 var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/CodeGenie');
+var mongoose = require('./mongoose/dbconnection');
+var schemas = require("./mongoose/schemas");
 
-var routes = require('./routes/index.js');
+//routes
+var indexRoutes = require('./routes/index');
+var userRoutes = require('./routes/users');
+var exerciseRoutes = require('./routes/exercises');
+var answerRoutes = require('./routes/answers');
 
+//vars
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -18,14 +24,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Middleware
-// Make our db accessible to our router
 app.use(function (req, res, next) {
-    req.db = db;
+    req.db = mongoose.db;
     next();
 });
 
-app.use('/', routes);
+app.use('/', indexRoutes);
+app.use('/users/', userRoutes);
+app.use('/exercises', exerciseRoutes);
+app.use('/exercises', answerRoutes);
 
 app.listen(app.get('port'));
 console.log('Express server started on port %s', app.get('port'));

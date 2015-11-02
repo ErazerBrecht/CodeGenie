@@ -1,25 +1,27 @@
 # NodeJS REST / MONGO
 
 Test sample by Brecht Carlier.
+Later edited by Matthew Berkvens.
+
 I created this to play around with NodeJS.
 
-I'm able to get the Questions in json format from the MongoDB
+I'm able to get, post and edit the Users, Exercises and Answers in json format from the online database.
+
 
 By using AJAX, I'm able to put the data in my html file.
 Used ACE editor to post answers.
 
-This is a first test. Nothing real yet.
-This solution uses Monk to talk with db instead of Mongoose.
+This solution uses the Mongoose library to talk to the online Database.
 
 Printscreen
 
 ![Printscreen](http://erazerbrecht.duckdns.org/Images/NodeJS_REST_MONGO_TEST2.png)
 
-Used Tiles for buttons, I personnaly like it :)
+Used Tiles for buttons, I personally like it :)
 
 TODO:
 
-- Users: Post answers / edit them
-- Admin: Make questions / Edit questions
-- Change to Mongoose
+- User authorization
+- Sessions
+- Authorization checks on each function
 

@@ -31,7 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="mongoose\schemas.js" />
+    <Compile Include="routes\answers.js" />
+    <Compile Include="routes\exercises.js" />
+    <Compile Include="routes\users.js" />
+    <Content Include="mongoose\connectioninfo.config" />
     <Content Include="public\javascripts\index.js" />
+    <Compile Include="mongoose\dbconnection.js" />
     <Compile Include="routes\index.js" />
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
+    <Folder Include="mongoose\" />
     <Folder Include="public\" />
     <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
