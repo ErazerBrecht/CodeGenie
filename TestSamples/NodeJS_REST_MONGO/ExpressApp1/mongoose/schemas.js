@@ -24,12 +24,11 @@ var exerciseSchema = mongoose.Schema({
     classification: { type: String, required: "The field 'classification' was not found" },
     weight: { type: Number, required: "The field 'weight' was not found" },
     deadline: { type: String, validate: [validateDate, "Invalid date in 'deadline'"] },
-    created: { type: String, default: moment().format("DD/MM/YYYY") },
+    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
     extra: { type: Boolean, default: false },
     questions: [{
         question: { type: String, required: "A field 'question' was not found" },
         weight: { type: Number, required: "A field 'weight' was not found" },
-        answer: { type: Boolean, default: true },
         extra: { type: Boolean, default: false },
         type: { type: String, required: true, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }
     }]

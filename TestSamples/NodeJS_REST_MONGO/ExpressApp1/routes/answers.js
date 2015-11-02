@@ -36,14 +36,7 @@ router.get('/:answerID', function (req, res) {
 //POST
 
 router.post("/post", function (req, res) {
-    var b = req.body;
-
-    var answer = new AnswerModel({
-        exerciseid: b.exerciseid,
-        userid: b.userid,
-        answered: b.answered,
-        answers: b.answers
-    });
+    var answer = new AnswerModel(req.body);
 
     newexercise.save(function (err) {
         var response = errhandler(err);

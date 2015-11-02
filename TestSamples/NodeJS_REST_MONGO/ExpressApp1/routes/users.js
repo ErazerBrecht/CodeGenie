@@ -57,18 +57,9 @@ router.get('/:userID/exercises/:exerciseID', function (req, res) {
 //POST
 
 router.post("/post", function (req, res) {
-    var b = req.body;
+    var newuser = new UserModel(req.body);
 
-    var newuser = new UserModel({
-        name: b.name,
-        email: b.email,
-        status: b.status,
-        class: b.class,
-        admin: b.admin,
-        lastseen: moment().format("DD/MM/YYYY"),
-        hash: b.hash,
-        salt: b.salt
-    });
+    newuser.lastseen = moment().format("DD/MM/YYYY")
 
     newuser.save(function (err) {
         var response = errhandler(err);

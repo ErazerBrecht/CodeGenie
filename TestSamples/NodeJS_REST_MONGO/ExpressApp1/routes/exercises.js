@@ -46,17 +46,7 @@ router.get('/:exerciseID/answers', function (req, res) {
 //POST
 
 router.post("/post", function (req, res) {
-    var b = req.body;
-
-    var newexercise = new ExerciseModel({
-        title: b.title,
-        classification: b.classification,
-        weight: b.weight,
-        deadline: b.deadline,
-        created: b.created,
-        extra: b.extra,
-        questions: b.questions
-    });
+    var newexercise = new ExerciseModel(req.body);
 
     newexercise.save(function (err) {
         var response = errhandler(err);
