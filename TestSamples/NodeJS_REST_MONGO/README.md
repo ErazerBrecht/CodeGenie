@@ -22,33 +22,37 @@ Used Tiles for buttons, I personally like it :)
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
-*All dates have the format of DD/MM/YYYY (e.g. 20/02/2015)*
-*All emails must pass email-validation*
-**Defaults do not need need to be filled in, if the field is missing the server will default these**
-**All of these objects also have an internal _id field which can be used but I won't mention them again**
+
+
+**All dates have the format of DD/MM/YYYY (e.g. 20/02/2015)**
+**All emails must pass email-validation.*
+
+
+*Defaults do not need need to be filled in, if the field is missing the server will default these.*
+*All of these objects also have an internal _id field which can be used but I won't mention them again.*
 
 
 ###Users
-Users have 9 fields, 4 of which are required and 4 which have a default
+Users have 9 fields, 4 of which are required and 4 which have a default.
 
 Required: 
 * name: string, name of the user (e.g. John Smith)
 * class: string, current class enrollment of the user (e.g. 3ea1)
-* hash: string, hash of the password + salt
-* salt: string, salt of this user
+* hash: string, hash of the password + salt.
+* salt: string, salt of this user.
 
 Defaults: 
-* status: number, register status, defaults to 0
-* registerdate: date, when the user was posted, defaults to current time on the server
-* lastseen: date, currently automatically set to the current time on the server
+* status: number, register status, defaults to 0.
+* registerdate: date, when the user was posted, defaults to current time on the server.
+* lastseen: date, currently automatically set to the current time on the server.
 * admin: boolean, currently automatically set to false whatever is posted.
 
 Not required but field is available: 
-* email: string, for when the user wants to subscribe
+* email: string, for when the user wants to subscribe.
 
 
 ###Exercises
-Exercises have 7 fields, 3 of which are required and 2 which have a default
+Exercises have 7 fields, 3 of which are required and 2 which have a default.
 
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
@@ -61,25 +65,25 @@ Defaults:
 
 Not required but field is available: 
 * deadline: date, date by which the exercise has to be solved
-* questions: array of 'question' objects (see: [question object](#questionobject)), this is an array of the questions in this exercise
+* questions: array of 'question' objects (see: [question object](#questionobject)), this is an array of the questions in this exercise.
 
 
 ###Answers
-Answers have 4 fields, 2 of which are required and 1 which have a default
+Answers have 4 fields, 2 of which are required and 1 which have a default.
 
 Required:
 * exerciseid: string, id of the exercise (e.g. 5637951a8a48cc983189c500)
 * userid: string, id of the user (e.g. 5637951a8a48cc983189c500)
 
 Defaults:
-* registerdate: date, when the answer was posted, defaults to current time on the server
+* registerdate: date, when the answer was posted, defaults to current time on the server.
 
 Not required but field is available: 
-* questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer
+* questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
 
 
-<a name="questionobject">####question object</a>
-The question object exists out of 4 fields, 3 of which are required and 1 which has a default
+<a name="questionobject"></a>####question object
+The question object exists out of 4 fields, 3 of which are required and 1 which has a default.
 
 Required:
 * question: string, question of this question (e.g. What is 'MongoDB'?)
@@ -87,19 +91,19 @@ Required:
 * type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')
 
 Defaults:
-* extra: boolean, check if this question is an extra question or not, defaults to false
+* extra: boolean, check if this question is an extra question or not, defaults to false.
 
-<a name="answerobject">####answer object</a>
-The answer object exists out of 5 fields, 3 of which are required and 2 which have a default
+<a name="answerobject"></a>####answer object
+The answer object exists out of 5 fields, 3 of which are required and 2 which have a default.
 
 Required:
-* answered: boolean, check to see if this question answer was included in answer post
+* answered: boolean, check to see if this question answer was included in answer post.
 * received: number, received score of this question answer (e.g. 5)
 * type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')
 
 Defaults:
-* comment: string, if code/question was asked, this is the field it will be placed in, defaults to ""
-* extra: boolean, check if this question is an extra question or not, defaults to false
+* comment: string, if code/question was asked, this is the field it will be placed in, defaults to ''.
+* extra: boolean, check if this question is an extra question or not, defaults to false.
 
 
 
