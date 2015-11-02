@@ -39,7 +39,7 @@ var answerSchema = mongoose.Schema({
     userid: { type: String, required: "The field 'userid' was not found" },
     answered: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'deadline'"] },
     answers: [{
-        answer: { type: Boolean, required: "A field 'answer' was not found" },
+        answered: { type: Boolean, required: "A field 'answer' was not found" },
         received: { type: Number, required: "A field 'weight' was not found" },
         extra: { type: Boolean, default: false },
         comment: { type: String, default: "" },

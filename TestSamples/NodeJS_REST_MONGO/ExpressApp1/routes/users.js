@@ -60,6 +60,7 @@ router.post("/post", function (req, res) {
     var newuser = new UserModel(req.body);
 
     newuser.lastseen = moment().format("DD/MM/YYYY")
+    newuser.admin = false;
 
     newuser.save(function (err) {
         var response = errhandler(err);
