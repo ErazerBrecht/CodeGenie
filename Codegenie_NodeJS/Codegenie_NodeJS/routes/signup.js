@@ -15,6 +15,6 @@ module.exports = function (passport) {
         failureRedirect: '/signup',
         failureFlash: true
     }));
-
+    
     return router;
 }

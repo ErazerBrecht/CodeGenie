@@ -63,11 +63,10 @@ app.use('/home', homeRoutes);
 
 https.createServer(sslOptions, app).listen(app.get('port'));
 
-//Matthew what is this code for?
-//var redirecthttp = express();
-//redirecthttp.all('*', function (req, res) {
-//    res.redirect('https://localhost:2000' + req.url);
-//}).listen(1337);
+var redirecthttp = express();
+redirecthttp.all('*', function (req, res) {
+    res.redirect('https://localhost:2000' + req.url);
+}).listen(1337);
 
 
 console.log('Express server started on port %s', app.get('port'));
