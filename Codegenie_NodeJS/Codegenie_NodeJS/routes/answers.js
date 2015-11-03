@@ -1,6 +1,7 @@
-﻿var schemas = require("../mongoose/schemas");
+﻿var schemas = require('../mongoose/schemas');
 var bodyParser = require('body-parser');
 var express = require('express');
+var auth = require('../passport/authlevels');
 var router = express.Router();
 
 var UserModel = schemas.UserModel;
@@ -9,11 +10,12 @@ var AnswerModel = schemas.AnswerModel;
 
 var errhandler = schemas.errhandler;
 
-
+var isAdmin = auth.isAdmin;
+var isUser = auth.isUser;
 
 //GET
 
-router.get('/', function (req, res) {
+router.get('/', isAdmin, function (req, res) {
     AnswerModel.find(function (err, answers) {
         if (err) return console.error(err);
 
@@ -21,7 +23,7 @@ router.get('/', function (req, res) {
     })
 });
 
-router.get('/:answerID', function (req, res) {
+router.get('/:answerID', isAdmin, function (req, res) {
     answerID = req.params.answerID;
 
     AnswerModel.find({ _id: answerID }, function (err, answer) {
@@ -35,7 +37,7 @@ router.get('/:answerID', function (req, res) {
 
 //POST
 
-router.post("/post", function (req, res) {
+router.post("/post", isAdmin, function (req, res) {
     var answer = new AnswerModel(req.body);
 
     newexercise.save(function (err) {
@@ -49,7 +51,7 @@ router.post("/post", function (req, res) {
 
 //EDIT
 
-router.post("/edit/:answerID", function (req, res) {
+router.post("/edit/:answerID", isAdmin, function (req, res) {
     answerID = req.params.answerID;
     var b = req.body;
 

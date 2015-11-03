@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="mongoose\dbconnection.js" />
     <Compile Include="mongoose\schemas.js" />
+    <Compile Include="passport\authlevels.js" />
     <Compile Include="passport\config.js" />
     <Compile Include="passport\login.js" />
     <Compile Include="passport\signup.js" />

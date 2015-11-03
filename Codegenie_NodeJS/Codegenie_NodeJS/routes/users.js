@@ -1,6 +1,7 @@
-﻿var schemas = require("../mongoose/schemas");
+﻿var schemas = require('../mongoose/schemas');
 var bodyParser = require('body-parser');
 var express = require('express');
+var auth = require('../passport/authlevels');
 var router = express.Router();
 
 var UserModel = schemas.UserModel;
@@ -9,16 +10,14 @@ var AnswerModel = schemas.AnswerModel;
 
 var errhandler = schemas.errhandler;
 
+var isAdmin = auth.isAdmin;
+var isUser = auth.isUser;
 
-var isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect('/');
-}
 
 
 //GET
 
-router.get('/', isAuthenticated, function (req, res) {
+router.get('/', isAdmin, function (req, res) {
     UserModel.find(function (err, users) {
         if (err) return console.error(err);
 
@@ -26,7 +25,7 @@ router.get('/', isAuthenticated, function (req, res) {
     })
 });
 
-router.get('/:userID', function (req, res) {
+router.get('/:userID', isUser, function (req, res) {
     userID = req.params.userID;
 
     UserModel.find({ _id: userID }, function (err, users) {
@@ -36,7 +35,7 @@ router.get('/:userID', function (req, res) {
     })
 });
 
-router.get('/:userID/exercises', function (req, res) {
+router.get('/:userID/exercises', isUser, function (req, res) {
     userID = req.params.userID;
 
     AnswerModel.find({ userid: userID }, function (err, answers) {
@@ -46,7 +45,7 @@ router.get('/:userID/exercises', function (req, res) {
     })
 });
 
-router.get('/:userID/exercises/:exerciseID', function (req, res) {
+router.get('/:userID/exercises/:exerciseID', isUser, function (req, res) {
     userID = req.params.userID;
     exerciseID = req.params.exerciseID;
 
@@ -61,10 +60,10 @@ router.get('/:userID/exercises/:exerciseID', function (req, res) {
 
 //POST
 
-router.post("/post", function (req, res) {
+router.post("/post", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
 
-    newuser.lastseen = moment().format("DD/MM/YYYY")
+    newuser.lastseen = moment().format("DD/MM/YYYY");
     newuser.admin = false;
 
     newuser.save(function (err) {
@@ -78,7 +77,7 @@ router.post("/post", function (req, res) {
 
 //EDIT
 
-router.post("/edit/:userID", function (req, res) {
+router.post("/edit/:userID", isUser, function (req, res) {
     userID = req.params.userID;
     var b = req.body;
 

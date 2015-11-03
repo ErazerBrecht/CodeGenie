@@ -5,7 +5,6 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
-var bCrypt = require('bcrypt-nodejs');
 
 //Mongoose
 var mongoose = require('./mongoose/dbconnection');

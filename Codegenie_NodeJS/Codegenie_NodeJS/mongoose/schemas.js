@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
     name: { type: String, required: "The field 'name' was not found", unique: true },
     password: { type: String, required: "The field 'password' was not found" },
     class: { type: String, required: "The field 'class' was not found" },
-    email: { type: String, unique: true, validate: [validator.isEmail, 'Invalid email'] },
+    email: { type: String, unique: true, sparse: true, validate: [validator.isEmail, 'Invalid email'] },
     status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
     registerdate: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date found in 'registerdate'"] },
