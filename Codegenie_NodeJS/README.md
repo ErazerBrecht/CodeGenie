@@ -3,22 +3,33 @@
 NodeJS project by Brecht Carlier and Matthew Berkvens.
 
 This is the NodeJS server for the Codegenie project made by Brecht, Arne and Matthew.
+This project also contains our views. These are written in JADE.
 
-
-I'm able to get, post and edit the Users, Exercises and Answers in json format from the online database.
-
-
-By using AJAX, I'm able to put the data in my html file.
-Used ACE editor to post answers.
+##At the moment
+Backend:
+We're able to get, post and edit the Users, Exercises and Answers in json format from the online database.
+Now we're working on the authentication of users.
 
 This solution uses the Mongoose library to talk to the online Database.
 
+Frontend:
+We use the bootstrap framework.
+By using AJAX, We're able to put the data in the frontend (view). Used Tiles for buttons.
+Used ACE editor to post answers.
+
+There is also a login page.
+
 Printscreen
 
-![Printscreen](http://erazerbrecht.duckdns.org/Images/NodeJS_REST_MONGO_TEST2.png)
+![Printscreen questions](http://erazerbrecht.duckdns.org/Images/NodeJS_REST_MONGO_TEST2.png)
+![Printscreen](http://i.imgur.com/MTyw8FD.png)
 
-Used Tiles for buttons, I personally like it :)
+##Bulding and using this project
+Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
+If Moongose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
+To connect to our database you will need the connectioninfo.config file (don't hesitate to ask it).
 
+We used Visual Studio for this project, we recommend Node.js tools for Visual Studio.
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
@@ -83,7 +94,7 @@ Not required but field is available:
 * questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
 
 
-####question object<a name="answerobject"></a>
+####Question object<a name="answerobject"></a>
 The question object exists out of 4 fields, 3 of which are required and 1 which has a default.
 
 Required:
@@ -94,7 +105,7 @@ Required:
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
 
-####answer object<a name="answerobject"></a>
+####Answer object<a name="answerobject"></a>
 The answer object exists out of 5 fields, 3 of which are required and 2 which have a default.
 
 Required:
