@@ -4,13 +4,13 @@ var router = express.Router();
 
 module.exports = function (passport) {
     
-    /* GET login page. */
-    router.get('/', function (req, res, next) {
-        res.render('login', { message: req.flash('message') });
+    /* GET signup page. */
+    router.get('/', function (req, res) {
+        res.render('signup', { message: req.flash('message') });
     });
-
-    /* Handle Login POST */
-    router.post('/login', passport.authenticate('login', {
+    
+    /* Handle Signup POST */
+    router.post('/', passport.authenticate('signup', {
         successRedirect: '/home',
         failureRedirect: '/',
         failureFlash: true

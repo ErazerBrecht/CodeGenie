@@ -28,6 +28,7 @@ configPassport(passport);
 
 //Routes
 var indexRoutes = require('./routes/index')(passport);
+var signupRoutes = require('./routes/signup.js')(passport);
 var userRoutes = require('./routes/users');
 var exerciseRoutes = require('./routes/exercises');
 var answerRoutes = require('./routes/answers');
@@ -54,20 +55,20 @@ app.use(passport.session());
 
 
 app.use('/', indexRoutes);
+app.use('/signup', signupRoutes);
 app.use('/users/', userRoutes);
 app.use('/exercises', exerciseRoutes);
 app.use('/answers', answerRoutes);
 app.use('/home', homeRoutes);
 
 
-
 https.createServer(sslOptions, app).listen(app.get('port'));
 
 //Matthew what is this code for?
-var redirecthttp = express();
-redirecthttp.all('*', function (req, res) {
-    res.redirect('https://localhost:2000' + req.url);
-}).listen(1337);
+//var redirecthttp = express();
+//redirecthttp.all('*', function (req, res) {
+//    res.redirect('https://localhost:2000' + req.url);
+//}).listen(1337);
 
 
 console.log('Express server started on port %s', app.get('port'));
