@@ -1,9 +1,9 @@
 #NodeJS REST / MONGO
 
-Test sample by Brecht Carlier.
-Later edited by Matthew Berkvens.
+NodeJS project by Brecht Carlier and Matthew Berkvens.
 
-I created this to play around with NodeJS.
+This is the NodeJS server for the Codegenie project made by Brecht, Arne and Matthew.
+
 
 I'm able to get, post and edit the Users, Exercises and Answers in json format from the online database.
 
@@ -38,10 +38,9 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 Users have 9 fields, 4 of which are required and 4 which have a default.
 
 Required: 
-* name: string, name of the user (e.g. John Smith)
+* name: string, name of the user (e.g. John Smith) **Is unique field**
 * class: string, current class enrollment of the user (e.g. 3ea1)
-* hash: string, hash of the password + salt.
-* salt: string, salt of this user.
+* password: string, encrypted password (encrypted with bCrypt)
 
 Defaults: 
 * status: number, register status, defaults to 0.
@@ -50,7 +49,7 @@ Defaults:
 * admin: boolean, currently automatically set to false whatever is posted.
 
 Not required but field is available: 
-* email: string, for when the user wants to subscribe.
+* email: string, for when the user wants to subscribe. **Is unique field*
 
 
 ###Exercises
@@ -112,8 +111,6 @@ Defaults:
 
 ##TODO:
 
-- User authorization
-- Sessions
-- Authorization checks on each function
 - Come up with a better way to store '[question answers](#answerobject)' (currently doesn't need 'extra', could use a reference to the original '[question object](#questionobject)')
+- Signup jade
 
