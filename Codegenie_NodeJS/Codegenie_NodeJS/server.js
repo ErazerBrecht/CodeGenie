@@ -26,15 +26,14 @@ var session = require('express-session');
 var configPassport = require('./passport/config');
 configPassport(passport);
 
-//routes
+//Routes
 var indexRoutes = require('./routes/index')(passport);
 var userRoutes = require('./routes/users');
 var exerciseRoutes = require('./routes/exercises');
 var answerRoutes = require('./routes/answers');
 var homeRoutes = require('./routes/home');
 
-//vars
-
+//Vars
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -62,11 +61,12 @@ app.use('/home', homeRoutes);
 
 
 
-https.createServer(sslOptions, app).listen(2000);
+https.createServer(sslOptions, app).listen(app.get('port'));
 
+//Matthew what is this code for?
 var redirecthttp = express();
 redirecthttp.all('*', function (req, res) {
-    res.redirect('https://localhost:2000' + req.url)
+    res.redirect('https://localhost:2000' + req.url);
 }).listen(1337);
 
 
