@@ -15,11 +15,11 @@ module.exports = function (passport) {
                         return done(err);
                     }
                     if (!user) {
-                        console.log('User Not Found with username ' + user.name);
+                        console.log('User Not Found with username ' + username);
                         return done(null, false, req.flash('message', 'Incorrect username.'));
                     }
                     if (!isValidPassword(user, password)) {
-                        console.log('Invalid Password for user: ' + user.name);
+                        console.log('Invalid Password for user: ' + username);
                         return done(null, false, req.flash('message', 'Incorrect password.'));
                     }
                     /*var newuser = new UserModel(user);
