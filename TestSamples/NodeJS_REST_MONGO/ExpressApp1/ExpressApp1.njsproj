@@ -48,6 +48,7 @@
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="mongoose\" />
+    <Folder Include="ssl\" />
     <Folder Include="public\" />
     <Folder Include="public\fonts\" />
     <Folder Include="public\images\" />
