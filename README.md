@@ -10,7 +10,7 @@ Maintained by
 This is the folder where our project lives
 
 #Requirements
-Folder where we will put the demands of our client / custumer
+Folder where we will put the demands of our client / customer
 
 #TestSamples
 Folder where we test code that.
