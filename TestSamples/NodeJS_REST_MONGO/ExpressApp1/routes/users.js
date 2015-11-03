@@ -10,10 +10,15 @@ var AnswerModel = schemas.AnswerModel;
 var errhandler = schemas.errhandler;
 
 
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
+}
+
 
 //GET
 
-router.get('/', function (req, res) {
+router.get('/', isAuthenticated, function (req, res) {
     UserModel.find(function (err, users) {
         if (err) return console.error(err);
 

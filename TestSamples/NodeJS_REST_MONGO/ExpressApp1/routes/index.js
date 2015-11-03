@@ -1,10 +1,32 @@
-﻿var bodyParser = require('body-parser');
-var express = require('express');
+﻿var express = require('express');
+var bodyParser = require('body-parser');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', { title: 'CodeGenie' });
-});
+module.exports = function (passport) {
+    
+    /* GET login page. */
+    router.get('/', function (req, res, next) {
+        res.render('login');
+    });
 
-module.exports = router;
+    /* GET signup page. */
+    /*router.get('/signup', function (req, res, next) {
+        res.render('signup');
+    });*/
+    
+    /* Handle Login POST */
+    router.post('/login', passport.authenticate('login', {
+        successRedirect: '/home',
+        failureRedirect: '/',
+        failureFlash: true
+    }));
+
+    /* Handle Signup POST */
+    /*router.post('/signup', passport.authenticate('signup', {
+        successRedirect: '/home',
+        failureRedirect: '/',
+        failureFlash: true
+    }));*/
+
+    return router;
+}

@@ -8,15 +8,14 @@ var validateDate = function (date) {
 }
 
 var userSchema = mongoose.Schema({
-    name: { type: String, required: "The field 'name' was not found" },
-    email: { type: String, validate: [validator.isEmail, 'Invalid email'] },
-    status: { type: Number, default: "0" },
+    name: { type: String, required: "The field 'name' was not found", unique: true },
+    password: { type: String, required: "The field 'password' was not found" },
     class: { type: String, required: "The field 'class' was not found" },
+    email: { type: String, unique: true, validate: [validator.isEmail, 'Invalid email'] },
+    status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
     registerdate: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date found in 'registerdate'"] },
-    lastseen: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'lastseen'"] },
-    hash: { type: String, required: "The field 'hash' was not found" },
-    salt: { type: String, required: "The field 'salt' was not found" }
+    lastseen: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'lastseen'"] }
 });
 
 var exerciseSchema = mongoose.Schema({
@@ -37,10 +36,11 @@ var exerciseSchema = mongoose.Schema({
 var answerSchema = mongoose.Schema({
     exerciseid: { type: String, required: "The field 'exerciseid' was not found" },
     userid: { type: String, required: "The field 'userid' was not found" },
-    answered: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'deadline'"] },
+    answered: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'answered'"] },
     answers: [{
-        answered: { type: Boolean, required: "A field 'answer' was not found" },
-        received: { type: Number, required: "A field 'weight' was not found" },
+        //TODO: Add question id from original exercise, clean up unecessary shit after
+        answered: { type: Boolean, required: "A field 'answered' was not found" },
+        received: { type: Number, required: "A field 'received' was not found" },
         extra: { type: Boolean, default: false },
         comment: { type: String, default: "" },
         type: { type: String, required: true, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }

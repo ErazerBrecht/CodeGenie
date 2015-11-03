@@ -32,13 +32,18 @@
   <ItemGroup>
     <Compile Include="app.js" />
     <Compile Include="mongoose\schemas.js" />
+    <Compile Include="passport\config.js" />
+    <Compile Include="passport\login.js" />
+    <Compile Include="passport\signup.js" />
     <Compile Include="routes\answers.js" />
     <Compile Include="routes\exercises.js" />
+    <Compile Include="routes\home.js" />
     <Compile Include="routes\users.js" />
     <Content Include="mongoose\connectioninfo.config" />
     <Content Include="public\javascripts\index.js" />
     <Compile Include="mongoose\dbconnection.js" />
     <Compile Include="routes\index.js" />
+    <Content Include="views\login.jade" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
@@ -48,6 +53,7 @@
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="mongoose\" />
+    <Folder Include="passport\" />
     <Folder Include="ssl\" />
     <Folder Include="public\" />
     <Folder Include="public\fonts\" />
