@@ -26,7 +26,7 @@ Printscreen
 
 ##Bulding and using this project
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
-If Moongose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
+If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
 To connect to our database you will need the connectioninfo.config file (don't hesitate to ask it).
 
