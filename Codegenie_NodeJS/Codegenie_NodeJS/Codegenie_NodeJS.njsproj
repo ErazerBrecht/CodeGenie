@@ -388,6 +388,7 @@
     <Content Include="public\stylesheets\bootstrap.css" />
     <Content Include="public\stylesheets\bootstrap.css.map" />
     <Content Include="public\stylesheets\bootstrap.min.css" />
+    <Content Include="public\stylesheets\index.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="public\stylesheets\tiles.css" />
     <Content Include="ssl\ca.crt" />
