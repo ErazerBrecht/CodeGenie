@@ -13,5 +13,5 @@ This is the folder where our project lives
 Folder where we will put the demands of our client / customer
 
 #TestSamples
-Folder where we test code that.
+Folder where we test code. And experiment with some modules / snippets
 If we like it, it will be merged in our project.
