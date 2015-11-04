@@ -397,6 +397,7 @@
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
     <Content Include="views\login.jade" />
+    <Content Include="views\signup.jade" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="mongoose\" />

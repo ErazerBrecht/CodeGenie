@@ -20,7 +20,7 @@ Current modules used:
 * moment: date formatting.
 * passport: user login/signup/authorization and sessions.
 * passport-local: we are using the local method, aka storing it in a database yourself
-* serve-favicon: this serves the favicon? no idea it was there when you make a blank project :p
+* serve-favicon: this serves the favicon? no idea it's there when you make a blank project :p
 
 
 Frontend:
@@ -41,7 +41,7 @@ If Mongoose doesn't work on your computer take a look at: https://github.com/AP-
 
 To connect to our database you will need the connectioninfo.config file in the /mongoose/ folder (don't hesitate to ask it).
 
-We used Visual Studio for this project, we recommend Node.js tools for Visual Studio.
+We used Visual Studio for this project, we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx).
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
@@ -132,7 +132,7 @@ Defaults:
 
 ##TODO:
 
-- Come up with a better way to store '[question answers](#answerobject)' (currently doesn't need 'extra', could use a reference to the original '[question object](#questionobject)')
+- Come up with a better way to store '[question answers](#answerobject)' (currently doesn't need the 'extra' field, could use a reference to the original '[question object](#questionobject)')
 - Make authentication checks and its responses better
 - Make page to view the user's solved questions
 - Make simple admin panel
