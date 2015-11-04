@@ -55,7 +55,7 @@ app.use(passport.session());
 
 app.use('/', indexRoutes);
 app.use('/signup', signupRoutes);
-app.use('/users/', userRoutes);
+app.use('/users', userRoutes);
 app.use('/exercises', exerciseRoutes);
 app.use('/answers', answerRoutes);
 app.use('/home', homeRoutes);
