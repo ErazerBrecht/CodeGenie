@@ -10,14 +10,25 @@ Backend:
 We're able to get, post and edit the Users, Exercises and Answers in json format from the online database.
 Now we're working on the authentication of users.
 
-This solution uses the Mongoose library to talk to the online Database.
+Current modules used: 
+* nodemon: needs to be installed globally to work, if you want to use the regular node.exe delete the 'Node.exe path' string in the project properties.
+* bcrypt: salts and hashes the password, also has a built-in check function.
+* connect-flash: for sending messages to the client.
+* express: REST API-fication of NodeJS.
+* express-session: for user sessions.
+* jade: view engine.
+* moment: date formatting.
+* passport: user login/signup/authorization and sessions.
+* passport-local: we are using the local method, aka storing it in a database yourself
+* serve-favicon: this serves the favicon? no idea it was there when you make a blank project :p
+
 
 Frontend:
 We use the bootstrap framework.
 By using AJAX, We're able to put the data in the frontend (view). Used Tiles for buttons.
 Used ACE editor to post answers.
 
-There is also a login page.
+There are currently 3 pages: a login page, signup page and home page (home page currently gets all exercises and displays the questions when you click on them).
 
 Printscreen
 
@@ -28,7 +39,7 @@ Printscreen
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
-To connect to our database you will need the connectioninfo.config file (don't hesitate to ask it).
+To connect to our database you will need the connectioninfo.config file in the /mongoose/ folder (don't hesitate to ask it).
 
 We used Visual Studio for this project, we recommend Node.js tools for Visual Studio.
 
@@ -38,8 +49,6 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 
 **All dates have the format of DD/MM/YYYY (e.g. 20/02/2015)**
 
-**All emails must pass email-validation.**
-
 
 *Defaults do not need need to be filled in, if the field is missing the server will default these.*
 
@@ -47,7 +56,7 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 
 
 ###Users
-Users have 9 fields, 4 of which are required and 4 which have a default.
+Users have 8 fields, 3 of which are required and 4 which have a default.
 
 Required: 
 * name: string, name of the user (e.g. John Smith) **Is unique field**
@@ -61,7 +70,7 @@ Defaults:
 * admin: boolean, currently automatically set to false whatever is posted.
 
 Not required but field is available: 
-* email: string, for when the user wants to subscribe. **Is unique field*
+* email: string, for when the user wants to subscribe. **Is unique field**
 
 
 ###Exercises
@@ -124,5 +133,6 @@ Defaults:
 ##TODO:
 
 - Come up with a better way to store '[question answers](#answerobject)' (currently doesn't need 'extra', could use a reference to the original '[question object](#questionobject)')
-- Signup jade
-
+- Make authentication checks and its responses better
+- Make page to view the user's solved questions
+- Make simple admin panel
