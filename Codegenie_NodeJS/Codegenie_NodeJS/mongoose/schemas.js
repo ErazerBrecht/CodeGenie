@@ -67,3 +67,10 @@ exports.errhandler = function (err) {
         return "ok";
     }
 }
+
+exports.questionExists = function (answer, questions) {
+    for (var index in questions) {
+        if (questions[index]._id == answer.questionid) return true;
+    }
+    return false;
+}

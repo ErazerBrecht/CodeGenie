@@ -17,39 +17,35 @@ var isAdmin = auth.isAdmin;
 //EXERCISES GET
 
 router.get('/', isAdmin, function (req, res) {
-    AnswerModel.find(function (err, answers) {
-        if (err) return console.error(err);
-
-        res.status(200).json(answers);
-    })
+    res.status(200).send("There needs to be an admin panel here");
 });
 
 
 router.get('/exercises', isAdmin, function (req, res) {
-    ExerciseModel.find(function (err, exercises) {
+    ExerciseModel.find(function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(exercises);
+        res.status(200).json(result);
     })
 });
 
 router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
-    ExerciseModel.findById(exerciseID, function (err, exercise) {
+    ExerciseModel.findById(exerciseID, function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(exercise);
+        res.status(200).json(result);
     })
 });
 
 router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
-    AnswerModel.find({ exerciseid: exerciseID }, function (err, exercise) {
+    AnswerModel.find({ exerciseid: exerciseID }, function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(exercise);
+        res.status(200).json(result);
     })
 });
 
@@ -68,10 +64,10 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
-    ExerciseModel.findOne({ _id: exerciseID }, function (err, exercise) {
+    ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
         if (err) return console.error(err);
 
-        var newexercise = new ExerciseModel(exercise);
+        var newexercise = new ExerciseModel(result);
 
         for (var field in req.body) newexercise[field] = req.body[field];
 
@@ -90,20 +86,20 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
 //ANSWERS GET
 
 router.get('/answers', isAdmin, function (req, res) {
-    AnswerModel.find(function (err, answer) {
+    AnswerModel.find(function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(answer);
+        res.status(200).json(result);
     })
 });
 
 router.get('/answers/:answerID', isAdmin, function (req, res) {
     var answerID = req.params.answerID;
 
-    AnswerModel.find({ _id: answerID }, function (err, answer) {
+    AnswerModel.find({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(answer);
+        res.status(200).json(result);
     })
 });
 
@@ -122,10 +118,10 @@ router.post("/answers/post", isAdmin, function (req, res) {
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
 
-    AnswerModel.findOne({ _id: answerID }, function (err, answer) {
+    AnswerModel.findOne({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
 
-        var newanswer = new UserModel(answer);
+        var newanswer = new UserModel(result);
 
         for (var field in req.body) newanswer[field] = req.body[field];
 
