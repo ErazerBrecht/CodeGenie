@@ -22,6 +22,7 @@ var sslOptions = {
 //Passport
 var passport = require('passport');
 var session = require('express-session');
+var cookiestore = require('connect-mongo')(session);
 var configPassport = require('./passport/config');
 configPassport(passport);
 
@@ -45,6 +46,10 @@ app.use(flash());
 app.use(session({
     secret: "shhhhhitsasecret",
     name: "Codegenie",
+    store: new cookiestore({
+        mongooseConnection: mongoose.db,
+        ttl: 14 * 24 * 60 * 60, //14 days 
+    }),
     resave: true,
     saveUninitialized: true
 }));
