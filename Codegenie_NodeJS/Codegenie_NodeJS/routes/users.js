@@ -86,8 +86,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
         if (err) return console.error(err);
         if (!result) return res.status(500).send("Not an eligible exercise ID");
 
-        if (result.hasOwnProperty('deadline')) {
-            if (moment().format("DD/MM/YYYY").isAfter(result.deadline)) res.status(200).send("Deadline is already over.");
+        if (result.deadline) {
+            if (new Date(moment().format("DD/MM/YYYY")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
 
         newanswer.userid = req.user._id;
@@ -102,10 +102,12 @@ router.post('/answer', isLoggedIn, function (req, res) {
             }
         }
 
+        if (newanswer.answers.length != answerlist.length) return res.status(500).send("There was a problem processing the questions.");
+
         newanswer.save(function (err) {
             var response = errhandler(err);
-            if (response == "ok") res.sendStatus(201);
-            else res.status(500).json(response);
+            if (response != "ok") return res.status(500).json(response);
+            return res.sendStatus(201);
         });
     })
 });
