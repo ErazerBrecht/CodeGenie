@@ -29,8 +29,7 @@ configPassport(passport);
 var indexRoutes = require('./routes/index')(passport);
 var signupRoutes = require('./routes/signup.js')(passport);
 var userRoutes = require('./routes/users');
-var exerciseRoutes = require('./routes/exercises');
-var answerRoutes = require('./routes/answers');
+var adminRoutes = require('./routes/admin');
 var homeRoutes = require('./routes/home');
 
 //Vars
@@ -56,8 +55,7 @@ app.use(passport.session());
 app.use('/', indexRoutes);
 app.use('/signup', signupRoutes);
 app.use('/users', userRoutes);
-app.use('/exercises', exerciseRoutes);
-app.use('/answers', answerRoutes);
+app.use('/admin', adminRoutes);
 app.use('/home', homeRoutes);
 
 

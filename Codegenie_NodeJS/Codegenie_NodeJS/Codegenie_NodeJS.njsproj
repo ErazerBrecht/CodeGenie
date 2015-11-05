@@ -367,8 +367,7 @@
     <Compile Include="public\javascripts\src-min\worker-php.js" />
     <Compile Include="public\javascripts\src-min\worker-xml.js" />
     <Compile Include="public\javascripts\src-min\worker-xquery.js" />
-    <Compile Include="routes\answers.js" />
-    <Compile Include="routes\exercises.js" />
+    <Compile Include="routes\admin.js" />
     <Compile Include="routes\home.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\signup.js" />

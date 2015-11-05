@@ -20,6 +20,7 @@ var userSchema = mongoose.Schema({
 var exerciseSchema = mongoose.Schema({
     title: { type: String, required: "The field 'title' was not found" },
     classification: { type: String, required: "The field 'classification' was not found" },
+    class: { type: String, required: "The field 'class' was not found" },
     weight: { type: Number, required: "The field 'weight' was not found" },
     deadline: { type: String, validate: [validateDate, "Invalid date in 'deadline'"] },
     created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
@@ -37,12 +38,10 @@ var answerSchema = mongoose.Schema({
     userid: { type: String, required: "The field 'userid' was not found" },
     answered: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'answered'"] },
     answers: [{
-        //TODO: Add question id from original exercise, clean up unecessary shit after
-        answered: { type: Boolean, required: "A field 'answered' was not found" },
+        questionid: { type: String, required: "The field 'questionid' was not found" },
         received: { type: Number, required: "A field 'received' was not found" },
-        extra: { type: Boolean, default: false },
-        comment: { type: String, default: "" },
-        type: { type: String, required: true, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }
+        answer: { type: Boolean, default: false },
+        text: { type: String, default: "" }
     }]
 });
 

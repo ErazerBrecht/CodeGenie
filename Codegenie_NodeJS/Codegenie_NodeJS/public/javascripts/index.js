@@ -7,7 +7,7 @@ function populatePage() {
     var content = '';
 
     // jQuery AJAX call for JSON
-    $.getJSON('/exercises', function (data) {
+    $.getJSON('/users/exercises', function (data) {
         content += '<div class="row">';
         // For each item in our JSON, add a div and a code editor
         $.each(data, function () {
@@ -32,7 +32,7 @@ function getExercise(id) {
     var content = '';
 
     // jQuery AJAX call for JSON
-    $.getJSON('/exercises/' + id, function (data) {
+    $.getJSON('/users/exercises/' + id, function (data) {
 
         // For each item in our JSON, add a div and a code editor
         $.each(data, function () {
