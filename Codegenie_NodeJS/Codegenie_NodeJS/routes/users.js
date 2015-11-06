@@ -24,6 +24,8 @@ router.get('/', isAdmin, function (req, res) {
     UserModel.find(function (err, result) {
         if (err) return console.error(err);
 
+        for (var user in result) result[user]["password"] = undefined;
+
         res.status(200).json(result);
     })
 });
@@ -31,6 +33,8 @@ router.get('/', isAdmin, function (req, res) {
 router.get('/mine', isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
+
+        result["password"] = undefined;
 
         res.status(200).json(result);
     })
