@@ -60,8 +60,8 @@ Users have 8 fields, 3 of which are required and 4 which have a default.
 
 Required: 
 * name: string, name of the user (e.g. John Smith) **Is unique field**
-* class: string, current class enrollment of the user (e.g. 3ea1)
 * password: string, encrypted password (encrypted with bCrypt)
+* class: string, current class enrollment of the user (e.g. 3EA1)
 
 Defaults: 
 * status: number, register status, defaults to 0.
@@ -74,12 +74,13 @@ Not required but field is available:
 
 
 ###Exercises
-Exercises have 7 fields, 3 of which are required and 2 which have a default.
+Exercises have 8 fields, 4 of which are required and 2 which have a default.
 
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
 * classification: string, classification of the exercise (e.g. Databases)
 * weight: number, maximum score and weight of this exercise (e.g. 20)
+* class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
 
 Defaults:
 * created: date, when the exercise was posted, defaults to current time on the server
@@ -91,48 +92,137 @@ Not required but field is available:
 
 
 ###Answers
-Answers have 4 fields, 2 of which are required and 1 which have a default.
+Answers have 4 fields, 2 of which are required and 1 which has a default.
 
 Required:
 * exerciseid: string, id of the exercise (e.g. 5637951a8a48cc983189c500)
 * userid: string, id of the user (e.g. 5637951a8a48cc983189c500)
 
 Defaults:
-* registerdate: date, when the answer was posted, defaults to current time on the server.
+* created: date, when the answer was posted, defaults to current time on the server.
 
 Not required but field is available: 
 * questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
 
 
 ####Question object<a name="answerobject"></a>
-The question object exists out of 4 fields, 3 of which are required and 1 which has a default.
+The question object exists out of 4 fields, 2 of which are required and 2 which have a default.
 
 Required:
 * question: string, question of this question (e.g. What is 'MongoDB'?)
 * weight: number, maximum score and weight of this exercise (e.g. 20)
-* type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')
 
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
+* type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')(defaults to "Checkbox")
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 5 fields, 3 of which are required and 2 which have a default.
+The answer object exists out of 4 fields, 1 of which is required and 3 which have a default.
 
 Required:
-* answered: boolean, check to see if this question answer was included in answer post.
-* received: number, received score of this question answer (e.g. 5)
-* type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')
+* questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
 
 Defaults:
-* comment: string, if code/question was asked, this is the field it will be placed in, defaults to ''.
-* extra: boolean, check if this question is an extra question or not, defaults to false.
+* received: number, how much the user received for this exercise (e.g. 5)
+
+Not required but field is available: 
+* text: string, if code/question was asked, this is the field it will be placed in.
+* answer: boolean, this is used if the original question was a checkbox.
+
+
+##Data access, Information Portals
+
+There are currently 2 portals, the /admin/ portal and the /users/ portal
+
+###User portal
+The user portal has 6 gets and 2 posts
+
+
+####GET: /users/
+
+This gives all current users, currently only accessible for admin.
+
+####GET: /users/mine
+
+This gives the current user's information.
+
+####GET: /users/exercises
+
+This gives all current exercises that the user is allowed to solve.
+
+####GET: /users/exercises/{ID} 
+
+This gives a specific exercise that the user is allowed to solve.
+
+####GET: /users/answers
+
+This gives all the answers that the user has submitted.
+
+####GET: /users/answers/{ID} 
+
+This gives a specific answer that the user has submitted.
+
+####POST: /users/answer
+
+If an user has solved an exercise it is posted here.
+
+####POST: /users/edit
+
+The user will edit his/her profile by posting here.
+
+
+###Admin portal
+The admin portal has 6 gets and 4 posts
+
+
+####POST: /admin/user
+
+The admin can create a new user by posting here.
+
+
+####GET: /admin/
+
+HTML page for the admin panel (TODO)
+
+####GET: /admin/exercises
+
+This gives all the exercises.
+
+####GET: /admin/exercises/{ID}
+
+This gives a specific exercise.
+
+####GET: /admin/exercises/{ID}/answers
+
+This gives all the answers of the exercise with ID: {ID}
+
+####POST: /admin/exercises/post
+
+The admin can create exercises by posting here.
+
+####POST: /admin/exercises/edit/{ID}
+
+The admin can edit exercises by posting here.
+
+
+####GET: /admin/answers 
+
+This gives all answers.
+
+####GET: /admin/answers/{ID}
+
+This gives a specific answer.
+
+####POST: /admin/answers/edit/{ID}
+
+The admin can edit answers by posting here.
+
 
 
 
 
 ##TODO:
 
-- Come up with a better way to store '[question answers](#answerobject)' (currently doesn't need the 'extra' field, could use a reference to the original '[question object](#questionobject)')
 - Make authentication checks and its responses better
 - Make page to view the user's solved questions
 - Make simple admin panel

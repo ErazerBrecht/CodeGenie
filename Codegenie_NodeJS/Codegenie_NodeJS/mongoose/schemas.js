@@ -29,19 +29,19 @@ var exerciseSchema = mongoose.Schema({
         question: { type: String, required: "A field 'question' was not found" },
         weight: { type: Number, required: "A field 'weight' was not found" },
         extra: { type: Boolean, default: false },
-        type: { type: String, required: true, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }
+        type: { type: String, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }
     }]
 });
 
 var answerSchema = mongoose.Schema({
     exerciseid: { type: String, required: "The field 'exerciseid' was not found" },
     userid: { type: String, required: "The field 'userid' was not found" },
-    answered: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'answered'"] },
+    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'answered'"] },
     answers: [{
         questionid: { type: String, required: "The field 'questionid' was not found" },
-        received: { type: Number, required: "A field 'received' was not found" },
-        answer: { type: Boolean, default: false },
-        text: { type: String, default: "" }
+        received: { type: Number, default: 0 },
+        answer: { type: Boolean },
+        text: { type: String }
     }]
 });
 
@@ -71,6 +71,13 @@ exports.errhandler = function (err) {
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
         if (questions[index]._id == answer.questionid) return true;
+    }
+    return false;
+}
+
+exports.answerExists = function (answer, answers) {
+    for (var index in answers) {
+        if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
 }

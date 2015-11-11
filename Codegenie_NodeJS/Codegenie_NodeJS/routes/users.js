@@ -14,7 +14,6 @@ var questionExists = schemas.questionExists;
 
 var isLoggedIn = auth.isLoggedIn;
 var isAdmin = auth.isAdmin;
-var isCorrectUser = auth.isCorrectUser;
 
 
 
@@ -104,9 +103,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 answerlist[index].received = 0;
                 newanswer.answers.push(answerlist[index]);
             }
+            else return res.status(500).send("There was a problem processing answer with questionid: " + answerlist[index].questionid);
         }
-
-        if (newanswer.answers.length != answerlist.length) return res.status(500).send("There was a problem processing the questions.");
 
         newanswer.save(function (err) {
             var response = errhandler(err);
@@ -114,19 +112,6 @@ router.post('/answer', isLoggedIn, function (req, res) {
             return res.sendStatus(201);
         });
     })
-});
-
-router.post("/post", isAdmin, function (req, res) {
-    var newuser = new UserModel(req.body);
-
-    newuser.lastseen = moment().format("DD/MM/YYYY");
-    newuser.admin = false;
-
-    newuser.save(function (err) {
-        var response = errhandler(err);
-        if (response == "ok") res.sendStatus(201);
-        else res.status(500).json(response);
-    });
 });
 
 router.post("/edit", isLoggedIn, function (req, res) {
@@ -137,9 +122,16 @@ router.post("/edit", isLoggedIn, function (req, res) {
 
         for (var field in req.body) newuser[field] = req.body[field];
 
-        if (!req.user.admin) newuser.admin = false;
+        newuser._id = undefined;
+        newuser.admin = undefined; //prevent user from editing random/protected information, everything else is allowed.
+        newuser.password = undefined;
+        newuser.status = undefined;
 
-        UserModel.update({ _id: userID }, newuser, { runValidators: true }, function (err) {
+        newuser.registerdate = undefined;
+        newuser.lastseen = undefined;
+        newuser.__v = undefined;
+
+        UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response == "ok") res.sendStatus(201);
             else res.status(500).json(response);

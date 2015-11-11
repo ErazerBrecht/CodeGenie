@@ -9,8 +9,27 @@ var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
 var errhandler = schemas.errhandler;
+var answerExists = schemas.answerExists;
 
 var isAdmin = auth.isAdmin;
+
+
+//USER POST
+
+router.post("/user", isAdmin, function (req, res) {
+    var newuser = new UserModel(req.body);
+
+    newuser.lastseen = moment().format("DD/MM/YYYY");
+    newuser.admin = true;
+
+    newuser.save(function (err) {
+        var response = errhandler(err);
+        if (response == "ok") res.sendStatus(201);
+        else res.status(500).json(response);
+    });
+});
+
+
 
 
 
@@ -103,17 +122,7 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
     })
 });
 
-//ANSWERS POST
-
-router.post("/answers/post", isAdmin, function (req, res) {
-    var newanswer = new AnswerModel(req.body);
-
-    newanswer.save(function (err) {
-        var response = errhandler(err);
-        if (response == "ok") res.sendStatus(201);
-        else res.status(500).json(response);
-    });
-});
+//ANSWERS EDIT
 
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
@@ -121,11 +130,11 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     AnswerModel.findOne({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
 
-        var newanswer = new UserModel(result);
+        var newanswer = new AnswerModel(result);
 
         for (var field in req.body) newanswer[field] = req.body[field];
 
-        AnswerModel.update({ _id: answerID }, newanswer, { runValidators: true }, function (err) {
+        AnswerModel.update({ _id: answerID }, { $set: newanswer }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response == "ok") res.sendStatus(201);
             else res.status(500).json(response);
