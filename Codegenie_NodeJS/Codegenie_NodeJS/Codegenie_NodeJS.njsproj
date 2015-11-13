@@ -371,6 +371,7 @@
     <Compile Include="routes\home.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\signup.js" />
+    <Compile Include="routes\statistics.js" />
     <Compile Include="routes\users.js" />
     <Compile Include="server.js" />
     <Content Include=".gitignore" />

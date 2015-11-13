@@ -59,7 +59,7 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 Users have 8 fields, 3 of which are required and 4 which have a default.
 
 Required: 
-* name: string, name of the user (e.g. John Smith) **Is unique field**
+* name: string, name of the user (e.g. John Smith) *Is unique field*
 * password: string, encrypted password (encrypted with bCrypt)
 * class: string, current class enrollment of the user (e.g. 3EA1)
 
@@ -70,7 +70,7 @@ Defaults:
 * admin: boolean, currently automatically set to false whatever is posted.
 
 Not required but field is available: 
-* email: string, for when the user wants to subscribe. **Is unique field**
+* email: string, for when the user wants to subscribe. *Is unique field*
 
 
 ###Exercises
@@ -226,3 +226,6 @@ The admin can edit answers by posting here.
 - Make authentication checks and its responses better
 - Make page to view the user's solved questions
 - Make simple admin panel
+- Make simple user panel
+- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 3EA1)
+- Finish statistics API

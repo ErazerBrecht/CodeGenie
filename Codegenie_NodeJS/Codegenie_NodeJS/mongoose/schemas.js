@@ -1,4 +1,4 @@
-﻿var mongoose = require("mongoose");
+﻿var mongoose = require('mongoose');
 var moment = require('moment');
 
 var validateDate = function (date) {

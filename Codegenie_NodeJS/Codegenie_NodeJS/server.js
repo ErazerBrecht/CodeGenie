@@ -31,6 +31,7 @@ var indexRoutes = require('./routes/index')(passport);
 var signupRoutes = require('./routes/signup.js')(passport);
 var userRoutes = require('./routes/users');
 var adminRoutes = require('./routes/admin');
+var statisticRoutes = require('./routes/statistics');
 var homeRoutes = require('./routes/home');
 
 //Vars
@@ -61,7 +62,9 @@ app.use('/', indexRoutes);
 app.use('/signup', signupRoutes);
 app.use('/users', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/statistics', statisticRoutes);
 app.use('/home', homeRoutes);
+
 
 
 https.createServer(sslOptions, app).listen(app.get('port'));
