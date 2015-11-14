@@ -9,7 +9,7 @@ block content
       nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
         // Brand and toggle get grouped for better mobile display
         .navbar-header
-          a.navbar-brand(href='#') CodeGenie
+          a.navbar-brand(href='#/') CodeGenie
         // Top Menu Items
         ul.nav.navbar-right.top-nav
           li.dropdown
@@ -36,14 +36,14 @@ block content
         .collapse.navbar-collapse.navbar-ex1-collapse
           ul.nav.navbar-nav.side-nav
             li.active
-              a(href='#')
+              a(href='#/')
                 i.fa.fa-fw.fa-dashboard
                 |  Dashboard
                                 
             li
-              a(href='#')
+              a(href='#/exercise')
                 i.fa.fa-fw.fa-edit
-                | Questions
+                | Add Exercise
                                  
             li
               a(href='javascript:;', data-toggle='collapse', data-target='#demo')
@@ -61,81 +61,10 @@ block content
                   a(href='#') 1EA3
         // /.navbar-collapse
                
-      #page-wrapper
-        .container-fluid
-          // Page Heading
-          .row
-            .col-lg-12
-              h1.page-header
-                | Dashboard
-                                     
-              ol.breadcrumb
-                li.active
-                  i.fa.fa-dashboard
-                  |  Dashboard
-          // /.row
-          .row
-            .col-lg-3.col-md-6
-              .panel.panel-primary
-                .panel-heading
-                  .row
-                    .col-xs-3
-                      i.fa.fa-comments.fa-5x
-                                                         
-                    .col-xs-9.text-right
-                      .huge 26                                       
-                      div New answers!
-                                             
-                a(href='#')
-                  .panel-footer
-                    span.pull-left View Details                                     
-                    span.pull-right
-                      i.fa.fa-arrow-circle-right                                    
-                    .clearfix
-          // /.row
-          .row
-            .col-lg-4
-              .panel.panel-default
-                .panel-heading
-                  h3.panel-title
-                    i.fa.fa-clock-o.fa-fw
-                    |  Tasks Panel
-                           
-                .panel-body
-                  .list-group
-                    a.list-group-item(href='#')
-                      span.badge just now                                         
-                      i.fa.fa-fw.fa-calendar
-                      |  Calendar updated                                     
-                    a.list-group-item(href='#')
-                      span.badge 4 minutes ago                                         
-                      i.fa.fa-fw.fa-comment
-                      |  Commented on a post                                    
-                    a.list-group-item(href='#')
-                      span.badge 23 minutes ago                                        
-                      i.fa.fa-fw.fa-truck
-                      |  Order 392 shipped                                  
-                    a.list-group-item(href='#')
-                      span.badge 46 minutes ago                                        
-                      i.fa.fa-fw.fa-money
-                      |  Invoice 653 has been paid                                     
-                    a.list-group-item(href='#')
-                      span.badge 1 hour ago                                       
-                      i.fa.fa-fw.fa-user
-                      |  A new user has been added                                    
-                    a.list-group-item(href='#')
-                      span.badge 2 hours ago                                         
-                      i.fa.fa-fw.fa-check
-                      |  Completed task: &quot;pick up dry cleaning&quot;                                     
-                    a.list-group-item(href='#')
-                      span.badge yesterday                                         
-                      i.fa.fa-fw.fa-globe
-                      |  Saved the world                                     
-                    a.list-group-item(href='#')
-                      span.badge two days ago                                         
-                      i.fa.fa-fw.fa-check
-                      |  Completed task: &quot;fix error on sales page&quot;                                 
-                  .text-right
-                    a(href='#')
-                      | View All Activity 
-                      i.fa.fa-arrow-circle-right
+      #page-wrapper(ng-app = 'adminApp')
+        .container-fluid(ng-view)
+
+ block scripts  
+     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js')
+     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js')
+     script(src='/javascripts/adminpanel.js')
