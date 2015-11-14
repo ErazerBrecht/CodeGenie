@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var auth = require('../passport/authlevels');
 var router = express.Router();
 
-var isLoggedIn = auth.isLoggedIn;
+var isLoggedInRedirect = auth.isLoggedInRedirect;
 
 module.exports = function (passport) {
     
@@ -13,7 +13,7 @@ module.exports = function (passport) {
         res.render('login', { message: req.flash('message') });
     });
 
-    router.get('/signout', isLoggedIn, function (req, res, next) {
+    router.get('/signout', isLoggedInRedirect, function (req, res, next) {
         req.logout();
         res.redirect('/');
     });

@@ -2,10 +2,13 @@
 var errorNotAdmin = "Unauthorized, not an admin.";
 var errorNotCorrectUser = "Unauthorized, not the correct user.";
 
-
-//TODO: Redirect to login page!?
 exports.isLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated()) return res.status(401).send(errorNotLoggedIn);
+    return next();
+}
+
+exports.isLoggedInRedirect = function (req, res, next) {
+    if (!req.isAuthenticated()) return res.redirect('/');
     return next();
 }
 

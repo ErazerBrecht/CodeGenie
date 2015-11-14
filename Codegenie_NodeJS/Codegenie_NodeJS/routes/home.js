@@ -5,13 +5,7 @@ var auth = require('../passport/authlevels');
 
 var isLoggedIn = auth.isLoggedIn;
 
-//var isAuthenticated = function (req, res, next) {
-//    if (req.isAuthenticated()) return next();
-//    res.redirect('/');
-//}
-
-
-router.get('/', isLoggedIn, function (req, res, next) {
+router.get('/', isLoggedInRedirect, function (req, res, next) {
     if (req.user.admin) //Check if user is an admin, TODO: Talk about this with other team members!!!!
         res.redirect('/admin');
     else
