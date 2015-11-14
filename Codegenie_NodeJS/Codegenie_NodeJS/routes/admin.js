@@ -36,9 +36,8 @@ router.post("/user", isAdmin, function (req, res) {
 //EXERCISES GET
 
 router.get('/', isAdmin, function (req, res) {
-    res.status(200).send("There needs to be an admin panel here");
+    res.render('panel', { title: 'CodeGenie' });
 });
-
 
 router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find(function (err, result) {
