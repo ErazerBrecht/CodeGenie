@@ -16,7 +16,7 @@ var isLoggedIn = auth.isLoggedIn;
 router.get('/', isLoggedIn, function (req, res) {
     var response = { users: 0, admins: 0, exercises: 0, answers: 0, class: [] };
 
-    //TODO: fix this godzilla of a query
+    //TODO: fix this godzilla of a query (why does it have to be async)
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
 

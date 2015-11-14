@@ -9,6 +9,7 @@ module.exports = function (passport) {
     
     /* GET login page. */
     router.get('/', function (req, res, next) {
+        if (req.isAuthenticated()) res.redirect('/home');
         res.render('login', { message: req.flash('message') });
     });
 

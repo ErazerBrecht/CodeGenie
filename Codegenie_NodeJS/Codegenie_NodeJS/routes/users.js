@@ -50,12 +50,30 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 
 router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
+    switch (exerciseID) {
+        case 'solved':
+            console.log(req.user._id);
+            AnswerModel.find({ userid: req.user._id }, function (err, result) {
+                if (err) return console.error(err);
 
-    ExerciseModel.find({ _id: exerciseID, class: req.user.class }, function (err, result) {
-        if (err) return console.error(err);
+                res.status(200).json(result);
+            })
+            break;
+        case 'unsolved':
+            ExerciseModel.find({ userid: req.user._id, class: req.user.class }, function (err, result) {
+                if (err) return console.error(err);
 
-        res.status(200).json(result);
-    })
+                res.status(200).json(result);
+            })
+            break;
+        default:
+            ExerciseModel.find({ _id: exerciseID, class: req.user.class }, function (err, result) {
+                if (err) return console.error(err);
+
+                res.status(200).json(result);
+            })
+            break;
+    }
 });
 
 router.get('/answers', isLoggedIn, function (req, res) {
