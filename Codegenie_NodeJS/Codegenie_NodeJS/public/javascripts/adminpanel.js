@@ -6,7 +6,7 @@
 			// route for the dashboard
 			.when('/', {
 				templateUrl: 'views/dashboard.html',
-				controller: 'dashBoardController',
+				controller: 'dashBoardController'
 			})
 
 			// route for the question page
