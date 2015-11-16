@@ -1,7 +1,7 @@
 ﻿(function () {
 	
 	var restData = function ($http) {
-		var getUser = function (username) {
+		var getUser = function () {
 			return $http.get("/users/mine")
                         .then(function (response) {
 				return response.data;

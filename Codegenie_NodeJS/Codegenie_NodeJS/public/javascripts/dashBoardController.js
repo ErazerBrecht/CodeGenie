@@ -24,7 +24,7 @@
 		github.getUser($scope.username).then(onUserComplete, onError);*/
 
 		var getUserData = function (data) {
-			$restData.getUserData()
+			restData.getUser()
 					.then(onDataComplete, OnError);
 		};
 		
