@@ -30,7 +30,7 @@ By using AJAX, We're able to put the data in the frontend (view). Used Tiles for
 Used ACE editor to post answers. </br>
 Used momentJS and momentJS angular for dynamic relative time!
 
-There are currently 3 pages: a login page, signup page and home page (home page currently gets all exercises and displays the questions when you click on them).
+There are currently 3 pages: a login page, signup page, adminpanel and home page (home page currently gets all exercises and displays the questions when you click on them).
 
 Printscreen
 
