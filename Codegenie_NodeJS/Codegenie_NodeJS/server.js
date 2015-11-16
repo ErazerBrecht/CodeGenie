@@ -49,7 +49,7 @@ app.use(session({
     name: "Codegenie",
     store: new cookiestore({
         mongooseConnection: mongoose.db,
-        ttl: 14 * 24 * 60 * 60, //14 days 
+        ttl: 14 * 24 * 60 * 60,
     }),
     resave: true,
     saveUninitialized: true
@@ -69,12 +69,12 @@ app.use('/home', homeRoutes);
 
 https.createServer(sslOptions, app).listen(app.get('port'));
 
-var redirectToHttps = express();
-redirectToHttps.use(function (req, res, next) {
-    if (req.secure) next();
-    else res.redirect('https://' + req.headers.host + req.url);
-});
-redirectToHttps.listen(80);
+//var redirectToHttps = express();
+//redirectToHttps.use(function (req, res, next) {
+//    if (req.secure) next();
+//    else res.redirect('https://' + req.headers.host + req.url);
+//});
+//redirectToHttps.listen(80);
 
 
 console.log('Express server started on port %s', app.get('port'));

@@ -7,9 +7,9 @@ var validateDate = function (date) {
 }
 
 var userSchema = mongoose.Schema({
-    name: { type: String, required: "The field 'name' was not found", unique: true },
-    password: { type: String, required: "The field 'password' was not found" },
-    class: { type: String, required: "The field 'class' was not found" },
+    name: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    class: { type: String, required: true },
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
@@ -18,31 +18,40 @@ var userSchema = mongoose.Schema({
 });
 
 var exerciseSchema = mongoose.Schema({
-    title: { type: String, required: "The field 'title' was not found" },
-    classification: { type: String, required: "The field 'classification' was not found" },
-    class: { type: String, required: "The field 'class' was not found" },
-    weight: { type: Number, required: "The field 'weight' was not found" },
+    title: { type: String, required: true },
+    classification: { type: String, required: true },
+    class: { type: String, required: true },
     deadline: { type: String, validate: [validateDate, "Invalid date in 'deadline'"] },
     created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
+    weight: { type: Number, required: true },
     extra: { type: Boolean, default: false },
     questions: [{
-        question: { type: String, required: "A field 'question' was not found" },
-        weight: { type: Number, required: "A field 'weight' was not found" },
-        extra: { type: Boolean, default: false },
-        type: { type: String, default: "Checkbox", enum: ['Checkbox', 'Question', 'Code'] }
-    }]
+            questiontitle: { type: String, required: true },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, default: false },
+            type: { type: String, required: true, enum: ['Checkbox', 'Question', 'Code'] }
+        }]
 });
 
 var answerSchema = mongoose.Schema({
-    exerciseid: { type: String, required: "The field 'exerciseid' was not found" },
-    userid: { type: String, required: "The field 'userid' was not found" },
-    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'answered'"] },
+    exerciseid: { type: String, required: true },
+    userid: { type: String, required: true },
+    title: { type: String, required: true },
+    classification: { type: String, required: true },
+    class: { type: String, required: true },
+    extra: { type: Boolean, required: true },
+    weight: { type: Number, required: true },
+    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
     answers: [{
-        questionid: { type: String, required: "The field 'questionid' was not found" },
-        received: { type: Number, default: 0 },
-        answer: { type: Boolean },
-        text: { type: String }
-    }]
+            questionid: { type: String, required: true },
+            questiontitle: { type: String, required: true },
+            received: { type: Number, default: 0 },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, required: true },
+            type: { type: String, required: true, enum: ['Checkbox', 'Question', 'Code'] },
+            answer: { type: Boolean },
+            text: { type: String }
+        }]
 });
 
 var UserModel = mongoose.model('User', userSchema);
@@ -57,8 +66,7 @@ exports.errhandler = function (err) {
     if (err) {
         var errmessage = [];
         for (var field in err.errors) {
-            var mes = err.errors[field].message + ": " + err.errors[field].value;
-            console.log(mes);
+            var mes = err.errors[field].message + " Found " + err.errors[field].value + ".";
             errmessage.push({ error: mes });
         }
         return errmessage;
