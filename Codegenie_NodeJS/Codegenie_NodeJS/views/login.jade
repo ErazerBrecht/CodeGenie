@@ -1,4 +1,5 @@
-﻿extends layout
+﻿
+extends layout
 
 block header
     link(rel='stylesheet', href='/stylesheets/form.css')
@@ -11,9 +12,12 @@ block content
           div.account-wall
             img(class='profile-img', width=128, src='https://cdn.photoaffections.com/images/icon-profile.png')
             form(class='form-signin', action='/login', method='POST')
-              input(type='text', name='username' class='form-control', placeholder='Username',required, autofocus)
-              input(type='password', name='password' class='form-control', placeholder='Password', required)
-              button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
+              .form-group
+                input(type='text', name='username' class='form-control', placeholder='Username',required, autofocus)
+              .form-group
+                input(type='password', name='password' class='form-control', placeholder='Password', required)
+              .form-group
+                button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
               span.clearfix
           a(href='/signup', class='text-center new-account') Create an account
           #message
