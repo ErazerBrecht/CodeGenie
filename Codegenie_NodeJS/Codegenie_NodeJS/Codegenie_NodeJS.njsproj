@@ -401,10 +401,10 @@
     <Content Include="ssl\server.crt" />
     <Content Include="ssl\server.key" />
     <Content Include="startnodemon.cmd" />
-    <Content Include="views\index.jade" />
+    <Content Include="views\userpanel.jade" />
     <Content Include="views\layout.jade" />
     <Content Include="views\login.jade" />
-    <Content Include="views\panel.jade" />
+    <Content Include="views\adminpanel.jade" />
     <Content Include="views\signup.jade" />
   </ItemGroup>
   <ItemGroup>

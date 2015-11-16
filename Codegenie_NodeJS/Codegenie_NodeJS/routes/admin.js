@@ -14,6 +14,18 @@ var answerExists = schemas.answerExists;
 var isAdmin = auth.isAdmin;
 
 
+router.get('/', isAdmin, function (req, res) {
+    res.render('adminpanel', { title: 'CodeGenie' });
+});
+
+router.get('/exercises', isAdmin, function (req, res) {
+    ExerciseModel.find(function (err, result) {
+        if (err) return console.error(err);
+        
+        res.status(200).json(result);
+    })
+});
+
 //USER POST
 
 router.post("/user", isAdmin, function (req, res) {
@@ -30,22 +42,7 @@ router.post("/user", isAdmin, function (req, res) {
 });
 
 
-
-
-
 //EXERCISES GET
-
-router.get('/', isAdmin, function (req, res) {
-    res.render('panel', { title: 'CodeGenie' });
-});
-
-router.get('/exercises', isAdmin, function (req, res) {
-    ExerciseModel.find(function (err, result) {
-        if (err) return console.error(err);
-
-        res.status(200).json(result);
-    })
-});
 
 router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
