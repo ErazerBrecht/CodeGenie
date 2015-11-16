@@ -4,7 +4,7 @@ block header
     link(rel='stylesheet', href='/stylesheets/sb-admin.css')
 
 block content
-    #wrapper
+    #wrapper(ng-app = 'adminApp' ng-controller='adminPanelController')
       // Navigation
       nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
         // Brand and toggle get grouped for better mobile display
@@ -15,7 +15,7 @@ block content
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               i.fa.fa-user
-              |  {{
+              | {{ user.name }}
               b.caret
                                 
             ul.dropdown-menu
@@ -61,7 +61,7 @@ block content
                   a(href='#') 1EA3
         // /.navbar-collapse
                
-      #page-wrapper(ng-app = 'adminApp')
+      #page-wrapper
         .container-fluid(ng-view)
 
  block scripts  
@@ -71,3 +71,4 @@ block content
      script(src='/javascripts/dashBoardController.js')
      script(src='/javascripts/exerciseController.js')
      script(src='/javascripts/restDataService.js')
+     script(src='/javascripts/adminPanelController.js')

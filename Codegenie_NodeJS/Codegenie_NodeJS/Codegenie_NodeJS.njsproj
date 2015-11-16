@@ -40,6 +40,7 @@
     <Compile Include="passport\login.js" />
     <Compile Include="passport\signup.js" />
     <Compile Include="public\javascripts\adminpanel.js" />
+    <Compile Include="public\javascripts\adminPanelController.js" />
     <Compile Include="public\javascripts\beautify.js" />
     <Compile Include="public\javascripts\bootstrap.js" />
     <Compile Include="public\javascripts\bootstrap.min.js" />
