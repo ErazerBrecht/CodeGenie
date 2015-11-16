@@ -42,6 +42,8 @@
     <Compile Include="public\javascripts\beautify.js" />
     <Compile Include="public\javascripts\bootstrap.js" />
     <Compile Include="public\javascripts\bootstrap.min.js" />
+    <Compile Include="public\javascripts\dashBoardController.js" />
+    <Compile Include="public\javascripts\exerciseController.js" />
     <Compile Include="public\javascripts\index.js" />
     <Compile Include="public\javascripts\npm.js" />
     <Compile Include="public\javascripts\src-min\ace.js" />
