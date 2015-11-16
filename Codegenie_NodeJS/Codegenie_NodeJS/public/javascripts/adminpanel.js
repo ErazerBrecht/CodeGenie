@@ -1,12 +1,12 @@
 ﻿(function () {
-	var adminApp = angular.module('adminApp', ['ngRoute']);
+	var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment']);
 
 	adminApp.config(function($routeProvider) {
 		$routeProvider
 			// route for the dashboard
 			.when('/', {
 				templateUrl: 'views/dashboard.html',
-				controller: 'dashBoardController'
+				controller: 'dashBoardController',
 			})
 
 			// route for the question page

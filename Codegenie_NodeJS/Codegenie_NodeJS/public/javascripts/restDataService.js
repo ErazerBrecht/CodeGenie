@@ -4,14 +4,20 @@
 		var getUser = function () {
 			return $http.get("/users/mine")
                         .then(function (response) {
-				return response.data;
+							return response.data;
 			});
 		};
 		
-
+		var getAllAnswers = function () {
+			return $http.get("/admin/answers")
+						.then(function (response) {
+							return response.data;
+			});
+		};
 
 		return {
-			getUser: getUser
+			getUser: getUser,
+			getAllAnswers: getAllAnswers
 		}
 	};
 	var module = angular.module("adminApp");
