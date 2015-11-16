@@ -9,7 +9,7 @@ router.get('/', isLoggedInRedirect, function (req, res, next) {
     if (req.user.admin) //Check if user is an admin, TODO: Talk about this with other team members!!!!
         res.redirect('/admin');
     else
-        res.render('index', { title: 'CodeGenie' });
+        res.render('userpanel', { title: 'CodeGenie' });
 });
 
 module.exports = router;
