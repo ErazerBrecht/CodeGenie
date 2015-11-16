@@ -1,5 +1,38 @@
 ﻿<div class="row">
-    <h1>Exercise</h1>
+    <div class="col-lg-12">
+        <h1 class="page-header">Exercise</h1>
 
-    <p>{{ message }}</p>
+        <p>{{ message }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col-lg-12">
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Titel">
+        </div>
+        <div class="form-group">
+            <label>Classification</label>
+            <input type="text" class="form-control" id="classification" placeholder="Classification">
+        </div>
+        <div class="form-group">
+            <label>Class</label>
+            <input type="text" class="form-control" id="class" placeholder="Class">
+        </div>
+        <div class="form-group">
+            <label>Weight</label>
+            <input type="number" class="form-control" id="weight" placeholder="Weight">
+        </div>
+        <div class="form-group">
+            <label>Deadline</label>
+            <input type="date" class="form-control" id="deadline">
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">Extra
+            </label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
 </div>
