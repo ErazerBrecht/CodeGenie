@@ -29,28 +29,34 @@
             <input type="date" class="form-control" id="deadline">
         </div>
         <div class="checkbox">
-            <label>
-                <input type="checkbox">Extra
-            </label>
+                <label class="big-checkbox"><input type="checkbox" id="extra">Extra</label>
         </div>
 
         <div class="form-group horizontal">
-            <label class="col-xs-1 control-label">Book</label>
+            <label class="col-xs-1 control-label">Question</label>
             <div class="col-xs-4">
-                <input type="text" class="form-control" name="book[0].title" placeholder="Title"/>
-            </div>
-            <div class="col-xs-4">
-                <input type="text" class="form-control" name="book[0].isbn" placeholder="ISBN"/>
+                <input type="text" class="form-control" name="questions[0].questiontitle" placeholder="Title"/>
             </div>
             <div class="col-xs-2">
-                <input type="text" class="form-control" name="book[0].price" placeholder="Price"/>
+                <input type="number" class="form-control" name="questions[0].weight" placeholder="Weight"/>
+            </div>
+            <div class="col-xs-2">
+                <select class="form-control" name="questions[0].type" placeholder="test">
+                    <option value="" disabled selected hidden>Select the type</option>
+                    <option value="Checkbox">Checkbox</option>
+                    <option value="Question">Question</option>
+                    <option value="Code">Code</option>
+                </select>
             </div>
             <div class="col-xs-1">
+                <label class="checkbox-inline big-checkbox"><input type="checkbox" name="questions[0].extra">Extra</label>
+            </div>
+            <div class="col-xs-1 col-xs-offset-1">
                 <button type="button" class="btn btn-default">+</button>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group top-30">
             <button type="submit" class="btn btn-default">Submit</button>
         </div>
 
