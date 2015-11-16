@@ -22,6 +22,18 @@
 		$scope.selection = "-stargazers_count";
 		
 		github.getUser($scope.username).then(onUserComplete, onError);*/
+
+		var getUserData = function (data) {
+			$restData.getUserData()
+					.then(onDataComplete, OnError);
+		};
+		
+		var onDataComplete = function (data) {
+			$scope.user = data;
+		};
+		var onError = function (response) {
+			$scope.error = "Couldn't find the data"
+		};
 	};
 	
 	app.controller("dashBoardController", dashBoardController);
