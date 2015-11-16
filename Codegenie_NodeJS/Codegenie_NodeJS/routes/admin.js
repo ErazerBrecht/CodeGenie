@@ -24,8 +24,8 @@ router.post("/user", isAdmin, function (req, res) {
 
     newuser.save(function (err) {
         var response = errhandler(err);
-        if (response == "ok") res.sendStatus(201);
-        else res.status(500).json(response);
+        if (response != "ok") return res.status(500).send(response);
+        res.sendStatus(201);
     });
 });
 
@@ -74,8 +74,8 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 
     newexercise.save(function (err) {
         var response = errhandler(err);
-        if (response == "ok") res.sendStatus(201);
-        else res.status(500).json(response);
+        if (response != "ok") return res.status(500).send(response);
+        res.sendStatus(201);
     });
 });
 
@@ -91,8 +91,8 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
 
         ExerciseModel.update({ _id: exerciseID }, newexercise, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response == "ok") res.sendStatus(201);
-            else res.status(500).json(response);
+            if (response != "ok") return res.status(500).send(response);
+            res.sendStatus(201);
         });
     });
 });
@@ -135,8 +135,8 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
 
         AnswerModel.update({ _id: answerID }, { $set: newanswer }, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response == "ok") res.sendStatus(201);
-            else res.status(500).json(response);
+            if (response != "ok") return res.status(500).send(response);
+            res.sendStatus(201);
         });
     });
 });

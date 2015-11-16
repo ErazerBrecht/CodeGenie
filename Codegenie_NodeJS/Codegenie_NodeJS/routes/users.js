@@ -144,7 +144,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
 
         newanswer.save(function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).json(response);
+            if (response != "ok") return res.status(500).send(response);
             return res.sendStatus(201);
         });
     })
@@ -169,8 +169,8 @@ router.post("/edit", isLoggedIn, function (req, res) {
         
         UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response == "ok") res.sendStatus(201);
-            else res.status(500).json(response);
+            if (response != "ok") return res.status(500).send(response);
+            res.sendStatus(201);
         });
     });
 });

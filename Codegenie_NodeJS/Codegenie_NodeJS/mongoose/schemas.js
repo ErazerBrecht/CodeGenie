@@ -64,10 +64,9 @@ exports.AnswerModel = AnswerModel;
 
 exports.errhandler = function (err) {
     if (err) {
-        var errmessage = [];
+        var errmessage = "";
         for (var field in err.errors) {
-            var mes = err.errors[field].message + " Found " + err.errors[field].value + ".";
-            errmessage.push({ error: mes });
+            errmessage += err.errors[field].message + " Found " + err.errors[field].value + ".";
         }
         return errmessage;
     }
