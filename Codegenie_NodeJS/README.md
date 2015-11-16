@@ -23,10 +23,12 @@ Current modules used:
 * serve-favicon: this serves the favicon? no idea it's there when you make a blank project :p
 
 
+
 Frontend:
-We use the bootstrap framework.
-By using AJAX, We're able to put the data in the frontend (view). Used Tiles for buttons.
-Used ACE editor to post answers.
+We use the bootstrap framework.</br>
+By using AJAX, We're able to put the data in the frontend (view). Used Tiles for buttons.</br>
+Used ACE editor to post answers. </br>
+Used momentJS and momentJS angular for dynamic relative time!
 
 There are currently 3 pages: a login page, signup page and home page (home page currently gets all exercises and displays the questions when you click on them).
 
