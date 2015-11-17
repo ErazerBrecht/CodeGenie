@@ -8,16 +8,22 @@ CodeGenie Requirements
 ###Technologie
 Gebruik maken van Meanstack
 
-Frontend: AngularJS + Bootstrap (Arne Schoonvliet)
-Backend: NodeJS + REST API (Brecht Carlier)
-Data: MongoDB + Mongoose (Matthew Berkvens)
+Frontend: AngularJS (Arne Schoonvliet)
+Lijm: Bootstrap + Rest API + Vanalles (Brecht Carlier)
+Backend: Rest API + MongoDB + Mongoose (Matthew Berkvens)
 
-Extra vereisten online code formatter voor C#
-Zie ramp examen C# code posten op BB.
-Code is onleesbaar moeilijk na te kijken!
-Oplossen!
+Extra vereisten online code formatter voor C# Zie ramp examen C# code posten op BB! Code is onleesbaar moeilijk na te kijken!
+
+### Eisen
+* Deadline volledig jaar hetzelfde!
+* Werken met jaar i.p.v. per klass!
+* Multiple choises
 
 ###Data
+
+Zie NodeJS project, README.md
+
+Deze data is *decrepated*
 
 **_Studenten_**
 * Naam
@@ -32,7 +38,4 @@ Oplossen!
 * Classificatie (Tags: Bijvoorbeeld: json, xml, sql, wpf, ...)
 * Tijd / Datum
 
-(Moet in aparte tabel in SQL termen)
-* Antwoorden 
-* Score
-* Student ID
+
