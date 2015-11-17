@@ -31,7 +31,7 @@ router.get('/exercises', isAdmin, function (req, res) {
 router.post("/user", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
 
-    newuser.lastseen = moment().format("DD/MM/YYYY");
+    newuser.lastseen = moment().format("DD/MM/YYYY HH:MM:SS");
     newuser.admin = true;
 
     newuser.save(function (err) {

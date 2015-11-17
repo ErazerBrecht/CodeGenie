@@ -13,8 +13,8 @@ var userSchema = mongoose.Schema({
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
-    registerdate: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date found in 'registerdate'"] },
-    lastseen: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'lastseen'"] }
+    registerdate: { type: String, default: moment().format("DD/MM/YYYY HH:MM:SS"), validate: [validateDate, "Invalid date found in 'registerdate'"] },
+    lastseen: { type: String, default: moment().format("DD/MM/YYYY HH:MM:SS"), validate: [validateDate, "Invalid date in 'lastseen'"] }
 });
 
 var exerciseSchema = mongoose.Schema({
@@ -22,7 +22,7 @@ var exerciseSchema = mongoose.Schema({
     classification: { type: String, required: true },
     class: { type: String, required: true },
     deadline: { type: String, validate: [validateDate, "Invalid date in 'deadline'"] },
-    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
+    created: { type: String, default: moment().format("DD/MM/YYYY HH:MM:SS"), validate: [validateDate, "Invalid date in 'created'"] },
     weight: { type: Number, required: true },
     extra: { type: Boolean, default: false },
     questions: [{
@@ -41,7 +41,7 @@ var answerSchema = mongoose.Schema({
     class: { type: String, required: true },
     extra: { type: Boolean, required: true },
     weight: { type: Number, required: true },
-    created: { type: String, default: moment().format("DD/MM/YYYY"), validate: [validateDate, "Invalid date in 'created'"] },
+    created: { type: String, default: moment().format("DD/MM/YYYY HH:MM:SS"), validate: [validateDate, "Invalid date in 'created'"] },
     answers: [{
             questionid: { type: String, required: true },
             questiontitle: { type: String, required: true },

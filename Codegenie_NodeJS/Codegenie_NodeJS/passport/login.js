@@ -23,7 +23,7 @@ module.exports = function (passport) {
                         console.log('Invalid Password for user: ' + username);
                         return done(null, false, req.flash('message', 'Incorrect password.'));
                     }
-                    UserModel.update({ _id: user._id }, { $set: { 'lastseen': moment().format("DD/MM/YYYY") } }, { runValidators: true }, function (err) {
+                    UserModel.update({ _id: user._id }, { $set: { 'lastseen': moment().format("DD/MM/YYYY HH:MM:SS") } }, { runValidators: true }, function (err) {
                         var response = errhandler(err);
                         if (response != "ok") {
                             done(null, false, response);
