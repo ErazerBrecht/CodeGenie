@@ -151,7 +151,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
             }
         }
         
-        //TODO: check if questionids that were posted are actually unique
+        //(MAYBE)TODO: check if questionids that were posted are actually unique
         if (newanswer.answers.length != result.questions.length) return res.status(500).send("There were some questions missing.");
         
         console.log(newanswer.answers);
@@ -166,7 +166,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
 
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
-        if (err) return console.error(err);
+        if (err) return console.error(err); 
         
         var newuser = new UserModel(result);
         

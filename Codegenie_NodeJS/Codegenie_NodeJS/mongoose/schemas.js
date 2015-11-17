@@ -3,8 +3,12 @@ var moment = require('moment');
 
 var validateDate = function (date) {
     var dateRegex = /^(?:(?:31(\/)(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec)))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
-    return dateRegex.test(date);
+    //return dateRegex.test(date);
+    //TODO fix this regex
+    return true;
 }
+
+var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -29,7 +33,7 @@ var exerciseSchema = mongoose.Schema({
             questiontitle: { type: String, required: true },
             weight: { type: Number, required: true },
             extra: { type: Boolean, default: false },
-            type: { type: String, required: true, enum: ['Checkbox', 'Question', 'Code'] }
+            type: { type: String, required: true, enum: typeEnum }
         }]
 });
 
@@ -48,8 +52,9 @@ var answerSchema = mongoose.Schema({
             received: { type: Number, default: 0 },
             weight: { type: Number, required: true },
             extra: { type: Boolean, required: true },
-            type: { type: String, required: true, enum: ['Checkbox', 'Question', 'Code'] },
+            type: { type: String, required: true, enum: typeEnum },
             answer: { type: Boolean },
+            choices: [{ type: String }],
             text: { type: String }
         }]
 });
