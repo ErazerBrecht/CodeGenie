@@ -199,17 +199,22 @@ The user will edit his/her profile by posting here.
 
 
 ###Admin portal
-The admin portal has 6 gets and 4 posts
+The admin portal has 7 gets and 4 posts
+
+
+####GET: /admin/
+
+HTML page for the admin panel
 
 
 ####POST: /admin/user
 
 The admin can create a new user by posting here.
 
+####GET: /admin/user/{ID}
 
-####GET: /admin/
+Gives the userdata of userid {ID}
 
-HTML page for the admin panel (TODO)
 
 ####GET: /admin/exercises
 
