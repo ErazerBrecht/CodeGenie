@@ -20,7 +20,7 @@ var isAdmin = auth.isAdmin;
 //GET
 
 router.get('/', isAdmin, function (req, res) {
-    UserModel.find(function (err, result) {
+    UserModel.find({}, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
         
         for (var user in result) result[user]["password"] = undefined;
@@ -30,10 +30,8 @@ router.get('/', isAdmin, function (req, res) {
 });
 
 router.get('/mine', isLoggedIn, function (req, res) {
-    UserModel.findById(req.user._id, function (err, result) {
+    UserModel.findById(req.user._id, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
-        
-        result["password"] = undefined;
         
         res.status(200).json(result);
     })
@@ -52,17 +50,33 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     switch (exerciseID) {
         case 'solved':
-            AnswerModel.find({ userid: req.user._id }, function (err, result) {
+            AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
                 
-                res.status(200).json(result);
+                var exerciseIDs = [];
+                
+                for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
+                
+                ExerciseModel.find({ _id: { $in: exerciseIDs } }, function (err, exresult) {
+                    if (err) return console.error(err);
+                    
+                    res.status(200).json(exresult);
+                })
             })
             break;
         case 'unsolved':
-            ExerciseModel.find({ userid: req.user._id, class: req.user.class }, function (err, result) {
+            AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
+
+                var exerciseIDs = [];
                 
-                res.status(200).json(result);
+                for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
+                
+                ExerciseModel.find({ _id: { $nin: exerciseIDs }, class: req.user.class }, function (err, exresult) {
+                    if (err) return console.error(err);
+                    
+                    res.status(200).json(exresult);
+                })
             })
             break;
         default:
@@ -136,12 +150,12 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 }
             }
         }
-
-        //TODO: check if questionids are actually unique
+        
+        //TODO: check if questionids that were posted are actually unique
         if (newanswer.answers.length != result.questions.length) return res.status(500).send("There were some questions missing.");
         
         console.log(newanswer.answers);
-
+        
         newanswer.save(function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
