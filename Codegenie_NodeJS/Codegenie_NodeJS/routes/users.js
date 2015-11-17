@@ -166,7 +166,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
 
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
-        if (err) return console.error(err); 
+        if (err) return console.error(err);
         
         var newuser = new UserModel(result);
         

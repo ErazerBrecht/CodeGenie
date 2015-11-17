@@ -252,10 +252,7 @@ The admin portal has 6 gets and 4 posts
 
 ##TODO:
 
-- Make authentication checks and its responses better
-- Update lastseen on auth checks
-- Make page to view the user's solved questions
-- Make simple admin panel
-- Make simple user panel
+- Make user panel
 - Find a better way to accept/store user classes (different table with 'active' classes? e.g. 3EA1)
 - Finish statistics API
+- Change date regex string to new format
