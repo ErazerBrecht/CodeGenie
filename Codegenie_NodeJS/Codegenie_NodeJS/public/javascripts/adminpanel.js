@@ -13,7 +13,11 @@
 			.when('/exercise', {
 				templateUrl: 'views/exercise.html',
 				controller: 'exerciseController'
-			})
+            })
+            .when('/answers', {
+                templateUrl: 'views/answers.html',
+                controller: 'answersController'
+            })
 			.otherwise({ redirectTo: "/" });
 	});
 }());

@@ -44,6 +44,7 @@
     <Compile Include="public\javascripts\Beautify\beautify.js" />
     <Compile Include="public\javascripts\Bootstrap\bootstrap.js" />
     <Compile Include="public\javascripts\Bootstrap\bootstrap.min.js" />
+    <Compile Include="public\javascripts\Controllers\answersController.js" />
     <Compile Include="public\javascripts\Controllers\dashBoardController.js" />
     <Compile Include="public\javascripts\Controllers\exerciseController.js" />
     <Compile Include="public\javascripts\userPanel.js" />
@@ -398,6 +399,7 @@
     <Content Include="public\stylesheets\sb-admin.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="public\stylesheets\tiles.css" />
+    <Content Include="public\views\answers.html" />
     <Content Include="public\views\dashboard.html" />
     <Content Include="public\views\exercise.html" />
     <Content Include="ssl\ca.crt" />

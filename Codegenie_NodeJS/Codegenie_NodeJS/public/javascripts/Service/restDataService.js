@@ -6,7 +6,7 @@
                         .then(function (response) {
 							return response.data;
 			});
-		};
+        };
 		
 		var getAllAnswers = function () {
 			return $http.get("/admin/answers")
@@ -14,10 +14,18 @@
 							return response.data;
 			});
 		};
+        
+        var getUserById = function (userId) {
+            return $http.get("/admin/user/" + userId)
+                        .then(function (response) {
+                            return response.data;
+            });
+        };
 
 		return {
 			getUser: getUser,
-			getAllAnswers: getAllAnswers
+            getAllAnswers: getAllAnswers,
+            getUserById: getUserById
 		}
 	};
 	var module = angular.module("adminApp");

@@ -1,0 +1,18 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Answers
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="list-group">
+            <a href="" ng-repeat="answer in answers | limitTo:10" class="list-group-item">
+                <time am-time-ago="answer.created" class="badge"></time> 
+                <i class="fa fa-fw fa-check"></i> {{}} {{error}}
+            </a>
+        </div>
+    </div>
+</div>
