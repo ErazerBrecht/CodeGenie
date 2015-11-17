@@ -49,7 +49,7 @@ We used Visual Studio for this project, we recommend [Node.js tools for Visual S
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
 
 
-**All dates have the format of DD/MM/YYYY (e.g. 20/02/2015)**
+**All dates have the format of DD/MM/YYYY HH:MM:SS (e.g. 20/02/2015 15:20:30)**
 
 
 *Defaults do not need need to be filled in, if the field is missing the server will default these.*
@@ -80,64 +80,79 @@ Exercises have 8 fields, 4 of which are required and 2 which have a default.
 
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
-* classification: string, classification of the exercise (e.g. Databases)
+* classification: string, classification of the exercise (e.g. Databinding)
 * weight: number, maximum score and weight of this exercise (e.g. 20)
 * class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
 
 Defaults:
-* created: date, when the exercise was posted, defaults to current time on the server
-* extra: boolean, check if this exercise is an extra assignment or not, defaults to false
+* created: date, when the exercise was posted, defaults to current time on the server.
+* extra: boolean, check if this exercise is an extra assignment or not, defaults to false.
 
 Not required but field is available: 
-* deadline: date, date by which the exercise has to be solved
+* deadline: date, date by which the exercise has to be solved.
 * questions: array of 'question' objects (see: [question object](#questionobject)), this is an array of the questions in this exercise.
 
 
 ###Answers
-Answers have 4 fields, 2 of which are required and 1 which has a default.
+Answers have 9 fields, 7 of which are required and 1 which has a default.
 
 Required:
 * exerciseid: string, id of the exercise (e.g. 5637951a8a48cc983189c500)
 * userid: string, id of the user (e.g. 5637951a8a48cc983189c500)
+* title: string, title of the original exercise (e.g. Databinding)
+* classification: string, classification of the original exercise (e.g. Databinding)
+* class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
+* weight: number, maximum score and weight of the original exercise (e.g. 20)
+* extra: boolean, check if the original exercise is an extra assignment or not.
 
 Defaults:
 * created: date, when the answer was posted, defaults to current time on the server.
 
 Not required but field is available: 
-* questions: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
+* answers: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
+
 
 
 ####Question object<a name="answerobject"></a>
 The question object exists out of 4 fields, 2 of which are required and 2 which have a default.
 
 Required:
-* question: string, question of this question (e.g. What is 'MongoDB'?)
+* question: string, title of this question (e.g. What is 'Databinding'?)
 * weight: number, maximum score and weight of this exercise (e.g. 20)
 
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
 * type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')(defaults to "Checkbox")
 
+
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 4 fields, 1 of which is required and 3 which have a default.
+The answer object exists out of 8 fields, 5 of which is required and 1 which has a default.
 
 Required:
 * questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
+* questiontitle: string, title of the original question (e.g. What is 'Databinding'?)
+* weight: number, maximum score and weight of the original question (e.g. 5)
+* extra: boolean, check if the original question is an extra question or not.
+* type: string with enum, type of original question (currently accepted: 'Checkbox', 'Question', 'Code')
 
 Defaults:
-* received: number, how much the user received for this exercise (e.g. 5)
+* received: number, how much the user received for this exercise (e.g. 5) (defaults to 0 obviously)
 
 Not required but field is available: 
 * text: string, if code/question was asked, this is the field it will be placed in.
 * answer: boolean, this is used if the original question was a checkbox.
 
 
+
+
 ##Data access, Information Portals
 
 There are currently 2 portals, the /admin/ portal and the /users/ portal
 
+
+
 ###User portal
-The user portal has 6 gets and 2 posts
+The user portal has 8 gets and 2 posts
 
 
 ####GET: /users/
@@ -151,6 +166,14 @@ This gives the current user's information.
 ####GET: /users/exercises
 
 This gives all current exercises that the user is allowed to solve.
+
+####GET: /users/exercises/solved
+
+This gives all the current exercises that the user has solved.
+
+####GET: /users/exercises/unsolved
+
+This gives all the current exercises that the user has yet to solve.
 
 ####GET: /users/exercises/{ID} 
 
@@ -171,6 +194,8 @@ If an user has solved an exercise it is posted here.
 ####POST: /users/edit
 
 The user will edit his/her profile by posting here.
+
+
 
 
 ###Admin portal
@@ -221,6 +246,8 @@ The admin can edit answers by posting here.
 
 
 
+###Statistics portal
+The admin portal has 6 gets and 4 posts
 
 
 ##TODO:
