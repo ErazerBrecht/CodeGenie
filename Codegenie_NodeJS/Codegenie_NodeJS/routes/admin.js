@@ -30,10 +30,10 @@ router.get('/exercises', isAdmin, function (req, res) {
 
 router.post("/user", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
-
+    
     newuser.lastseen = moment().format("DD/MM/YYYY HH:MM:SS");
     newuser.admin = true;
-
+    
     newuser.save(function (err) {
         var response = errhandler(err);
         if (response != "ok") return res.status(500).send(response);
@@ -41,25 +41,37 @@ router.post("/user", isAdmin, function (req, res) {
     });
 });
 
+//EXERCISES GET
+
+router.get('/user/:userID', isAdmin, function (req, res) {
+    var userID = req.params.userID;
+    
+    UserModel.findById(userID, { password: 0 }, function (err, result) {
+        if (err) return console.error(err);
+        
+        res.status(200).json(result);
+    })
+});
+
 
 //EXERCISES GET
 
 router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
-
+    
     ExerciseModel.findById(exerciseID, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
 
 router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
-
+    
     AnswerModel.find({ exerciseid: exerciseID }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
@@ -68,7 +80,7 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
 
 router.post("/exercises/post", isAdmin, function (req, res) {
     var newexercise = new ExerciseModel(req.body);
-
+    
     newexercise.save(function (err) {
         var response = errhandler(err);
         if (response != "ok") return res.status(500).send(response);
@@ -78,14 +90,14 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
-
+    
     ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
         if (err) return console.error(err);
-
+        
         var newexercise = new ExerciseModel(result);
-
+        
         for (var field in req.body) newexercise[field] = req.body[field];
-
+        
         ExerciseModel.update({ _id: exerciseID }, newexercise, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
@@ -103,17 +115,17 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
 router.get('/answers', isAdmin, function (req, res) {
     AnswerModel.find(function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
 
 router.get('/answers/:answerID', isAdmin, function (req, res) {
     var answerID = req.params.answerID;
-
+    
     AnswerModel.find({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
@@ -122,14 +134,14 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
 
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
-
+    
     AnswerModel.findOne({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
-
+        
         var newanswer = new AnswerModel(result);
-
+        
         for (var field in req.body) newanswer[field] = req.body[field];
-
+        
         AnswerModel.update({ _id: answerID }, { $set: newanswer }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
