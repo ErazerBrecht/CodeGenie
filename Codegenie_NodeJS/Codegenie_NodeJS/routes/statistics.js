@@ -14,37 +14,36 @@ var isLoggedIn = auth.isLoggedIn;
 
 
 router.get('/', isLoggedIn, function (req, res) {
-    var response = { users: 0, admins: 0, exercises: 0, answers: 0, class: [] };
+    var response = { users: 0, admins: 0, exercises: 0, answers: 0, classes: [] };
     
     //TODO: fix this godzilla of a query (why does it have to be async)
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
-        
+
         AnswerModel.count(function (err, c) {
             response.answers = c;
-            
+
             UserModel.count(function (err, c) {
                 response.users = c;
-                
+
                 UserModel.count({ admin: true }, function (err, c) {
                     response.admins = c;
-                    
-                    
-                    /*UserModel.count({}, { class: 1 }, function (err, c) {
+
+                    UserModel.find({}, { class: 1 }, function (err, c) {
                         var ar = count(c);
-                        for (var index in ar[0]) response.class.push({ class: ar[0][index], count: ar[1][index] });
-                        */
+                        for (var index in ar[0]) response.classes.push({ class: ar[0][index].class, count: ar[1][index] });
+
                         res.status(200).json(response);
-                    //});
+                    });
                 });
             });
         });
     });
 });
 
-var count = function (arr) {
+function count(arr) {
     var a = [], b = [], prev;
-    
+
     arr.sort();
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] !== prev) {
@@ -55,7 +54,7 @@ var count = function (arr) {
         }
         prev = arr[i];
     }
-    
+
     return [a, b];
 }
 
