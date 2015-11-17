@@ -39,8 +39,8 @@ module.exports = function (passport) {
                                 email: email,
                                 status: 0,
                                 admin: false,
-                                registerdate: moment().format("DD/MM/YYYY HH:MM:SS"),
-                                lastseen: moment().format("DD/MM/YYYY HH:MM:SS")
+                                registerdate: moment().format("DD/MM/YYYY HH:mm:ss"),
+                                lastseen: moment().format("DD/MM/YYYY HH:mm:ss")
                             });
                             
                             newUser.save(function (err) {

@@ -7,7 +7,7 @@ var errorNotAdmin = "Unauthorized, not an admin.";
 var errorNotCorrectUser = "Unauthorized, not the correct user.";
 
 var updatelastseen = function (user) {
-    UserModel.update({ _id: user._id }, { $set: { 'lastseen': moment().format("DD/MM/YYYY HH:MM:SS") } }, { runValidators: true }, function (err) {
+    UserModel.update({ _id: user._id }, { $set: { 'lastseen': moment().format("DD/MM/YYYY HH:mm:ss") } }, { runValidators: true }, function (err) {
         if (err) console.log('Error updating lastseen for user: ' + user.name);
     });
 }

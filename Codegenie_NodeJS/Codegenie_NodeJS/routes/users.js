@@ -122,7 +122,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
         if (!answer.answers) return res.status(500).send("There were no answers given.");
         
         if (result.deadline) {
-            if (new Date(moment().format("DD/MM/YYYY HH:MM:SS")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
+            if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
         
         newanswer.userid = req.user._id;
@@ -131,7 +131,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
         newanswer.extra = result.extra;
         newanswer.classification = result.classification;
         newanswer.class = result.classification;
-        newanswer.created = moment().format("DD/MM/YYYY HH:MM:SS");
+        newanswer.created = moment().format("DD/MM/YYYY HH:mm:ss");
         
         for (var answerIndex in answer.answers) {
             if (!questionExists(answer.answers[answerIndex], result.questions)) {
