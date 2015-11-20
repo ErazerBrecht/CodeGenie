@@ -7,58 +7,86 @@
 </div>
 
 <div class="row">
-    <form class="col-lg-12">
+    <form id="exerciseForm" class="col-lg-12">
         <div class="form-group">
             <label>Title</label>
-            <input type="text" class="form-control" id="title" placeholder="Titel">
+            <input type="text" class="form-control" name="title" placeholder="Titel">
         </div>
         <div class="form-group">
             <label>Classification</label>
-            <input type="text" class="form-control" id="classification" placeholder="Classification">
+            <input type="text" class="form-control" name="classification" placeholder="Classification">
         </div>
         <div class="form-group">
             <label>Class</label>
-            <input type="text" class="form-control" id="class" placeholder="Class">
+            <input type="text" class="form-control" name="class" placeholder="Class">
         </div>
         <div class="form-group">
             <label>Weight</label>
-            <input type="number" class="form-control" id="weight" placeholder="Weight">
+            <input type="number" class="form-control" name="weight" placeholder="Weight">
         </div>
         <div class="form-group">
             <label>Deadline</label>
-            <input type="date" class="form-control" id="deadline">
+            <input type="date" class="form-control" name="deadline">
         </div>
         <div class="checkbox">
-                <label class="big-checkbox"><input type="checkbox" id="extra">Extra</label>
+            <label class="big-checkbox"><input type="checkbox" name="extra">Extra</label>
         </div>
 
-        <div class="form-group horizontal">
-            <label class="col-xs-1 control-label">Question</label>
-            <div class="col-xs-4">
-                <input type="text" class="form-control" name="questions[0].questiontitle" placeholder="Title"/>
-            </div>
-            <div class="col-xs-2">
-                <input type="number" class="form-control" name="questions[0].weight" placeholder="Weight"/>
-            </div>
-            <div class="col-xs-2">
-                <select class="form-control" name="questions[0].type" placeholder="test">
-                    <option value="" disabled selected hidden>Select the type</option>
-                    <option value="Checkbox">Checkbox</option>
-                    <option value="Question">Question</option>
-                    <option value="Code">Code</option>
-                </select>
-            </div>
-            <div class="col-xs-1">
-                <label class="checkbox-inline big-checkbox"><input type="checkbox" name="questions[0].extra">Extra</label>
-            </div>
-            <div class="col-xs-1 col-xs-offset-1">
-                <button type="button" class="btn btn-default">+</button>
+        <div id="questionForm">
+            <div class="form-group horizontal">
+                <label class="col-xs-1 control-label">Question</label>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" name="questions[][questiontitle]" placeholder="Title"/>
+                </div>
+                <div class="col-xs-2">
+                    <input type="number" class="form-control" name="questions[][weight]" placeholder="Weight"/>
+                </div>
+                <div class="col-xs-2">
+                    <select class="form-control" name="questions[][type]" placeholder="test">
+                        <option value="" disabled selected hidden>Select the type</option>
+                        <option value="Checkbox">Checkbox</option>
+                        <option value="Question">Question</option>
+                        <option value="Code">Code</option>
+                    </select>
+                </div>
+                <div class="col-xs-1">
+                    <label class="checkbox-inline big-checkbox"><input type="checkbox" name="questions[][extra]">Extra</label>
+                </div>
+                <div class="col-xs-1 col-xs-offset-1">
+                    <button type="button" class="btn btn-default addButton"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
             </div>
         </div>
 
         <div class="form-group top-30">
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button id="submitButton" class="btn btn-default">Submit</button>
         </div>
-
     </form>
 </div>
+
+<script src="javascripts/jquery.serialize-object.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        //Add row in form
+        $('.addButton').click(function() {
+            $("#questionForm").append("<div class='form-group horizontal'> <label class='col-xs-1 control-label'>Question</label> <div class='col-xs-4'> <input type='text' class='form-control' name='questions[][questiontitle]' placeholder='Title' /> </div> <div class='col-xs-2'> <input type='number' class='form-control' name='questions[][weight]' placeholder='Weight' /></div> <div class='col-xs-2'> <select class='form-control' name='questions[][type]'> <option value='' disabled selected hidden>Select the type</option> <option value='Checkbox'>Checkbox</option> <option value='Question'>Question</option> <option value='Code'>Code</option> </select> </div> <div class='col-xs-1'> <label class='checkbox-inline big-checkbox'><input type='checkbox' name='questions[][extra]'>Extra</label> </div> <div class='col-xs-1 col-xs-offset-1'> <button type='button' class='btn btn-default removeButton'><span class='glyphicon glyphicon-minus'></span></button> </div> </div>");
+        });
+
+        //Remove row in form
+        //TODO
+
+        //Handle submit with AJAX
+        $("#submitButton").click(function() {
+            $.ajax({
+                url: '/admin/exercises/post',
+                type: 'post',
+                dataType: 'text',                       //recieve as text
+                contentType: "application/json",        // send as JSON
+                data: $('#exerciseForm').serializeJSON(),
+                success: function(data) {
+                    alert(data);
+                }
+            });
+        });
+    });
+</script>
