@@ -11,7 +11,7 @@
         <div class="list-group">
             <a href="" ng-repeat="answer in answers | limitTo:10" class="list-group-item">
                 <time am-time-ago="answer.created" class="badge"></time> 
-                <i class="fa fa-fw fa-check"></i> {{}} {{error}}
+                <i class="fa fa-fw fa-check"></i> {{answer.userName}} {{error}}
             </a>
         </div>
     </div>

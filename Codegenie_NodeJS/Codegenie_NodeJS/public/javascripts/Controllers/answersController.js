@@ -2,32 +2,32 @@
     
     var app = angular.module("adminApp");
     
+
     var answersController = function ($scope, restData, $routeParams) {
-        var getAllAnswers = function () {
-            restData.getAllAnswers()
-					.then(onDataComplete, onError);
-        };
-        var onDataComplete = function (data) {
+        var userData;
+        var len = 0;
+        restData.getAllAnswers.query(function (data) {
             $scope.answers = data;
-            alert($scope.answers.length);
-            for (i = 0; i < $scope.answers.length; i++) {
-                getUserById($scope.answers[i].userid);
-            }
+           
+          
+            len = $scope.answers.length;
+
+            $scope.yolo();
             
-        };
-        var onError = function (response) {
-            $scope.error = "Couldn't find the data"
+        });
+
+        $scope.yolo = function () {
+            for (i = 0; i < len; i++) {
+                alert($scope.answers[i].userid);
+                restData.getUserById.get({ userid: $scope.answers[i].userid }, function (data) {
+                    $scope.answers[i].name = data.name;      
+
+                });
+            }
         };
         
-        var getUserById = function (userId) {
-            restData.getUserById(userId)
-                    .then(onUserDataComplete, onError);
-        };
-        var onUserDataComplete = function (data) {
-            $scope.userData = data;  
-        };
-        getAllAnswers();
-        alert($scope.userData.name);
+        
+        
     };
     app.controller("answersController", answersController);
 }());
