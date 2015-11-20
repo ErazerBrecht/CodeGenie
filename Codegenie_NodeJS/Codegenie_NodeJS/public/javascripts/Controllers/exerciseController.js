@@ -1,30 +1,27 @@
 ﻿(function () {
 	
-	var app = angular.module("adminApp");
-	
-	
-	
-	var exerciseController = function ($scope, restData, $routeParams) {
-		/*var onUserComplete = function (data) {
-			$scope.user = data;
-			
-			github.getRepos($scope.user)
-                 .then(onRepo, onError);
-		};
-		
-		var onRepo = function (data) {
-			$scope.repos = data;
-		};
-		
-		var onError = function (response) {
-			$scope.error = "Couldn't find the data"
-		};
-		
-		$scope.username = $routeParams.username;
-		$scope.selection = "-stargazers_count";
-		
-		github.getUser($scope.username).then(onUserComplete, onError);*/
-	};
+    var app = angular.module("adminApp");
+
+    var exerciseController = function ($scope, restData, $routeParams) {
+        $scope.questions = [];
+
+        $scope.ctor = function() {
+            $scope.addButton();
+        };
+        
+        //Add new question table into the form
+        $scope.addButton = function() {
+            var question = {};
+            $scope.questions.push(question);
+        };
+        
+        //Remove correct question table from the form
+        $scope.removeButton = function (id) {
+            $scope.questions.splice(id, 1);
+        };
+
+        $scope.ctor();
+    };
 	
 	app.controller("exerciseController", exerciseController);
-}());
+})();
