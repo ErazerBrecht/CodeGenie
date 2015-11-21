@@ -29,12 +29,14 @@ var exerciseSchema = mongoose.Schema({
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },
     extra: { type: Boolean, default: false },
     questions: [{
-        questiontitle: { type: String, required: true },
-        weight: { type: Number, required: true },
-        extra: { type: Boolean, default: false },
-        type: { type: String, required: true, enum: typeEnum },
-        choices: [{ type: String }],
-    }]
+            questiontitle: { type: String, required: true },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, default: false },
+            type: { type: String, required: true, enum: typeEnum },
+            choices: [{
+                    text: { type: String }
+                }]
+        }]
 });
 
 var answerSchema = mongoose.Schema({
@@ -47,16 +49,16 @@ var answerSchema = mongoose.Schema({
     revised: { type: Boolean, default: false },
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },
     answers: [{
-        questionid: { type: String, required: true },
-        questiontitle: { type: String, required: true },
-        received: { type: Number, default: 0 },
-        weight: { type: Number, required: true },
-        extra: { type: Boolean, required: true },
-        type: { type: String, required: true, enum: typeEnum },
-        answer: { type: Boolean },
-        choices: [{ type: String }],
-        text: { type: String }
-    }]
+            questionid: { type: String, required: true },
+            questiontitle: { type: String, required: true },
+            received: { type: Number, default: 0 },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, required: true },
+            type: { type: String, required: true, enum: typeEnum },
+            answer: { type: Boolean },
+            choices: [{ type: String }],
+            text: { type: String }
+        }]
 });
 
 var UserModel = mongoose.model('User', userSchema);

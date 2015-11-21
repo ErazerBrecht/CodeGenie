@@ -21,6 +21,21 @@
                 delete $scope.exercise.questions;
             }
         };
+
+        $scope.typeChanged = function(id) {
+            if ($scope.exercise.questions[id].type === 'MultipleChoice') {
+                $scope.exercise.questions[id].choices = [];
+                $scope.addChoice(id);
+            } else {
+                if ($scope.exercise.questions[id].choices != null)
+                    delete $scope.exercise.questions[id].choices;
+            }
+        };
+        
+        $scope.addChoice = function (id) {
+            var choice = {};
+            $scope.exercise.questions[id].choices.push(choice);
+        }
         
         $scope.processForm = function () {
             $http({
