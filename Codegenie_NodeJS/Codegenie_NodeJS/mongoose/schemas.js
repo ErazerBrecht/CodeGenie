@@ -32,7 +32,8 @@ var exerciseSchema = mongoose.Schema({
         questiontitle: { type: String, required: true },
         weight: { type: Number, required: true },
         extra: { type: Boolean, default: false },
-        type: { type: String, required: true, enum: typeEnum }
+        type: { type: String, required: true, enum: typeEnum },
+        choices: [{ type: String }],
     }]
 });
 
