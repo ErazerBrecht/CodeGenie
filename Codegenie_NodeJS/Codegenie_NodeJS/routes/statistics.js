@@ -75,7 +75,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         }]
     };
 
-    AnswerModel.find({ exerciseid: exerciseID/*, revised: true*/ }, function (err, result) {
+    AnswerModel.find({ exerciseid: exerciseID, revised: true }, function (err, result) {
         if (!result.length) return res.status(200).json([]);
         response.count = result.length;
 
@@ -104,7 +104,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 
         AnswerModel.aggregate(
             [
-                { "$match": { "exerciseid": exerciseID } },
+                { "$match": { "exerciseid": exerciseID, "revised": true } },
                 {
                     $group: {
                         "_id": "$exerciseid",
@@ -115,32 +115,26 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                 { $unwind: "$answers" },
                 {
                     $group: {
-                        "_id": { "name": "$_id", "title": "$answers.questiontitle" },
-                        "valAvg": { $avg: "$answers.received" }
+                        "_id": "$answers.questiontitle",
+                        "average": { $avg: "$answers.received" }
                     }
                 },
                 {
                     "$group": {
-                        "_id": "$_id.name",
-                        "answers": {
-                            $push: {
-                                "_id": "$_id.title",
-                                "average": "$valAvg"
-                            }
-                        }
+                        "_id": "$_id",
+                        "average": { $avg: "$average" }
                     }
                 }
             ],
             function (err, agresult) {
                 if (err) console.error(err);
                 else {
-                    for (var i = 0; i < agresult[0].answers.length; i++) {
+                    console.log(agresult);
+                    for (var i = 0; i < agresult.length; i++) {
                         for (var x = 0; x < final.length; x++) {
-                            var agobj = agresult[0].answers[i];
+                            var agobj = agresult[i];
                             if (agobj._id == final[x].questiontitle) {
-                                console.log(agobj);
                                 final[x].average = agobj.average;
-                                console.log(final[x].average);
                             }
                         }
                     }
