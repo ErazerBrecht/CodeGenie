@@ -16,7 +16,7 @@ var isLoggedIn = auth.isLoggedIn;
 router.get('/', isLoggedIn, function (req, res) {
     var response = { users: 0, admins: 0, exercises: 0, answers: 0, classes: [] };
     
-    //TODO: fix this godzilla of a query (why does it have to be async)
+    //Godzilla has to stay, there is no sync method for queries
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
 
@@ -129,7 +129,6 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
             function (err, agresult) {
                 if (err) console.error(err);
                 else {
-                    console.log(agresult);
                     for (var i = 0; i < agresult.length; i++) {
                         for (var x = 0; x < final.length; x++) {
                             var agobj = agresult[i];
@@ -169,7 +168,6 @@ function countclasses(arr) {
 
     for (i = 0; i < arr.length; i++) {
         var obj = arr[i].class;
-        console.log(obj);
         if (a.indexOf(obj) == -1) {
             a.push(obj);
             b.push(1);
