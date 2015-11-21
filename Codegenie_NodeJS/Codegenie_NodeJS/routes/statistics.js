@@ -19,20 +19,20 @@ router.get('/', isLoggedIn, function (req, res) {
     //TODO: fix this godzilla of a query (why does it have to be async)
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
-        
+
         AnswerModel.count(function (err, c) {
             response.answers = c;
-            
+
             UserModel.count(function (err, c) {
                 response.users = c;
-                
+
                 UserModel.count({ admin: true }, function (err, c) {
                     response.admins = c;
-                    
+
                     UserModel.find({}, { class: 1 }, function (err, result) {
                         var ar = countclasses(result);
                         for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-                        
+
                         res.status(200).json(response);
                     });
                 });
@@ -43,14 +43,14 @@ router.get('/', isLoggedIn, function (req, res) {
 
 router.get('/exercises', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     ExerciseModel.count(function (err, c) {
         response.count = c;
-        
+
         ExerciseModel.find({}, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -59,7 +59,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var response = {
-        count: 0, 
+        count: 0,
         title: "",
         classification: "",
         class: "",
@@ -67,70 +67,103 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         received: 0,
         extra: false,
         questions: [{
-                questiontitle: "",
-                weight: 0,
-                extra: false,
-                type: "",
-                mean: 0
-            }]
+            questiontitle: "",
+            weight: 0,
+            extra: false,
+            type: "",
+            average: 0
+        }]
     };
-    
+
     AnswerModel.find({ exerciseid: exerciseID/*, revised: true*/ }, function (err, result) {
         if (!result.length) return res.status(200).json([]);
         response.count = result.length;
-        
+
+        response.title = result[0].title;
+        response.classification = result[0].classification;
+        response.class = result[0].class;
+        response.weight = result[0].weight;
+        response.received = result[0].received;
+        response.extra = result[0].extra;
+
+        var final = [];
+        var questiontemplate = result[0].answers;
+        for (var i = 0; i < questiontemplate.length; i++) {
+            var obj = questiontemplate[i];
+            if (!final.hasOwnProperty(obj)) {
+                var filtered = { questiontitle: "", extra: false, type: "", weight: 0, average: 0 };
+
+                filtered.questiontitle = obj.questiontitle;
+                filtered.extra = obj.extra;
+                filtered.type = obj.type;
+                filtered.weight = obj.weight;
+
+                final.push(filtered);
+            }
+        }
+
         AnswerModel.aggregate(
             [
+                { "$match": { "exerciseid": exerciseID } },
                 {
-                    "$group": {
-                        "_id": "$_id",
-                        "received": { $avg: "$received" },
-                        "answers": { $push: "$list" }
+                    $group: {
+                        "_id": "$exerciseid",
+                        "answers": { $push: "$answers" }
                     }
                 },
-                { $unwind: "$list" },
-                { $unwind: "$list" },
+                { $unwind: "$answers" },
+                { $unwind: "$answers" },
                 {
-                    "$group": {
-                        "_id": { "name": "$_id", "value": "$list.questionid" },
-                        "val": { $avg: "$received" },
-                        "valAvg": { $avg: "$list.received" }
+                    $group: {
+                        "_id": { "name": "$_id", "title": "$answers.questiontitle" },
+                        "valAvg": { $avg: "$answers.received" }
                     }
                 },
-                { "$sort": { "_id": 1 } },
                 {
                     "$group": {
                         "_id": "$_id.name",
-                        "received": { $avg: "$received" },
                         "answers": {
                             $push: {
-                                "type": "$_id._id",
-                                "value": "$valAvg"
+                                "_id": "$_id.title",
+                                "average": "$valAvg"
                             }
                         }
                     }
                 }
             ],
-            function (err, results) {
+            function (err, agresult) {
                 if (err) console.error(err);
-                else console.log(results);
+                else {
+                    for (var i = 0; i < agresult[0].answers.length; i++) {
+                        for (var x = 0; x < final.length; x++) {
+                            var agobj = agresult[0].answers[i];
+                            if (agobj._id == final[x].questiontitle) {
+                                console.log(agobj);
+                                final[x].average = agobj.average;
+                                console.log(final[x].average);
+                            }
+                        }
+                    }
+
+                    response.questions = final;
+
+                    res.status(200).json(response);
+                }
             }
         );
-        
-        res.status(200).json(response);
     });
 });
 
 router.get('/answers', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     AnswerModel.count(function (err, c) {
-        AnswerModel.count = c;
-        
+        response.count = c;
+
         AnswerModel.find({}, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -139,7 +172,7 @@ router.get('/answers', isLoggedIn, function (req, res) {
 
 function countclasses(arr) {
     var a = [], b = [];
-    
+
     for (i = 0; i < arr.length; i++) {
         var obj = arr[i].class;
         console.log(obj);
@@ -149,7 +182,7 @@ function countclasses(arr) {
         }
         else b[a.indexOf(obj)] += 1;
     }
-    
+
     return [a, b];
 }
 
