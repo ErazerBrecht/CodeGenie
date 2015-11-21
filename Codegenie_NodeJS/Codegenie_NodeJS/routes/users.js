@@ -145,7 +145,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 var qu = result.questions[questionIndex];
                 if (an.questionid == qu._id) {
                     an.received = 0;
-                    an.title = qu.title;
+                    an.questiontitle = qu.questiontitle;
                     an.type = qu.type;
                     an.weight = qu.weight;
                     an.extra = qu.extra;
