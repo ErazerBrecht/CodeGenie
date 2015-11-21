@@ -45,6 +45,7 @@ var answerSchema = mongoose.Schema({
     class: { type: String, required: true },
     extra: { type: Boolean, required: true },
     weight: { type: Number, required: true },
+    revised: { type: Boolean, default: false },
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },
     answers: [{
             questionid: { type: String, required: true },
