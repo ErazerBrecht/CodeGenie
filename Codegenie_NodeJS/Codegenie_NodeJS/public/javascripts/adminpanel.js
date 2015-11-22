@@ -10,9 +10,9 @@
 			})
 
 			// route for the question page
-			.when('/exercise', {
-				templateUrl: 'views/exercise.html',
-				controller: 'exerciseController'
+			.when('/addexercise', {
+				templateUrl: 'views/addexercise.html',
+				controller: 'addExerciseController'
             })
             .when('/answers', {
                 templateUrl: 'views/answers.html',

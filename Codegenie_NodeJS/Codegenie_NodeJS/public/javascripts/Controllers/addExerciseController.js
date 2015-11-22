@@ -2,7 +2,7 @@
     
     var app = angular.module("adminApp");
     
-    var exerciseController = function ($scope, $http, restData, $routeParams) {        
+    var addExerciseController = function ($scope, $http, restData, $routeParams) {        
         //Add new question table into the form
         $scope.addButton = function () {
             var question = {};
@@ -56,5 +56,5 @@
         };
     };
     
-    app.controller("exerciseController", exerciseController);
+    app.controller("addExerciseController", addExerciseController);
 })();

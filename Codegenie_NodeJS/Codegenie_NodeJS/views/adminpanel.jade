@@ -40,9 +40,14 @@ block content
               a(href='#/')
                 i.fa.fa-fw.fa-dashboard
                 |  Dashboard
+
+            li
+              a(href='#/exercises')
+                i.fa.fa-fw.fa-edit
+                | Exercises
                                 
             li
-              a(href='#/exercise')
+              a(href='#/addexercise')
                 i.fa.fa-fw.fa-edit
                 | Add Exercise
                                  
@@ -71,7 +76,7 @@ block content
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js')
      script(src='/javascripts/adminpanel.js')
      script(src='/javascripts/Controllers/dashBoardController.js')
-     script(src='/javascripts/Controllers/exerciseController.js')
+     script(src='/javascripts/Controllers/addExerciseController.js')
      script(src='/javascripts/Controllers/adminPanelController.js')
      script(src='/javascripts/Controllers/answersController.js')
      script(src='/javascripts/Service/restDataService.js')
