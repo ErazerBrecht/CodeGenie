@@ -162,6 +162,21 @@ router.get('/answers', isLoggedIn, function (req, res) {
     });
 });
 
+router.get('/answers/revised', isLoggedIn, function (req, res) {
+    var response = { count: 0, classes: [] };
+    
+    AnswerModel.count({ revised: true }, function (err, c) {
+        response.count = c;
+        
+        AnswerModel.find({ revised: true }, { class: 1 }, function (err, result) {
+            var ar = countclasses(result);
+            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
+            
+            res.status(200).json(response);
+        });
+    });
+});
+
 router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
     
@@ -177,20 +192,6 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     });
 });
 
-router.get('/answers/revised', isLoggedIn, function (req, res) {
-    var response = { count: 0, classes: [] };
-    
-    AnswerModel.count({ revised: true }, function (err, c) {
-        response.count = c;
-        
-        AnswerModel.find({ revised: true }, { class: 1 }, function (err, result) {
-            var ar = countclasses(result);
-            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
-            res.status(200).json(response);
-        });
-    });
-});
 
 function countclasses(arr) {
     var a = [], b = [];

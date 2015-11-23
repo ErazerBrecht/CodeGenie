@@ -81,7 +81,6 @@ Exercises have 8 fields, 4 of which are required and 2 which have a default.
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
 * classification: string, classification of the exercise (e.g. Databinding)
-* weight: number, maximum score and weight of this exercise (e.g. 20)
 * class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
 
 Defaults:
@@ -102,7 +101,7 @@ Required:
 * title: string, title of the original exercise (e.g. Databinding)
 * classification: string, classification of the original exercise (e.g. Databinding)
 * class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
-* weight: number, maximum score and weight of the original exercise (e.g. 20)
+* revised: boolean, check if the answer has been revised by the teacher.
 * extra: boolean, check if the original exercise is an extra assignment or not.
 
 Defaults:
@@ -114,7 +113,7 @@ Not required but field is available:
 
 
 ####Question object<a name="answerobject"></a>
-The question object exists out of 4 fields, 2 of which are required and 2 which have a default.
+The question object exists out of 5 fields, 2 of which are required and 2 which have a default.
 
 Required:
 * question: string, title of this question (e.g. What is 'Databinding'?)
@@ -123,17 +122,17 @@ Required:
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
 * type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')(defaults to "Checkbox")
-
+* choices: array of objects with field 'text', the different choices if the question is a multiple choice one.
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 8 fields, 5 of which is required and 1 which has a default.
+The answer object exists out of 9 fields, 5 of which is required and 1 which has a default.
 
 Required:
 * questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
 * questiontitle: string, title of the original question (e.g. What is 'Databinding'?)
 * weight: number, maximum score and weight of the original question (e.g. 5)
 * extra: boolean, check if the original question is an extra question or not.
-* type: string with enum, type of original question (currently accepted: 'Checkbox', 'Question', 'Code')
+* type: string with enum, type of original question (currently accepted: 'Checkbox', 'Question', 'Code', 'MultipleChoice')
 
 Defaults:
 * received: number, how much the user received for this exercise (e.g. 5) (defaults to 0 obviously)
@@ -141,18 +140,18 @@ Defaults:
 Not required but field is available: 
 * text: string, if code/question was asked, this is the field it will be placed in.
 * answer: boolean, this is used if the original question was a checkbox.
-
+* choices: array of objects with field 'text', the answered choices if the original question was a multiple choice one.
 
 
 
 ##Data access, Information Portals
 
-There are currently 2 portals, the /admin/ portal and the /users/ portal
+There are currently 3 portals, the /admin/ portal, /users/ portal and the /statistics/ portal.
 
 
 
 ###User portal
-The user portal has 8 gets and 2 posts
+The user portal has 8 gets and 2 posts.
 
 
 ####GET: /users/
@@ -199,7 +198,7 @@ The user will edit his/her profile by posting here.
 
 
 ###Admin portal
-The admin portal has 7 gets and 4 posts
+The admin portal has 9 gets and 4 posts.
 
 
 ####GET: /admin/
@@ -228,6 +227,10 @@ This gives a specific exercise.
 
 This gives all the answers of the exercise with ID: {ID}
 
+####GET: /admin/exercises/delete/{ID}
+
+This deletes the exercise with ID: {ID}
+
 ####POST: /admin/exercises/post
 
 The admin can create exercises by posting here.
@@ -245,6 +248,10 @@ This gives all answers.
 
 This gives a specific answer.
 
+####GET: /admin/answers/delete/{ID}
+
+This deletes the answer with ID: {ID}
+
 ####POST: /admin/answers/edit/{ID}
 
 The admin can edit answers by posting here.
@@ -252,12 +259,37 @@ The admin can edit answers by posting here.
 
 
 ###Statistics portal
-The admin portal has 6 gets and 4 posts
+The statistics has 
+
+####GET: /statistics/
+
+Gives various numbers on the amount of users, admins, exercises, answers and users per class.
+
+####GET: /statistics/exercises
+
+Gives the amount of exercises and amount of exercises per class.
+
+####GET: /statistics/exercises/{ID}
+
+Gives the amount of times this exercise has been solved and the averages received point of each solved and revised question.
+
+####GET: /statistics/answers
+
+Gives the amount of answers and the amount of answers solved per class.
+
+####GET: /statistics/answers/revised
+
+Gives the amount of answers that have been revised and amount of revised answers per class.
+
+####GET: /statistics/answers/unrevised
+
+Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
+
+
 
 
 ##TODO:
 
 - Make user panel
 - Find a better way to accept/store user classes (different table with 'active' classes? e.g. 3EA1)
-- Finish statistics API
 - Change date regex string to new format
