@@ -8,6 +8,10 @@
             templateUrl: 'views/userDashboard.html',
             controller: 'userDashboardController'
         })
+            .when('/exercises', {
+            templateUrl: 'views/userExercises.html',
+            controller: 'userExercisesController'
+        })
             .otherwise({ redirectTo: "/" });
     });
 }());
