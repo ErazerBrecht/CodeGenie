@@ -300,6 +300,4 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 
 - Make user panel
 - Change date regex string to new format
-- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 1EA1, 1EA1)
-
-  Maybe work with courses (e.g. OO, Programeren) instead of classes?
+- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 1EA1, 1EA1), maybe work with courses (e.g. OO, Programeren) instead of classes?
