@@ -71,11 +71,13 @@ interact('#dropzone')
 		        y: dropRect.top + dropRect.height / 2,
 		    };
 
+        event.relatedTarget.style.color = 'red';
         event.draggable.snap({
             anchors: [dropCenter]
         });
     })
 	.on('dragleave', function (event) {
+	    event.relatedTarget.style.color = 'black';
 	    event.draggable.snap(false);
 	    // when leaving a dropzone, snap to the original position
 	    event.draggable.snap({ anchors: [origPos] });
