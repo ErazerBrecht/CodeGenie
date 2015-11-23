@@ -106,7 +106,15 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     });
 });
 
-
+router.post("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
+    var exerciseID = req.params.exerciseID;
+    
+    ExerciseModel.remove({ _id: exerciseID }, function (err) {
+        if (err) return console.error(err);
+        
+        res.sendStatus(200);
+    });
+});
 
 
 
@@ -130,7 +138,7 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
     })
 });
 
-//ANSWERS EDIT
+//ANSWERS POST
 
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
@@ -147,6 +155,16 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
             if (response != "ok") return res.status(500).send(response);
             res.sendStatus(201);
         });
+    });
+});
+
+router.post("/answers/delete/:answerID", isAdmin, function (req, res) {
+    var answerID = req.params.answerID;
+    
+    AnswerModel.remove({ _id: answerID }, function (err) {
+        if (err) return console.error(err);
+        
+        res.sendStatus(200);
     });
 });
 
