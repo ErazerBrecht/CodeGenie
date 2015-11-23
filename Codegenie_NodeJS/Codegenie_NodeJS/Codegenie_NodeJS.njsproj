@@ -49,6 +49,7 @@
     <Compile Include="public\javascripts\Controllers\dashBoardController.js" />
     <Compile Include="public\javascripts\Controllers\addExerciseController.js" />
     <Compile Include="public\javascripts\Controllers\userDashboardController.js" />
+    <Compile Include="public\javascripts\Controllers\userExercisesController.js" />
     <Compile Include="public\javascripts\Controllers\userPanelController.js" />
     <Compile Include="public\javascripts\Service\userRestDataService.js" />
     <Compile Include="public\javascripts\userPanel.js" />
@@ -400,6 +401,7 @@
     <Content Include="public\stylesheets\bootstrap.min.css" />
     <Content Include="public\stylesheets\form.css" />
     <Content Include="public\stylesheets\index.css" />
+    <Content Include="public\stylesheets\sb-user.css" />
     <Content Include="public\stylesheets\sb-admin.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="public\stylesheets\tiles.css" />
@@ -408,6 +410,7 @@
     <Content Include="public\views\dashboard.html" />
     <Content Include="public\views\addexercise.html" />
     <Content Include="public\views\userDashboard.html" />
+    <Content Include="public\views\userExercises.html" />
     <Content Include="ssl\ca.crt" />
     <Content Include="ssl\server.crt" />
     <Content Include="ssl\server.key" />

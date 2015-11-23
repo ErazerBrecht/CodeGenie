@@ -6,6 +6,12 @@
         userRestData.getExercises.query(function (data) {
             $scope.exercises = data;
         });
+
+        $scope.select = function (id) {
+            $scope.selected = $scope.exercises[id];
+        }
+
+
     };
     app.controller("userExercisesController", userExercisesController);
 }());
