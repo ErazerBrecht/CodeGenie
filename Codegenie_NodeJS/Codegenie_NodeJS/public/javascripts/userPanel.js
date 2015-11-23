@@ -1,4 +1,20 @@
-﻿$(function () {
+﻿(function () {
+    var userApp = angular.module('userApp', ['ngRoute', 'ngResource']);
+    
+    userApp.config(function ($routeProvider) {
+        $routeProvider
+			// route for the dashboard
+			.when('/', {
+            templateUrl: 'views/userDashboard.html',
+            controller: 'userDashboardController'
+        })
+            .otherwise({ redirectTo: "/" });
+    });
+}());
+
+
+
+/*$(function () {
     populatePage();
 });
 
@@ -54,4 +70,4 @@ function getExercise(id) {
         $('#questionList').html(content);
         initEditors();
     });
-}
+}*/

@@ -1,20 +1,60 @@
 ﻿extends layout
 
 block header
-    link(rel='stylesheet', href='/stylesheets/index.css')
+    link(rel='stylesheet', href='/stylesheets/sb-admin.css')
+    link(rel='stylesheet', href='/stylesheets/form.css')
     link(rel='stylesheet', href='/stylesheets/tiles.css')
 
 block content
-    h1= title
+    #wrapper(ng-app = 'userApp' ng-controller='userPanelController')
+      // Navigation
+      nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+          a.navbar-brand(href='#/') CodeGenie
+        // Top Menu Items
+        ul.nav.navbar-right.top-nav
+          li.dropdown
+            a.dropdown-toggle(href='', data-toggle='dropdown')
+              i.fa.fa-user
+              | {{ user.name }}
+              b.caret
+                                
+            ul.dropdown-menu
+              li
+                a(href='#')
+                  i.fa.fa-fw.fa-user
+                  |  Profile
+                                                                          
+              li.divider
+                                       
+              li
+                a(href='#')
+                  i.fa.fa-fw.fa-power-off
+                  a(href='/signout') Log Out
 
-    #wrapper        
-        // Question LIST
-        a(href='/signout', class='text-center') Signout
-        h2 Questions
-        #buttonList
-        #questionList
-        
-block scripts          
-    script(src='/javascripts/src-min/ace.js')
-    script(src='/javascripts/userPanel.js')
-    
+
+        // Sidebar Menu Items - These collapse to the responsive navigation menu on small screens
+        .collapse.navbar-collapse.navbar-ex1-collapse
+          ul.nav.navbar-nav.side-nav
+            li
+              a(href='#/')
+                i.fa.fa-fw.fa-dashboard
+                |  Dashboard
+
+            li
+              a(href='#/exercises')
+                i.fa.fa-fw.fa-edit
+                | Exercises
+               
+      #page-wrapper
+        .container-fluid(ng-view)
+
+ block scripts  
+     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js')
+     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js')
+     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js')
+     script(src='/javascripts/userPanel.js')
+     script(src='/javascripts/Controllers/userPanelController.js')
+     script(src='/javascripts/Controllers/userDashboardController.js')
+     script(src='/javascripts/Service/userRestDataService.js')

@@ -48,6 +48,9 @@
     <Compile Include="public\javascripts\Controllers\answersController.js" />
     <Compile Include="public\javascripts\Controllers\dashBoardController.js" />
     <Compile Include="public\javascripts\Controllers\addExerciseController.js" />
+    <Compile Include="public\javascripts\Controllers\userDashboardController.js" />
+    <Compile Include="public\javascripts\Controllers\userPanelController.js" />
+    <Compile Include="public\javascripts\Service\userRestDataService.js" />
     <Compile Include="public\javascripts\userPanel.js" />
     <Compile Include="public\javascripts\npm.js" />
     <Compile Include="public\javascripts\Service\restDataService.js" />
@@ -404,6 +407,7 @@
     <Content Include="public\views\answers.html" />
     <Content Include="public\views\dashboard.html" />
     <Content Include="public\views\addexercise.html" />
+    <Content Include="public\views\userDashboard.html" />
     <Content Include="ssl\ca.crt" />
     <Content Include="ssl\server.crt" />
     <Content Include="ssl\server.key" />
