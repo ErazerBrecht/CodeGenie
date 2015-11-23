@@ -1,4 +1,18 @@
-var startPos = null;
+(function ($) {
+    $.fn.invisible = function () {
+        return this.each(function () {
+            $(this).css("visibility", "hidden");
+        });
+    };
+    $.fn.visible = function () {
+        return this.each(function () {
+            $(this).css("visibility", "visible");
+        });
+    };
+}(jQuery));
+
+$("#dropzone").invisible();
+var origPos;
 
 interact('.block')
     .draggable({
@@ -15,7 +29,6 @@ interact('.block')
             target.setAttribute('data-y', y);
         }
     })
-    .inertia(true)
     .restrict({
         drag: "",
         endOnly: true,
@@ -24,27 +37,28 @@ interact('.block')
     .snap({
         mode: 'anchor',
         anchors: [],
-        range: Infinity,
         elementOrigin: { x: 0.5, y: 0.5 },
         endOnly: true
     })
+    //Triggered when you start draging
 	.on('dragstart', function (event) {
-	    if (!startPos) {
-	        var rect = interact.getElementRect(event.target);
+        $("#dropzone").visible();
 
-	        // record center point when starting the very first a drag
-	        startPos = {
-	            x: rect.left + rect.width / 2,
-	            y: rect.top + rect.height / 2
-	        }
-	    }
+        //Get the draged block
+	    var rect = interact.getElementRect(event.target);
+
+	    // record center point this is needed to return the block to orginal postition
+	    origPos = {
+	        x: rect.left + rect.width / 2,
+	        y: rect.top + rect.height / 2
+	    };
 
 	    // snap to the start position
-	    event.interactable.snap({ anchors: [startPos] });
+	    event.interactable.snap({ anchors: [origPos] });
 	});
 
 
-interact('.dropzone')
+interact('#dropzone')
     // enable draggables to be dropped into this
     .dropzone({ overlap: 'center' })
     // only accept elements matching this CSS selector
@@ -54,15 +68,23 @@ interact('.dropzone')
         var dropRect = interact.getElementRect(event.target),
 		    dropCenter = {
 		        x: dropRect.left + dropRect.width / 2,
-		        y: dropRect.top + dropRect.height / 2
+		        y: dropRect.top + dropRect.height / 2,
 		    };
 
         event.draggable.snap({
             anchors: [dropCenter]
         });
     })
-
+	.on('dragleave', function (event) {
+	    event.draggable.snap(false);
+	    // when leaving a dropzone, snap to the original position
+	    event.draggable.snap({ anchors: [origPos] });
+	})
+    .on('dropdeactivate', function (event) {
+        // Make dropzone invsible again!
+        $("#dropzone").invisible();
+    })
     .on('drop', function (event) {
         event.relatedTarget.textContent = '';
-        alert('Verwijderd');
+        alert("delete");
     });
