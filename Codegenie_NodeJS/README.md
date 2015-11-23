@@ -61,9 +61,9 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 Users have 8 fields, 3 of which are required and 4 which have a default.
 
 Required: 
-* name: string, name of the user (e.g. John Smith) *Is unique field*
+* name: string, name of the user (e.g. John Smith) *is unique field*
 * password: string, encrypted password (encrypted with bCrypt)
-* class: string, current class enrollment of the user (e.g. 3EA1)
+* class: string, current class enrollment of the user (e.g. 1EA1)
 
 Defaults: 
 * status: number, register status, defaults to 0.
@@ -72,7 +72,7 @@ Defaults:
 * admin: boolean, currently automatically set to false whatever is posted.
 
 Not required but field is available: 
-* email: string, for when the user wants to subscribe. *Is unique field*
+* email: string, for when the user wants to subscribe. *is unique & sparse field*
 
 
 ###Exercises
@@ -81,7 +81,7 @@ Exercises have 8 fields, 4 of which are required and 2 which have a default.
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
 * classification: string, classification of the exercise (e.g. Databinding)
-* class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
+* class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
 
 Defaults:
 * created: date, when the exercise was posted, defaults to current time on the server.
@@ -100,7 +100,7 @@ Required:
 * userid: string, id of the user (e.g. 5637951a8a48cc983189c500)
 * title: string, title of the original exercise (e.g. Databinding)
 * classification: string, classification of the original exercise (e.g. Databinding)
-* class: string, this is the class that is eligible to solve this exercise (e.g. 3EA1)
+* class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
 * revised: boolean, check if the answer has been revised by the teacher.
 * extra: boolean, check if the original exercise is an extra assignment or not.
 
@@ -125,7 +125,7 @@ Defaults:
 * choices: array of objects with field 'text', the different choices if the question is a multiple choice one.
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 9 fields, 5 of which is required and 1 which has a default.
+The answer object exists out of 9 fields, 5 of which are required and 1 which has a default.
 
 Required:
 * questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
@@ -299,5 +299,7 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 ##TODO:
 
 - Make user panel
-- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 3EA1)
 - Change date regex string to new format
+- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 1EA1, 1EA1)
+
+  Maybe work with courses (e.g. OO, Programeren) instead of classes?
