@@ -1,6 +1,6 @@
 #NodeJS REST / MONGO
 
-NodeJS project by Brecht Carlier and Matthew Berkvens.
+NodeJS project by Brecht Carlier, Arne Schoonvliet and Matthew Berkvens.
 
 This is the NodeJS server for the Codegenie project made by Brecht, Arne and Matthew.
 This project also contains our views. These are written in JADE.
