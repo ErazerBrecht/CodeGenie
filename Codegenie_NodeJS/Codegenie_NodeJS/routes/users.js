@@ -2,7 +2,7 @@
 var bodyParser = require('body-parser');
 var express = require('express');
 var auth = require('../passport/authlevels');
-var bCrypt = require('bCrypt');
+var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 var router = express.Router();
 
