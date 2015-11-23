@@ -1,4 +1,5 @@
 ﻿(function () {
+    
     var userApp = angular.module('userApp', ['ngRoute', 'ngResource']);
     
     userApp.config(function ($routeProvider) {
@@ -14,6 +15,17 @@
         })
             .otherwise({ redirectTo: "/" });
     });
+
+    function initEditors() {
+        var editor;
+        $('.editor').each(function (index) {
+            editor = ace.edit(this);
+            editor.setTheme("ace/theme/sqlserver");
+            editor.getSession().setMode("ace/mode/csharp");
+        });
+    }
+
+    initEditors();
 }());
 
 

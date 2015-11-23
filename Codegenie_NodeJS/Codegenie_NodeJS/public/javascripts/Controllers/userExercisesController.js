@@ -11,7 +11,7 @@
             $scope.selected = $scope.exercises[id];
         }
 
-
+       
     };
     app.controller("userExercisesController", userExercisesController);
 }());
