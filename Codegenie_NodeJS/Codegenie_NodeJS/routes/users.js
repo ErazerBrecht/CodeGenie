@@ -2,6 +2,7 @@
 var bodyParser = require('body-parser');
 var express = require('express');
 var auth = require('../passport/authlevels');
+var bCrypt = require('bCrypt');
 var moment = require('moment');
 var router = express.Router();
 
@@ -22,9 +23,9 @@ var isAdmin = auth.isAdmin;
 router.get('/', isAdmin, function (req, res) {
     UserModel.find({}, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
-
+        
         for (var user in result) result[user]["password"] = undefined;
-
+        
         res.status(200).json(result);
     })
 });
@@ -32,7 +33,7 @@ router.get('/', isAdmin, function (req, res) {
 router.get('/mine', isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
@@ -40,7 +41,7 @@ router.get('/mine', isLoggedIn, function (req, res) {
 router.get('/exercises', isLoggedIn, function (req, res) {
     ExerciseModel.find({ class: req.user.class }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
@@ -52,14 +53,14 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         case 'solved':
             AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
-
+                
                 var exerciseIDs = [];
-
+                
                 for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
-
+                
                 ExerciseModel.find({ _id: { $in: exerciseIDs } }, function (err, exresult) {
                     if (err) return console.error(err);
-
+                    
                     res.status(200).json(exresult);
                 })
             })
@@ -67,14 +68,14 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         case 'unsolved':
             AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
-
+                
                 var exerciseIDs = [];
-
+                
                 for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
-
+                
                 ExerciseModel.find({ _id: { $nin: exerciseIDs }, class: req.user.class }, function (err, exresult) {
                     if (err) return console.error(err);
-
+                    
                     res.status(200).json(exresult);
                 })
             })
@@ -82,7 +83,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         default:
             ExerciseModel.find({ _id: exerciseID, class: req.user.class }, function (err, result) {
                 if (err) return console.error(err);
-
+                
                 res.status(200).json(result);
             })
             break;
@@ -92,17 +93,17 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 router.get('/answers', isLoggedIn, function (req, res) {
     AnswerModel.find({ userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
 
 router.get('/answers/:answerID', isLoggedIn, function (req, res) {
     var answerID = req.params.answerID;
-
+    
     AnswerModel.find({ _id: answerID, userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
-
+        
         res.status(200).json(result);
     })
 });
@@ -115,7 +116,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
     var answer = req.body;
     var newanswer = new AnswerModel;
-
+    
     ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
         if (err) return console.error(err);
         if (!result) return res.status(500).send("Not an eligible exercise ID");
@@ -124,9 +125,9 @@ router.post('/answer', isLoggedIn, function (req, res) {
         if (result.deadline) {
             if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
-
+        
         console.log(req.body);
-
+        
         newanswer.userid = req.user._id;
         newanswer.exerciseid = exerciseID;
         newanswer.title = result.title;
@@ -134,7 +135,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
         newanswer.classification = result.classification;
         newanswer.class = result.class;
         newanswer.created = moment().format("DD/MM/YYYY HH:mm:ss");
-
+        
         for (var answerIndex in answer.answers) {
             if (!questionExists(answer.answers[answerIndex], result.questions)) {
                 return res.status(500).send("There was a problem processing answer with questionid: " + an.questionid);
@@ -155,7 +156,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
         
         //(MAYBE)TODO: check if questionids that were posted are actually unique
         if (newanswer.answers.length != result.questions.length) return res.status(500).send("There were some questions missing.");
-
+        
         newanswer.save(function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
@@ -167,20 +168,20 @@ router.post('/answer', isLoggedIn, function (req, res) {
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
-
+        
         var newuser = new UserModel(result);
-
+        
         for (var field in req.body) newuser[field] = req.body[field];
-
+        
         newuser._id = undefined;
         newuser.admin = undefined; //prevent user from editing random/protected information, everything else is allowed.
-        newuser.password = undefined;
+        newuser.password = createhash(password);
         newuser.status = undefined;
-
+        
         newuser.registerdate = undefined;
         newuser.lastseen = undefined;
         newuser.__v = undefined;
-
+        
         UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
@@ -188,5 +189,9 @@ router.post("/edit", isLoggedIn, function (req, res) {
         });
     });
 });
+
+var createHash = function (password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 module.exports = router;
