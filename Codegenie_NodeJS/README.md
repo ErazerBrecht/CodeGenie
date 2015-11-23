@@ -198,7 +198,7 @@ The user will edit his/her profile by posting here.
 
 
 ###Admin portal
-The admin portal has 9 gets and 4 posts.
+The admin portal has 11 gets and 4 posts.
 
 
 ####GET: /admin/
@@ -243,6 +243,14 @@ The admin can edit exercises by posting here.
 ####GET: /admin/answers 
 
 This gives all answers.
+
+####GET: /admin/answers/revised
+
+This gives all unrevised answers.
+
+####GET: /admin/answers/unrevised
+
+This gives all revised answers.
 
 ####GET: /admin/answers/{ID}
 

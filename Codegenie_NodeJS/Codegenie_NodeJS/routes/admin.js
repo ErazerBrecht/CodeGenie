@@ -131,11 +131,29 @@ router.get('/answers', isAdmin, function (req, res) {
 router.get('/answers/:answerID', isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     
-    AnswerModel.find({ _id: answerID }, function (err, result) {
-        if (err) return console.error(err);
-        
-        res.status(200).json(result);
-    })
+    switch (answerID) {
+        case 'revised':
+            AnswerModel.find({ revised: true }, function (err, result) {
+                if (err) return console.error(err);
+                
+                res.status(200).json(result);
+            })
+            break;
+        case 'unrevised':
+            AnswerModel.find({ revised: false }, function (err, result) {
+                if (err) return console.error(err);
+                
+                res.status(200).json(result);
+            })
+            break;
+        default:
+            AnswerModel.find({ _id: answerID }, function (err, result) {
+                if (err) return console.error(err);
+                
+                res.status(200).json(result);
+            })
+            break;
+    }
 });
 
 router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
