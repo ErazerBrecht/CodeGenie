@@ -121,10 +121,9 @@ router.post('/answer', isLoggedIn, function (req, res) {
         if (!result) return res.status(500).send("Not an eligible exercise ID");
         if (!answer.answers) return res.status(500).send("There were no answers given.");
         
-        //TODO: Change date to new format
-        /*if (result.deadline) {
+        if (result.deadline) {
             if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
-        }*/
+        }
 
         console.log(req.body);
 
