@@ -1,0 +1,11 @@
+﻿#dropzone {
+    background-color: #D43F3A;
+    color: white;
+    border: dashed 4px transparent;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
