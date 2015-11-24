@@ -1,9 +1,57 @@
-﻿#dropzone {
-  background-color: #ccc;
-  border: dashed 4px transparent;
-  border-radius: 4px;
-  margin: 10px auto 30px;
-  padding: 10px;
-  width: 100%;
-  transition: background-color 0.3s;
-}
+﻿        * {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        [ng-drag] {
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        [ng-drag] {
+            width: 100px;
+            height: 100px;
+            background: #003cff;
+            color: white;
+            text-align: center;
+            padding-top: 40px;
+            display: inline-block;
+            margin: 0 10px;
+            cursor: move;
+        }
+
+        ul.draggable-objects:after {
+            display: block;
+            content: "";
+            clear: both;
+        }
+
+        .draggable-objects li {
+            float: left;
+            display: block;
+            width: 120px;
+            height: 100px;
+        }
+
+        [ng-drag].drag-over {
+            background: #a42f2b;
+            z-index: 2;
+        }
+
+        [ng-drop] {
+            background-color: #D43F3A;
+            color: white;
+            border-radius: 4px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+
+            [ng-drop].drag-enter {
+                /*CSS Rules for dropzone when the block enters*/
+            }
