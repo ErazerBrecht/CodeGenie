@@ -22,7 +22,7 @@
 
             <div ng-switch on="question.type">
                 <div ng-switch-when="Checkbox"><input type="checkbox"></div>
-                <div ng-switch-when="Code"><div class="editor"></div></div>
+                <div ng-switch-when="Code"><div elem-ready="initEditors()" class="editor"></div></div>
                 <div ng-switch-when="Question"><div contenteditable="true" class="answer"></div></div>
             </div>
         </div>

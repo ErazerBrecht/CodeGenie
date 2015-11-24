@@ -16,16 +16,20 @@
             .otherwise({ redirectTo: "/" });
     });
 
-    function initEditors() {
-        var editor;
-        $('.editor').each(function (index) {
-            editor = ace.edit(this);
-            editor.setTheme("ace/theme/sqlserver");
-            editor.getSession().setMode("ace/mode/csharp");
-        });
-    }
+    userApp.directive('elemReady', function ($parse) {
+        return {
+            restrict: 'A',
+            link: function ($scope, elem, attrs) {
+                elem.ready(function () {
+                    $scope.$apply(function () {
+                        var func = $parse(attrs.elemReady);
+                        func($scope);
+                    });
+                });
+            }
+        }
+    });
 
-    initEditors();
 }());
 
 
