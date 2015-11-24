@@ -1,15 +1,17 @@
 ﻿var mongoose = require('mongoose');
-var fs = require('fs').readFile('./mongoose/connectioninfo.config', 'UTF-8', function (err, data) {
-    if (err) return console.log('There was an error reading the connection string to the database, make sure to check if ./mongoose/connectioninfo.js exists and has an URL.');
+
+data = process.env.db;
+
+if (data != undefined && data.trim() != "connectionstring") {
     mongoose.connect(data);
-});
+} else
+    throw Error('There was an error reading the connection string to the database.\n Make sure the process.env.db exists and has a valid URL (starts with mongodb).\n You can set the env.db variable in your startup script, startnodemon.cmd \n');
 
 var db = mongoose.connection;
-
 db.on('error', console.error.bind(console, 'connection error: '));
 
 db.once('open', function (callback) {
-    console.log('connection made.');
+    console.log('Connection made with our MongoDB');
 });
 
 exports.db = db;
