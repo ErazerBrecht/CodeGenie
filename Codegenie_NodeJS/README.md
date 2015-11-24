@@ -6,11 +6,33 @@ This is the NodeJS server for the Codegenie project made by Brecht, Arne and Mat
 This project also contains our views. These are written in JADE.
 
 ##At the moment
-Backend:
+#####Backend:
 We're able to get, post and edit the Users, Exercises and Answers in json format from the online database.
-Now we're working on the authentication of users.
+The authentication of users is also working. We're working to generate some statistics calculated from the data in the database.
 
-Current modules used: 
+Nevertheless this part is as good as done. Al the needed basic functionality works, and now we're just adding extra features.
+
+#####Frontend:
+There are currently 3 pages: a login page, signup page, adminpanel and a userpanel.
+
+* Login and signup pages: Self-explanatory
+* Adminpanel: The "home" page for the admin (Tim Dams)
+  * Dashboard with some basic statistics 
+  * Adding questions
+  * Editing and removing questions
+  * Able to get a list of answers
+* Userpanel: The page for the students
+  * Will be used to post answers (Work in progress)
+
+What are we doing now?
+First the Userpanel is the highest priority because it needs to most work.
+
+The deleting questions in the Adminpanel needs to be finished (drag & drop). Filtering of those questions is also needed! </br>
+Viewing the answers is far from done and will be our next top priority after the userpanel!
+
+##Dependencies
+
+Current modules used (NodeJS => Backend): 
 * nodemon: needs to be installed globally to work, if you want to use the regular node.exe delete the 'Node.exe path' string in the project properties.
 * bcrypt: salts and hashes the password, also has a built-in check function.
 * connect-flash: for sending messages to the client.
@@ -23,27 +45,31 @@ Current modules used:
 * serve-favicon: this serves the favicon? no idea it's there when you make a blank project :p
 
 
-
 Frontend:
-We use the bootstrap framework.</br>
-By using AJAX, We're able to put the data in the frontend (view). Used Tiles for buttons.</br>
-Used ACE editor to post answers. </br>
-Used momentJS and momentJS angular for dynamic relative time!
+* Bootstrap: easy for making nice and responsive views
+* AngularJS: used for client side routing and MVC pattern
+* ACE editor: A code editor, we will use this to post code. It will mostly be used for syntaxhighlighting
+* Beautify: Will format the code in the code editor
+* momentJS and momentJS angular for dynamic relative time!
+* Angular: ngDraggable: used to drop and drag our tiles to remove them
+* ngResource: TODO Arne explain this short!
 
-There are currently 3 pages: a login page, signup page, adminpanel and home page (home page currently gets all exercises and displays the questions when you click on them).
+##Printscreens
 
-Printscreen
+TODO: Update this printsreens!!!
 
 ![Printscreen questions](http://erazerbrecht.duckdns.org/Images/NodeJS_REST_MONGO_TEST2.png)
 ![Printscreen](http://i.imgur.com/MTyw8FD.png)
 
 ##Bulding and using this project
+We used Visual Studio for this project, we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx).
+
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
-To connect to our database you will need the connectioninfo.config file in the /mongoose/ folder (don't hesitate to ask it).
+To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine. This can easily be done by defining it in the cmd windows where you will start your node server. In our project we use a startup script (startnodemon.cmd), there you will need to add the connectionstring!
 
-We used Visual Studio for this project, we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx).
+If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project!
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
