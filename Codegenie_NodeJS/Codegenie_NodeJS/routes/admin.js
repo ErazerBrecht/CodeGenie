@@ -26,13 +26,10 @@ router.get('/exercises', isAdmin, function (req, res) {
     })
 });
 
-//USER POST
+//USER POST (MAINLY FOR MAKING ADMIN ACCOUNTS)
 
 router.post("/user", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
-    
-    newuser.lastseen = moment().format("DD/MM/YYYY HH:mm:ss");
-    newuser.admin = true;
     
     newuser.save(function (err) {
         var response = errhandler(err);
