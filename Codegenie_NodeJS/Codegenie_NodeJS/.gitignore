@@ -15,4 +15,4 @@ results
 node_modules
 npm-debug.log
 
-*.cmd
+startnodemon.cmd
