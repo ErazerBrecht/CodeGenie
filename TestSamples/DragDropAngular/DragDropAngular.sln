@@ -7,20 +7,21 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DragDropAngular", ".", "{A9
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_10027"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\Dropbox\AP Hogeschool\Semester 5\Cloud\Repository\TestSamples\DragDropAngular\"
+		Debug.AspNetCompiler.PhysicalPath = "..\DragDropAngular\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_10027\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_10027"
-		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\Dropbox\AP Hogeschool\Semester 5\Cloud\Repository\TestSamples\DragDropAngular\"
+		Release.AspNetCompiler.PhysicalPath = "..\DragDropAngular\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_10027\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "10027"
+		SlnRelativePath = "..\DragDropAngular\"
 	EndProjectSection
 EndProject
 Global
