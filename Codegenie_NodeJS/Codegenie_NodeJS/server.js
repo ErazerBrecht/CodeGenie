@@ -65,9 +65,11 @@ app.use('/admin', adminRoutes);
 app.use('/statistics', statisticRoutes);
 app.use('/home', homeRoutes);
 
+var server = app.listen(app.get('port'), function () {  
+    console.log('Express server started on port %s', app.get('port'));
+});
 
-
-https.createServer(sslOptions, app).listen(app.get('port'));
+//https.createServer(sslOptions, app).listen(app.get('port'));
 
 //var redirectToHttps = express();
 //redirectToHttps.use(function (req, res, next) {
@@ -75,6 +77,3 @@ https.createServer(sslOptions, app).listen(app.get('port'));
 //    else res.redirect('https://' + req.headers.host + req.url);
 //});
 //redirectToHttps.listen(80);
-
-
-console.log('Express server started on port %s', app.get('port'));
