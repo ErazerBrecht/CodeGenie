@@ -10,7 +10,17 @@
         $scope.select = function(id) {
             $scope.selected = $scope.exercises[id];
         }
-
+        
+        //Drag and drop
+        $scope.centerAnchor = true;
+        $scope.toggleCenterAnchor = function () { $scope.centerAnchor = !$scope.centerAnchor }
+        $scope.draggableObjects = [{ name: 'one' }, { name: 'two' }, { name: 'three' }];
+        $scope.onDropComplete1 = function (data) {
+            var id = $scope.draggableObjects.indexOf(data);
+            $scope.draggableObjects.splice(id, 1);
+        }   
+        
+        //AJAX Call
         $scope.processForm = function () {
             $http({
                 method  : 'POST',

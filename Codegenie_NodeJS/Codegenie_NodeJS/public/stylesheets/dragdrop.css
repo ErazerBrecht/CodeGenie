@@ -1,11 +1,18 @@
-﻿#dropzone {
+﻿[ng-drag].drag-over {
+    background: #a42f2b !important;
+    z-index: 2;
+}
+
+[ng-drop] {
     background-color: #D43F3A;
     color: white;
-    border: dashed 4px transparent;
     border-radius: 4px;
-    transition: background-color 0.3s;
     padding-top: 50px;
     padding-bottom: 50px;
     padding-left: 10px;
     margin-bottom: 20px;
 }
+
+    [ng-drop].drag-enter {
+        /*CSS Rules for dropzone when the block enters*/
+    }

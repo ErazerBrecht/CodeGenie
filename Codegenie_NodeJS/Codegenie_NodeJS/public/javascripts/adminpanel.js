@@ -1,5 +1,5 @@
 ﻿(function () {
-    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource']);
+    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource', 'ngDraggable']);
     
     adminApp.config(function ($routeProvider) {
         $routeProvider
