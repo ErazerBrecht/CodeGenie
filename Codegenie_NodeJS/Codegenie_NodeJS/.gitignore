@@ -1,4 +1,5 @@
 ﻿lib-cov
+*.cmd
 *.config
 *.seed
 *.log
@@ -14,5 +15,3 @@ results
 
 node_modules
 npm-debug.log
-
-startnodemon.cmd
