@@ -1,6 +1,6 @@
 ﻿(function () {
     
-    var userApp = angular.module('userApp', ['ngRoute', 'ngResource']);
+    var userApp = angular.module('userApp', ['ngRoute', 'ngResource', 'ui.ace']);
     
     userApp.config(function ($routeProvider) {
         $routeProvider
@@ -15,21 +15,6 @@
         })
             .otherwise({ redirectTo: "/" });
     });
-
-    userApp.directive('elemReady', function ($parse) {
-        return {
-            restrict: 'A',
-            link: function ($scope, elem, attrs) {
-                elem.ready(function () {
-                    $scope.$apply(function () {
-                        var func = $parse(attrs.elemReady);
-                        func($scope);
-                    });
-                });
-            }
-        }
-    });
-
 }());
 
 

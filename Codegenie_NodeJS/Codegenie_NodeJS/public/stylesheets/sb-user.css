@@ -6,6 +6,7 @@
 
 /* Global Styles */
 
+
 body {
     margin-top: 100px;
     background-color: #fff;
@@ -40,6 +41,7 @@ body {
     #page-wrapper {
         padding: 10px;
     }
+    .ace_editor { height: 200px; }
 }
 
 /* Top Navigation */

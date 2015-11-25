@@ -12,25 +12,29 @@
             <div class="title">
                 <h3>{{exercise.title}}</h3>
             </div>
+ 
         </div>
     </div>
 </div>
-
 <div class="row" ng-show="selected">
-        <div ng-repeat="question in selected.questions">
-            {{question.questiontitle}} - Points: {{question.weight}}
+    <div ng-repeat="question in selected.questions">
+        {{question.questiontitle}} - Points: {{question.weight}}
 
-            <div ng-switch on="question.type">
-                <div ng-switch-when="Checkbox"><input type="checkbox"></div>
-                <div ng-switch-when="Code"><div elem-ready="initEditors()" class="editor"></div></div>
-                <div ng-switch-when="Question"><div contenteditable="true" class="answer"></div></div>
-            </div>
+        <div ng-switch on="question.type">
+            <div ng-switch-when="Checkbox"><input type="checkbox"></div>
+            <div ng-switch-when="Code"><div ui-ace="{
+  useWrapMode : false,
+  theme:'sqlserver',
+  mode: 'csharp',
+  firstLineNumber: 1,
+}"></div></div>
+            <div ng-switch-when="Question"><div contenteditable="true" class="answer"></div></div>
         </div>
+    </div>
 
-        
 
-        <div>
-            {{selected}}
-        </div>
-    </form>
+
+    <div>
+        {{selected}}
+    </div>
 </div>
