@@ -389,7 +389,6 @@
     <Compile Include="routes\users.js" />
     <Compile Include="server.js" />
     <Content Include=".gitignore" />
-    <Content Include="mongoose\connectioninfo.config" />
     <Content Include="package.json" />
     <Content Include="public\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
