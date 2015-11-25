@@ -102,7 +102,7 @@ Not required but field is available:
 
 
 ###Exercises
-Exercises have 8 fields, 4 of which are required and 2 which have a default.
+Exercises have 7 fields, 3 of which are required and 2 which have a default.
 
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
