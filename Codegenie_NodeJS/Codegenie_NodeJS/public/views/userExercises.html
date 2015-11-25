@@ -18,7 +18,8 @@
 </div>
 <div class="row" ng-show="selected">
     <div ng-repeat="question in selected.questions">
-        {{question.questiontitle}} - Points: {{question.weight}}
+        <div ng-if="question.extra == true"><span style="color:red; font-weight:bolder">EXTRA: </span>{{question.questiontitle}} - Points: {{question.weight}}</div>
+        <div ng-if="question.extra == false">{{question.questiontitle}} - Points: {{question.weight}}</div>
 
         <div ng-switch on="question.type">
             <div ng-switch-when="Checkbox"><input type="checkbox"></div>
