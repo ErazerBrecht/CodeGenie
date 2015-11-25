@@ -1,8 +1,8 @@
 ﻿var mongoose = require('mongoose');
 
-data = process.env.db;
+data = process.env.db.trim();
 
-if (data != undefined && data.trim() != "connectionstring") {
+if (data != undefined && data != "connectionstring") {
     mongoose.connect(data);
 } else
     throw Error('There was an error reading the connection string to the database.\n Make sure the process.env.db exists and has a valid URL (starts with mongodb).\n You can set the env.db variable in your startup script, startnodemon.cmd \n');
