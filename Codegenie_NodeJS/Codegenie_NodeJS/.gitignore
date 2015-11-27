@@ -1,5 +1,4 @@
 ﻿lib-cov
-*.cmd
 *.config
 *.seed
 *.log
