@@ -1,74 +1,69 @@
 ﻿extends layout
 
 block header
-    link(rel='stylesheet', href='/stylesheets/sb-admin.css')
     link(rel='stylesheet', href='/stylesheets/form.css')
     link(rel='stylesheet', href='/stylesheets/tiles.css')
     link(rel='stylesheet', href='/stylesheets/dragdrop.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/sb-admin.css')
 
 block content
     #wrapper(ng-app = 'adminApp' ng-controller='adminPanelController')
       // Navigation
-      nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
-        // Brand and toggle get grouped for better mobile display
+      nav.navbar.navbar-inverse.navbar-static-top(role='navigation', style='margin-bottom: 0')
         .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation             
+            span.icon-bar                    
+            span.icon-bar                    
+            span.icon-bar                 
           a.navbar-brand(href='#/') CodeGenie
+          
         // Top Menu Items
         ul.nav.navbar-right.top-nav
           li.dropdown
             a.dropdown-toggle(href='', data-toggle='dropdown')
               i.fa.fa-user
-              | {{ user.name }}
-              b.caret
-                                
+              | {{user.name}}
+              b.caret                     
             ul.dropdown-menu
               li
                 a(href='#')
                   i.fa.fa-fw.fa-user
-                  |  Profile
-                                                                          
-              li.divider
-                                       
+                  |  Profile                        
+                li.divider                         
               li
-                a(href='#')
+                a(href='/signout')
                   i.fa.fa-fw.fa-power-off
-                  a(href='/signout') Log Out
-
-
+                  | Log Out
         // Sidebar Menu Items - These collapse to the responsive navigation menu on small screens
-        .collapse.navbar-collapse.navbar-ex1-collapse
-          ul.nav.navbar-nav.side-nav
-            li
-              a(href='#/')
-                i.fa.fa-fw.fa-dashboard
-                |  Dashboard
-
-            li
-              a(href='#/exercises')
-                i.fa.fa-fw.fa-edit
-                | Exercises
-                                
-            li
-              a(href='#/addexercise')
-                i.fa.fa-fw.fa-edit
-                | Add Exercise
-                                 
-            li
-              a(href='#/answers', data-toggle='collapse', data-target='#demo')
-                i.fa.fa-fw.fa-arrows-v
-                | Answers
-                i.fa.fa-fw.fa-caret-down
-                                       
-              ul#demo.collapse
-                li
-                  a(href='#') 1EA1
-                                            
-                li
-                  a(href='#') 1EA2
-                li
-                  a(href='#') 1EA3
-        // /.navbar-collapse
-               
+        .navbar-inverse.sidebar(role='navigation')
+          .sidebar-nav.navbar-collapse
+            ul#side-menu.nav.in
+              li
+                a(href='#/')
+                  i.fa.fa-fw.fa-dashboard
+                  | Dashboard                        
+              li
+                a(href='#/exercises')
+                  i.fa.fa-fw.fa-edit
+                  | Exercises                       
+              li
+                a(href='#/addexercise')
+                  i.fa.fa-fw.fa-edit
+                  | Add Exercise                      
+              li
+                a(href='#/answers')
+                  i.fa.fa-fw.fa-files-o
+                  | Answers
+                  span.fa.arrow                            
+                ul.nav.nav-second-level.collapse
+                  li
+                    a(href='#') 1EA1                             
+                    li
+                      a(href='#') 1EA2                             
+                    li
+                      a(href='#') 1EA3        
       #page-wrapper
         .container-fluid(ng-view)
 
@@ -76,6 +71,7 @@ block content
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js')
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js')
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js')
+     script(src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.2.0/metisMenu.min.js")
      script(src='/javascripts/adminpanel.js')
      script(src='/javascripts/Controllers/dashBoardController.js')
      script(src='/javascripts/Controllers/exercisesController.js')
