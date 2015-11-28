@@ -390,6 +390,11 @@
     <Compile Include="server.js" />
     <Content Include=".gitignore" />
     <Content Include="package.json" />
+    <Content Include="public\fonts\fontawesome-webfont.eot" />
+    <Content Include="public\fonts\fontawesome-webfont.svg" />
+    <Content Include="public\fonts\fontawesome-webfont.ttf" />
+    <Content Include="public\fonts\fontawesome-webfont.woff" />
+    <Content Include="public\fonts\FontAwesome.otf" />
     <Content Include="public\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="public\fonts\glyphicons-halflings-regular.ttf" />
@@ -402,6 +407,7 @@
     <Content Include="public\stylesheets\bootstrap.css.map" />
     <Content Include="public\stylesheets\bootstrap.min.css" />
     <Content Include="public\stylesheets\dragdrop.css" />
+    <Content Include="public\stylesheets\font-awesome.min.css" />
     <Content Include="public\stylesheets\form.css" />
     <Content Include="public\stylesheets\index.css" />
     <Content Include="public\stylesheets\sb-user.css" />
