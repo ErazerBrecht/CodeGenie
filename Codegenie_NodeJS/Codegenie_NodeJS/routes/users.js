@@ -163,10 +163,10 @@ router.post('/answer', isLoggedIn, function (req, res) {
     })
 });
 
-router.post('/answer/:answerID/edit', isLoggedIn, function (req, res) {
-    var answerID = req.body.answerID;
+router.post('/answer/edit/:answerID', isLoggedIn, function (req, res) {
+    var answerID = req.params.answerID;
     
-    AnswerModel.findOne({ _id: answerID, class: req.user.class, userid: req.user._id }, function (err) {
+    AnswerModel.findOne({ _id: answerID, class: req.user.class, userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
         if (!result) return res.status(500).send("Not an eligible answer ID");
         
@@ -174,19 +174,20 @@ router.post('/answer/:answerID/edit', isLoggedIn, function (req, res) {
             if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
         
-        var edited = { answers: [] };
+        var editedanswer = result.answers;
         
         var newanswerlist = req.body.answers;
-        for (var index in newanswerlist) {
-            var editedanswer = {};
-            editedanswer._id = newanswerlist[index]._id;
-            editedanswer.answer = newanswerlist[index].answer;
-            editedanswer.choices = newanswerlist[index].choices;
-            editedanswer.text = newanswerlist[index].text;
-            edited.answers.push(editedanswer);
+        for (var i in newanswerlist) {
+            for (var x in editedanswer) {
+                if (newanswerlist[i]._id == editedanswer[x]._id) {
+                    editedanswer[x].answer = newanswerlist[i].answer;
+                    editedanswer[x].choices = newanswerlist[i].choices;
+                    editedanswer[x].text = newanswerlist[i].text;
+                }
+            }
         }
         
-        AnswerModel.update({ _id: answerID }, { $set: edited }, { runValidators: true }, function (err) {
+        AnswerModel.findOneAndUpdate({ _id: answerID }, { $set: { answers: editedanswer } }, { upsert: false } , function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(500).send(response);
             res.sendStatus(201);
