@@ -8,10 +8,13 @@ var validateDate = function (date) {
 
 var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
+var courseEnum = ['Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
+
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     class: { type: String, required: true },
+    //course: { type: String, required: true, enum: courseEnum },
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
@@ -23,6 +26,7 @@ var exerciseSchema = mongoose.Schema({
     title: { type: String, required: true },
     classification: { type: String, required: true },
     class: { type: String, required: true },
+    //course: { type: String, required: true, enum: courseEnum },
     deadline: { type: String, validate: [validateDate, "Invalid date in 'deadline'"] },
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },
     extra: { type: Boolean, default: false },
@@ -43,6 +47,7 @@ var answerSchema = mongoose.Schema({
     title: { type: String, required: true },
     classification: { type: String, required: true },
     class: { type: String, required: true },
+    //course: { type: String, required: true, enum: courseEnum },
     extra: { type: Boolean, required: true },
     revised: { type: Boolean, default: false },
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },

@@ -126,8 +126,6 @@ router.post('/answer', isLoggedIn, function (req, res) {
             if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
         
-        console.log(req.body);
-        
         newanswer.userid = req.user._id;
         newanswer.exerciseid = exerciseID;
         newanswer.title = result.title;
@@ -164,6 +162,38 @@ router.post('/answer', isLoggedIn, function (req, res) {
         });
     })
 });
+
+router.post('/answer/:answerID/edit', isLoggedIn, function (req, res) {
+    var answerID = req.body.answerID;
+    
+    AnswerModel.findOne({ _id: answerID, class: req.user.class, userid: req.user._id }, function (err) {
+        if (err) return console.error(err);
+        if (!result) return res.status(500).send("Not an eligible answer ID");
+        
+        if (result.deadline) {
+            if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
+        }
+        
+        var edited = { answers: [] };
+        
+        var newanswerlist = req.body.answers;
+        for (var index in newanswerlist) {
+            var editedanswer = {};
+            editedanswer._id = newanswerlist[index]._id;
+            editedanswer.answer = newanswerlist[index].answer;
+            editedanswer.choices = newanswerlist[index].choices;
+            editedanswer.text = newanswerlist[index].text;
+            edited.answers.push(editedanswer);
+        }
+        
+        AnswerModel.update({ _id: answerID }, { $set: edited }, { runValidators: true }, function (err) {
+            var response = errhandler(err);
+            if (response != "ok") return res.status(500).send(response);
+            res.sendStatus(201);
+        });
+    });
+});
+
 
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
