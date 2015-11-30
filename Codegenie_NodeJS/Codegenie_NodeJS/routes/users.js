@@ -114,12 +114,14 @@ router.get('/answers/:answerID', isLoggedIn, function (req, res) {
 
 router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
-    var answer = req.body;
-    var newanswer = new AnswerModel;
     
     ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
         if (err) return console.error(err);
         if (!result) return res.status(500).send("Not an eligible exercise ID");
+        
+        var answer = req.body;
+        var newanswer = new AnswerModel();
+
         if (!answer.answers) return res.status(500).send("There were no answers given.");
         
         if (result.deadline) {
@@ -180,8 +182,6 @@ router.post('/answer/edit/:answerID', isLoggedIn, function (req, res) {
         for (var i in newanswerlist) {
             for (var x in editedanswer) {
                 if (newanswerlist[i]._id == editedanswer[x]._id) {
-                    editedanswer[x].answer = newanswerlist[i].answer;
-                    editedanswer[x].choices = newanswerlist[i].choices;
                     editedanswer[x].text = newanswerlist[i].text;
                 }
             }

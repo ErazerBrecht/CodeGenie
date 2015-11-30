@@ -35,13 +35,11 @@ var exerciseSchema = mongoose.Schema({
             weight: { type: Number, required: true },
             extra: { type: Boolean, default: false },
             type: { type: String, required: true, enum: typeEnum },
-            choices: [{
-                    text: { type: String }
-                }]
+            choices: [String]
         }]
 });
 
-var answerSchema = mongoose.Schema({
+var answerSchema = mongoose.Schema( {
     exerciseid: { type: String, required: true },
     userid: { type: String, required: true },
     title: { type: String, required: true },
@@ -51,16 +49,14 @@ var answerSchema = mongoose.Schema({
     extra: { type: Boolean, required: true },
     revised: { type: Boolean, default: false },
     created: { type: String, default: moment().format("DD/MM/YYYY HH:mm:ss"), validate: [validateDate, "Invalid date in 'created'"] },
-    answers: [{
+    answers: [ {
             questionid: { type: String, required: true },
             questiontitle: { type: String, required: true },
             received: { type: Number, default: 0 },
             weight: { type: Number, required: true },
             extra: { type: Boolean, required: true },
             type: { type: String, required: true, enum: typeEnum },
-            answer: { type: Boolean },
-            choices: [{ type: String }],
-            text: { type: String }
+            text: [String]
         }]
 });
 
