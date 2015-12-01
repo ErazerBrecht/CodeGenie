@@ -35,21 +35,10 @@
         
         $scope.processForm = function () {
             
-            $http({
-                method  : 'POST',
-                url     : '/users/answer',
-                data    : $scope.answer,
-                responseType: 'text'
-            }).then(
-                //SUCCESS
-                function (response) {
-                    alert(response.data);
-                },
-                //ERROR
-                function (error) {
-                    alert(error.data);
-                }
-            );
+            userRestData.postAnswer.save($scope.answer, function (response) {
+                alert("Created");
+            });
+            
         };
     };
     

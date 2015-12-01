@@ -5,7 +5,10 @@
             
             //userPanel services
             getUser: $resource("/users/mine"),
-            getExercises: $resource("/users/exercises")           
+            getExercises: $resource("/users/exercises"),
+            postAnswer: $resource("/users/answer", {
+                responseType : 'text'
+            })           
         };
     };
     
