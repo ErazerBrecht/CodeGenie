@@ -56,14 +56,6 @@ block content
                 a(href='#/answers')
                   i.fa.fa-fw.fa-files-o
                   | Answers
-                  span.fa.arrow                            
-                ul.nav.nav-second-level.collapse
-                  li
-                    a(href='#') 1EA1                             
-                    li
-                      a(href='#') 1EA2                             
-                    li
-                      a(href='#') 1EA3        
       #page-wrapper
         .container-fluid(ng-view)
 
@@ -72,13 +64,13 @@ block content
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js')
      script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js')
      script(src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.2.0/metisMenu.min.js")
+     script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js")
+     script(src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js")
      script(src='/javascripts/adminpanel.js')
+     script(src='/javascripts/Controllers/adminPanelController.js')
      script(src='/javascripts/Controllers/dashBoardController.js')
      script(src='/javascripts/Controllers/exercisesController.js')
      script(src='/javascripts/Controllers/addExerciseController.js')
-     script(src='/javascripts/Controllers/adminPanelController.js')
      script(src='/javascripts/Controllers/answersController.js')
      script(src='/javascripts/Service/restDataService.js')
-     script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js")
-     script(src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js")
      script(src="/javascripts/ngDraggable.js")

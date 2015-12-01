@@ -8,6 +8,11 @@
             $scope.answers = data;
         });
 
+        restData.getNewAnswers.get(function (data)
+        {
+            $scope.new = data.count;
+        });
+
 		
 	};
 	app.controller("dashBoardController", dashBoardController);
