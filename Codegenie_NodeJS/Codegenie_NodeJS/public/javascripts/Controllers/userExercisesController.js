@@ -14,20 +14,25 @@
             $scope.userData = data;
         });
         
-
+        
         $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
             $scope.answers = $scope.exercises[id].questions;
-
+            
+            angular.forEach($scope.answers, function (value, key) {
+                value.questionid = value._id;
+                delete value._id;
+            });
+            
             answer.exerciseid = $scope.selected._id;
             
             
             
             answer.answers = $scope.answers;
             $scope.answer = answer;
-
+ 
         }
-
+        
         $scope.processForm = function () {
             
             $http({
@@ -49,5 +54,5 @@
     };
     
     app.controller("userExercisesController", userExercisesController);
-    
+   
 }());
