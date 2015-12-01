@@ -17,25 +17,38 @@
     </div>
 </div>
 <div class="row" ng-show="selected">
-    <div ng-repeat="question in selected.questions">
-        <div ng-if="question.extra == true"><span style="color:red; font-weight:bolder">EXTRA: </span>{{question.questiontitle}} - Points: {{question.weight}}</div>
-        <div ng-if="question.extra == false">{{question.questiontitle}} - Points: {{question.weight}}</div>
+    <form id="exerciseForm" class="col-lg-12" ng-submit="processForm()">
+        <div ng-repeat="answer in answers">
+            <div ng-if="answer.extra == true"><span style="color:red; font-weight:bolder">EXTRA: </span>{{answer.questiontitle}} - Points: {{answer.weight}}</div>
+            <div ng-if="answer.extra == false">{{answer.questiontitle}} - Points: {{answer.weight}}</div>
 
-        <div ng-switch on="question.type">
-            <div ng-switch-when="Checkbox"><input type="checkbox"></div>
-            <div ng-switch-when="Code"><div ui-ace="{
+            <div ng-switch on="answer.type">
+                <div ng-switch-when="Checkbox"><input ng-model="answer.text" type="checkbox"></div>
+                <div ng-switch-when="Code">
+                    <div ng-model="answer.text" ui-ace="{
   useWrapMode : false,
   theme:'sqlserver',
   mode: 'csharp',
   firstLineNumber: 1,
-}"></div></div>
-            <div ng-switch-when="Question"><div contenteditable="true" class="answer"></div></div>
+}"></div>
+                </div>
+                <div ng-switch-when="Question"><input type="text" ng-model="answer.text" class="answer" /></div>
+            </div>
         </div>
-    </div>
+
+        <div class="form-group top-30">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
 
 
+        <div>
+            <h1>Selected</h1>
+            {{selected}}
+            <h1>Answer</h1>
+            {{answer}}
 
-    <div>
-        {{selected}}
-    </div>
+            <h1>User</h1>
+            {{userData}}
+        </div>
+    </form>
 </div>
