@@ -34,7 +34,6 @@
         }
         
         $scope.processForm = function () {
-            
             userRestData.postAnswer.save($scope.answer, function (response) {
                 alert("Created");
             });

@@ -9,7 +9,9 @@
             getUserById: $resource('/admin/user/:userid', { userid: '@userid' }),
             getExercises : $resource("/admin/exercises"),
             getNewAnswers: $resource("/statistics/answers/unrevised"),
-            postExercise: $resource('/admin/exercises/post')
+            postExercise: $resource("/admin/exercises/post", {
+                responseType : 'text'
+            })
         };             
     };
 

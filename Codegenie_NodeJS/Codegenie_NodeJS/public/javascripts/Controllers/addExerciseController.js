@@ -44,20 +44,10 @@
         }
         
         $scope.processForm = function () {
-            $http({
-                method  : 'POST',
-                url     : '/admin/exercises/post',
-                data    : $scope.exercise, // pass in data as strings   
-                responseType: 'text'        
-            }).then(
-                //SUCCESS
-                function(response) {
-                    alert(response.data);
-                },
-                //ERROR
-                function(error) {
-                }
-            );
+           $scope.exercise.deadline = moment($scope.exercise.deadline).format('DD/MM/YYYY [23:59:59]');     //Change dateformat
+           restData.postExercise.save($scope.exercise, function (response) {
+                alert("Exercise created");
+            });
         };
     };
     
