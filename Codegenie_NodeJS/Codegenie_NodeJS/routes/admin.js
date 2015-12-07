@@ -173,7 +173,7 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         if (err) return console.error(err);
         
         if (result.deadline) {
-            if (new Date(moment().format("DD/MM/YYYY HH:mm:ss")).getTime() < new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
+            if (new Date(new Date().toISOString()).getTime() < new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
         }
 
         var newanswer = new AnswerModel(result);

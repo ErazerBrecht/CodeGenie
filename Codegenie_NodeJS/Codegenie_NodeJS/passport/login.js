@@ -24,7 +24,7 @@ module.exports = function (passport) {
                 return done(null, false, req.flash('message', 'Incorrect password.'));
             }
             
-            UserModel.update({ _id: user._id }, { $set: { 'lastseen': moment().format("DD/MM/YYYY HH:mm:ss") } }, { runValidators: true }, function (err) {
+            UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
                 var response = errhandler(err);
                 if (response != "ok") {
                     done(null, false, response);

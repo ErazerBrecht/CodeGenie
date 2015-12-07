@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var auth = require('../passport/authlevels');
 var router = express.Router();
+var moment = require('moment')
 
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
@@ -56,7 +57,45 @@ router.get('/exercises', isLoggedIn, function (req, res) {
     });
 });
 
-router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/year/:exerciseID', isLoggedIn, function (req, res) {
+    var exerciseID = req.params.exerciseID;
+    
+    AnswerModel.aggregate(
+        [
+            { "$match": { "exerciseid": exerciseID, "revised": true } },
+            {
+                $group: {
+                    "_id": moment('$deadline', 'DD/MM/YYYY HH:mm:ss').year(),
+                    "answers": { $push: $answers }
+                }
+            },
+            { $unwind: "$answers" },
+            {
+                $group: {
+                    "_id": $_id,
+                    "count": {
+                        $sum: 1
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "title": $_id,
+                    "count": $count
+                }
+            }
+        ],
+            function (err, agresult) {
+            if (err) console.error(err);
+            else {
+                console.log(agresult)
+                res.status(200).json(agresult);
+            }
+        }
+    );
+});
+
+router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var response = {
         count: 0,
