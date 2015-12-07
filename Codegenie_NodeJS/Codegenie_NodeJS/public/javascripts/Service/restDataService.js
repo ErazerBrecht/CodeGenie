@@ -11,7 +11,8 @@
             getNewAnswers: $resource("/statistics/answers/unrevised"),
             postExercise: $resource("/admin/exercises/post", {
                 responseType : 'text'
-            })
+            }),
+            postUpdateExercise: $resource("/admin/exercises/edit/:id", {id: '@id'})
         };             
     };
 

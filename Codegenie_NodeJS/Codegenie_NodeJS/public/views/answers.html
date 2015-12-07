@@ -9,9 +9,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="list-group">
-            <a href="" ng-repeat="answer in answers | limitTo:10" class="list-group-item">
+            <a href="" ng-repeat="answer in answers | orderBy: 'created'" class="list-group-item">
                 <time am-time-ago="answer.created" am-format="DD-MM-YYYY HH:mm:ss" class="badge"></time> 
-                <i class="fa fa-fw fa-check"></i> {{answer.name}} {{error}}
+
+                <span >{{answer.created}} </span>
+                <i class="fa fa-fw fa-check"></i> {{answer.name}} {{answer.class}} {{answer.title}}
             </a>
         </div>
     </div>
