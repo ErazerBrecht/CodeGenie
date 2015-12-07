@@ -35,13 +35,13 @@
         $scope.addChoice = function (id) {
             var choice = {};
             $scope.exercise.questions[id].choices.push(choice);
-        }
+        };
         
         $scope.removeChoice = function (questionId, id) {
             $scope.exercise.questions[questionId].choices.splice(id, 1);
             if ($scope.exercise.questions[questionId].choices.length < 1)
                 delete $scope.exercise.questions[questionId].choices;
-        }
+        };
         
         $scope.processForm = function () {
            $scope.exercise.deadline = moment($scope.exercise.deadline).format('DD/MM/YYYY [23:59:59]');     //Change dateformat

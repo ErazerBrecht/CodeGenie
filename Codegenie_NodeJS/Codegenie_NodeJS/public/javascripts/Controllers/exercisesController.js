@@ -36,10 +36,10 @@
         };
 
         $scope.removeChoice = function (questionId, id) {
-            $scope.exercise.questions[questionId].choices.splice(id, 1);
-            if ($scope.exercise.questions[questionId].choices.length < 1)
-                delete $scope.exercise.questions[questionId].choices;
-        }
+            $scope.selected.questions[questionId].choices.splice(id, 1);
+            if ($scope.selected.questions[questionId].choices.length < 1)
+                delete $scope.selected.questions[questionId].choices;
+        };
         
         //Drag and drop
         $scope.centerAnchor = true;
