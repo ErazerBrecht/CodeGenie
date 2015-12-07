@@ -78,14 +78,14 @@ exports.errhandler = function (err) {
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
-        if (questions[index]._id === answer.questionid) return true;
+        if (questions[index]._id == answer.questionid) return true;
     }
     return false;
 }
 
 exports.answerExists = function (answer, answers) {
     for (var index in answers) {
-        if (answers[index].questionid === answer.questionid) return true;
+        if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
 }
