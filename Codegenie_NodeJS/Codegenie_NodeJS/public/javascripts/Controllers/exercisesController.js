@@ -10,6 +10,35 @@
         $scope.select = function(id) {
             $scope.selected = $scope.exercises[id];
         }
+
+        $scope.addButton = function () {
+            var question = {};
+            if ($scope.selected.questions == null)
+                $scope.selected.questions = [];
+
+            $scope.selected.questions.push(question);
+        };
+
+        $scope.typeChanged = function(id) {
+            if ($scope.selected.questions[id].type === 'MultipleChoice') {
+                $scope.selected.questions[id].choices = [];
+                $scope.addChoice(id);
+            } else {
+                if ($scope.selected.questions[id].choices != null)
+                    delete $scope.exercise.questions[id].choices;
+            }
+        };
+
+        $scope.addChoice = function (id) {
+            var choice = {};
+            $scope.selected.questions[id].choices.push(choice);
+        };
+
+        $scope.removeChoice = function (questionId, id) {
+            $scope.exercise.questions[questionId].choices.splice(id, 1);
+            if ($scope.exercise.questions[questionId].choices.length < 1)
+                delete $scope.exercise.questions[questionId].choices;
+        }
         
         //Drag and drop
         $scope.centerAnchor = true;
