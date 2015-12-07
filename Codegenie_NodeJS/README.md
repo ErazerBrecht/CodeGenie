@@ -84,12 +84,13 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 
 
 ###Users
-Users have 8 fields, 3 of which are required and 4 which have a default.
+Users have 9 fields, 4 of which are required and 4 which have a default.
 
 Required: 
 * name: string, name of the user (e.g. John Smith) *is unique field*
 * password: string, encrypted password (encrypted with bCrypt)
 * class: string, current class enrollment of the user (e.g. 1EA1)
+* course: Current course *not implemented yet*
 
 Defaults: 
 * status: number, register status, defaults to 0.
@@ -102,12 +103,13 @@ Not required but field is available:
 
 
 ###Exercises
-Exercises have 7 fields, 3 of which are required and 2 which have a default.
+Exercises have 8 fields, 4 of which are required and 2 which have a default.
 
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
 * classification: string, classification of the exercise (e.g. Databinding)
 * class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
+* course: Current course *not implemented yet*
 
 Defaults:
 * created: date, when the exercise was posted, defaults to current time on the server.
@@ -119,7 +121,7 @@ Not required but field is available:
 
 
 ###Answers
-Answers have 9 fields, 7 of which are required and 1 which has a default.
+Answers have 10 fields, 8 of which are required and 1 which has a default.
 
 Required:
 * exerciseid: string, id of the exercise (e.g. 5637951a8a48cc983189c500)
@@ -129,6 +131,7 @@ Required:
 * class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
 * revised: boolean, check if the answer has been revised by the teacher.
 * extra: boolean, check if the original exercise is an extra assignment or not.
+* course: Current course *not implemented yet*
 
 Defaults:
 * created: date, when the answer was posted, defaults to current time on the server.
@@ -151,7 +154,7 @@ Defaults:
 * choices: array of objects with field 'text', the different choices if the question is a multiple choice one.
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 9 fields, 5 of which are required and 1 which has a default.
+The answer object exists out of 7 fields, 5 of which are required and 1 which has a default.
 
 Required:
 * questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
@@ -165,8 +168,6 @@ Defaults:
 
 Not required but field is available: 
 * text: string, if code/question was asked, this is the field it will be placed in.
-* answer: boolean, this is used if the original question was a checkbox.
-* choices: array of objects with field 'text', the answered choices if the original question was a multiple choice one.
 
 
 
@@ -177,7 +178,7 @@ There are currently 3 portals, the /admin/ portal, /users/ portal and the /stati
 
 
 ###User portal
-The user portal has 8 gets and 2 posts.
+The user portal has 8 gets and 3 posts.
 
 
 ####GET: /users/
@@ -214,11 +215,19 @@ This gives a specific answer that the user has submitted.
 
 ####POST: /users/answer
 
-If an user has solved an exercise it is posted here.
+Users can post solved exercises here.
+
+**Only information needed:**</br>
+Original exercise ID in a field named 'exerciseid'</br>
+Array of [answer objects](#answerobject) with the field 'questionid' and 'text' filled in</br>
+
+####POST: /users/answer/edit/{ID}
+
+Users can edit one of their answers here.
 
 ####POST: /users/edit
 
-The user will edit his/her profile by posting here.
+Users can edit their profiles here.
 
 
 
@@ -229,12 +238,12 @@ The admin portal has 11 gets and 4 posts.
 
 ####GET: /admin/
 
-HTML page for the admin panel
+HTML page for the admin panel.
 
 
 ####POST: /admin/user
 
-The admin can create a new user by posting here.
+Admins can create new users by posting here.
 
 ####GET: /admin/user/{ID}
 
@@ -324,5 +333,8 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 
 ##TODO:
 
-- Make user panel
-- Find a better way to accept/store user classes (different table with 'active' classes? e.g. 1EA1, 1EA2), maybe work with courses (e.g. OO, Programeren) instead of classes?
+- Finish user panel
+- Expand statistics portal
+- Make fancy graphics
+- Make profile manager
+- Implement courses (e.g. OO, Programeren) instead of classes

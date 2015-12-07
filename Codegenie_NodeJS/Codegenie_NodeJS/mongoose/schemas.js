@@ -56,7 +56,7 @@ var answerSchema = mongoose.Schema( {
             weight: { type: Number, required: true },
             extra: { type: Boolean, required: true },
             type: { type: String, required: true, enum: typeEnum },
-            text: [String]
+            text: String
         }]
 });
 
@@ -72,7 +72,7 @@ exports.errhandler = function (err) {
     if (err) {
         var errmessage = "";
         for (var field in err.errors) {
-            errmessage += err.errors[field].message + " Found " + err.errors[field].value + ".";
+            errmessage += err.errors[field].message + " Found " + err.errors[field].value + ".\n";
         }
         return errmessage;
     }
@@ -83,14 +83,14 @@ exports.errhandler = function (err) {
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
-        if (questions[index]._id == answer.questionid) return true;
+        if (questions[index]._id === answer.questionid) return true;
     }
     return false;
 }
 
 exports.answerExists = function (answer, answers) {
     for (var index in answers) {
-        if (answers[index].questionid == answer.questionid) return true;
+        if (answers[index].questionid === answer.questionid) return true;
     }
     return false;
 }

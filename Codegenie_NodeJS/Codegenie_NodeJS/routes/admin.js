@@ -18,8 +18,12 @@ router.get('/', isAdmin, function (req, res) {
     res.render('adminpanel', { title: 'CodeGenie' });
 });
 
-router.get('/exercises', isAdmin, function (req, res) {
-    ExerciseModel.find(function (err, result) {
+//USERS GET
+
+router.get('/user/:userID', isAdmin, function (req, res) {
+    var userID = req.params.userID;
+    
+    UserModel.findById(userID, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
         
         res.status(200).json(result);
@@ -38,20 +42,17 @@ router.post("/user", isAdmin, function (req, res) {
     });
 });
 
+
+
 //EXERCISES GET
 
-router.get('/user/:userID', isAdmin, function (req, res) {
-    var userID = req.params.userID;
-    
-    UserModel.findById(userID, { password: 0 }, function (err, result) {
+router.get('/exercises', isAdmin, function (req, res) {
+    ExerciseModel.find(function (err, result) {
         if (err) return console.error(err);
         
         res.status(200).json(result);
     })
 });
-
-
-//EXERCISES GET
 
 router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
