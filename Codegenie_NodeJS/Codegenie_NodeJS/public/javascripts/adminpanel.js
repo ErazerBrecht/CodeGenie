@@ -34,8 +34,8 @@ $(function () {
         $routeProvider
 			// route for the dashboard
 			.when('/', {
-                templateUrl: 'views/dashboard.html',
-                controller: 'dashBoardController'
+                templateUrl: 'views/adminDashboard.html',
+                controller: 'adminDashBoardController'
             })
 
             // route to watch and edit all exercises
