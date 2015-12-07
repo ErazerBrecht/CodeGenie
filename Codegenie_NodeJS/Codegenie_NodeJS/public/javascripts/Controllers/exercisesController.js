@@ -9,6 +9,7 @@
 
         $scope.select = function(id) {
             $scope.selected = $scope.exercises[id];
+            $scope.selected.deadline = new Date($scope.selected.deadline);
         }
 
         $scope.addButton = function () {
