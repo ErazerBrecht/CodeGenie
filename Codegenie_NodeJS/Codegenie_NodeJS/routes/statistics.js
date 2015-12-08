@@ -20,20 +20,20 @@ router.get('/', isLoggedIn, function (req, res) {
     //Godzilla has to stay, there is no sync method for queries
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
-        
+
         AnswerModel.count(function (err, c) {
             response.answers = c;
-            
+
             UserModel.count(function (err, c) {
                 response.users = c;
-                
+
                 UserModel.count({ admin: true }, function (err, c) {
                     response.admins = c;
-                    
+
                     UserModel.find({}, { class: 1 }, function (err, result) {
                         var ar = countclasses(result);
                         for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-                        
+
                         res.status(200).json(response);
                     });
                 });
@@ -44,14 +44,14 @@ router.get('/', isLoggedIn, function (req, res) {
 
 router.get('/exercises', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     ExerciseModel.count(function (err, c) {
         response.count = c;
-        
+
         ExerciseModel.find({}, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -59,33 +59,34 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 
 router.get('/exercises/year/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
-    
+
     AnswerModel.aggregate(
         [
-            { "$match": { "exerciseid": exerciseID, "revised": true } },
+            { "$match": { "exerciseid": exerciseID } },
             {
                 $group: {
-                    "_id": moment('$deadline', 'DD/MM/YYYY HH:mm:ss').year(),
-                    "answers": { $push: $answers }
+                    "_id": { $year: "$created" },
+                    "answers": { $push: "$answers" }
                 }
             },
             { $unwind: "$answers" },
             {
                 $group: {
-                    "_id": $_id,
+                    "_id": "$_id",
                     "count": {
                         $sum: 1
                     }
                 }
             },
             {
-                "$project": {
-                    "title": $_id,
-                    "count": $count
+                $project: {
+                    "_id": 0,
+                    "count": "$count",
+                    "year": "$_id"
                 }
             }
         ],
-            function (err, agresult) {
+        function (err, agresult) {
             if (err) console.error(err);
             else {
                 console.log(agresult)
@@ -106,41 +107,41 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
         received: 0,
         extra: false,
         questions: [{
-                questiontitle: "",
-                weight: 0,
-                extra: false,
-                type: "",
-                average: 0
-            }]
+            questiontitle: "",
+            weight: 0,
+            extra: false,
+            type: "",
+            average: 0
+        }]
     };
-    
+
     AnswerModel.find({ exerciseid: exerciseID, revised: true }, function (err, result) {
         if (!result.length) return res.status(200).json([]);
         response.count = result.length;
-        
+
         response.title = result[0].title;
         response.classification = result[0].classification;
         response.class = result[0].class;
         response.weight = result[0].weight;
         response.received = result[0].received;
         response.extra = result[0].extra;
-        
+
         var final = [];
         var questiontemplate = result[0].answers;
         for (var i = 0; i < questiontemplate.length; i++) {
             var obj = questiontemplate[i];
             if (!final.hasOwnProperty(obj)) {
                 var filtered = { questiontitle: "", extra: false, type: "", weight: 0, average: 0 };
-                
+
                 filtered.questiontitle = obj.questiontitle;
                 filtered.extra = obj.extra;
                 filtered.type = obj.type;
                 filtered.weight = obj.weight;
-                
+
                 final.push(filtered);
             }
         }
-        
+
         AnswerModel.aggregate(
             [
                 { "$match": { "exerciseid": exerciseID, "revised": true } },
@@ -159,7 +160,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                     }
                 },
                 {
-                    "$group": {
+                    $group: {
                         "_id": "$_id",
                         "average": { $avg: "$average" }
                     }
@@ -176,9 +177,9 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                             }
                         }
                     }
-                    
+
                     response.questions = final;
-                    
+
                     res.status(200).json(response);
                 }
             }
@@ -188,14 +189,14 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
 
 router.get('/answers', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     AnswerModel.count(function (err, c) {
         response.count = c;
-        
+
         AnswerModel.find({}, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -203,14 +204,14 @@ router.get('/answers', isLoggedIn, function (req, res) {
 
 router.get('/answers/revised', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     AnswerModel.count({ revised: true }, function (err, c) {
         response.count = c;
-        
+
         AnswerModel.find({ revised: true }, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -218,14 +219,14 @@ router.get('/answers/revised', isLoggedIn, function (req, res) {
 
 router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     var response = { count: 0, classes: [] };
-    
+
     AnswerModel.count({ revised: false }, function (err, c) {
         response.count = c;
-        
+
         AnswerModel.find({ revised: false }, { class: 1 }, function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
-            
+
             res.status(200).json(response);
         });
     });
@@ -234,7 +235,7 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
 
 function countclasses(arr) {
     var a = [], b = [];
-    
+
     for (i = 0; i < arr.length; i++) {
         var obj = arr[i].class;
         if (a.indexOf(obj) == -1) {
@@ -243,7 +244,7 @@ function countclasses(arr) {
         }
         else b[a.indexOf(obj)] += 1;
     }
-    
+
     return [a, b];
 }
 
