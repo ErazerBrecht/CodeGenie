@@ -40,7 +40,7 @@ $(function () {
 
             // route to watch and edit all exercises
             .when('/exercises', {
-                templateUrl: 'views/exercises.html',
+                templateUrl: 'views/adminExercises.html',
                 controller: 'exercisesController'
             })
 			
