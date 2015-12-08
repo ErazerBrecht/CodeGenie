@@ -50,6 +50,12 @@
                             <div ng-switch-when="Question">
                                 <input type="text" ng-model="answer.text" class="answer" />
                             </div>
+
+                            <div ng-switch-when="MultipleChoice">
+                                <div ng-repeat="choice in answer.choices" class="radio">
+                                    <label><input type="radio" text />{{choice.text}}</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
