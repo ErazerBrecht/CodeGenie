@@ -44,9 +44,9 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="" ng-repeat="answer in answers | limitTo:10" class="list-group-item">
+                    <a href="" ng-repeat="answer in answers | limitTo:10 | orderBy:'-created'" class="list-group-item">
                         <time am-time-ago="answer.created" class="badge"></time>
-                        <i class="fa fa-fw fa-check"></i> {{answer.created}}
+                        <i class="fa fa-fw fa-check"></i> {{answer.class}}
                     </a>
                     
                 </div>
