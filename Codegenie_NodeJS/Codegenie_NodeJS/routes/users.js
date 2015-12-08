@@ -114,7 +114,6 @@ router.get('/answers/:answerID', isLoggedIn, function (req, res) {
 
 router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
-    console.log(req.body);
     
     ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
         if (err) return console.error(err);
@@ -139,10 +138,9 @@ router.post('/answer', isLoggedIn, function (req, res) {
         
         for (var answerIndex in answer.answers) {
             if (!questionExists(answer.answers[answerIndex], result.questions)) {
-                console.log(answer.answers)
-                console.log(answer.answers[answerIndex].questionid)
                 return res.status(500).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
             }
+
             for (var questionIndex in result.questions) {
                 var an = answer.answers[answerIndex];
                 var qu = result.questions[questionIndex];
@@ -158,7 +156,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
         }
         
         //(MAYBE)TODO: check if questionids that were posted are actually unique
-        if (newanswer.answers.length != result.questions.length) return res.status(500).send("There were some questions missing.");
+        if (newanswer.answers.length != result.questions.length)
+            return res.status(500).send("There were some questions missing.");
         
         newanswer.save(function (err) {
             var response = errhandler(err);
