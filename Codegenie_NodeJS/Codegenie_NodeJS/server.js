@@ -49,7 +49,7 @@ app.use(session({
     name: "Codegenie",
     store: new cookiestore({
         mongooseConnection: mongoose.db,
-        ttl: 14 * 24 * 60 * 60,
+        ttl: 7 * 24 * 60 * 60,
     }),
     resave: true,
     saveUninitialized: true

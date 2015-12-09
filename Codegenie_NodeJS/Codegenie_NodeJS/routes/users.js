@@ -118,12 +118,12 @@ router.post('/answer', isLoggedIn, function (req, res) {
     
     ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
         if (err) return console.error(err);
-        if (!result) return res.status(500).send("Not an eligible exercise ID");
+        if (!result) return res.status(400).send("Not an eligible exercise ID");
         
         var answer = req.body;
         var newanswer = new AnswerModel();
 
-        if (!answer.answers) return res.status(500).send("There were no answers given.");
+        if (!answer.answers) return res.status(400).send("There were no answers given.");
         
         if (result.deadline) {
             if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
@@ -141,7 +141,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
             if (!questionExists(answer.answers[answerIndex], result.questions)) {
                 console.log(answer.answers)
                 console.log(answer.answers[answerIndex].questionid)
-                return res.status(500).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
+                return res.status(400).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
             }
             for (var questionIndex in result.questions) {
                 var an = answer.answers[answerIndex];
@@ -158,11 +158,11 @@ router.post('/answer', isLoggedIn, function (req, res) {
         }
         
         //(MAYBE)TODO: check if questionids that were posted are actually unique
-        if (newanswer.answers.length != result.questions.length) return res.status(500).send("There were some questions missing.");
+        if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
         
         newanswer.save(function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).send(response);
+            if (response != "ok") return res.status(400).send(response);
             return res.sendStatus(201);
         });
     })
@@ -173,7 +173,7 @@ router.post('/answer/edit/:answerID', isLoggedIn, function (req, res) {
     
     AnswerModel.findOne({ _id: answerID, class: req.user.class, userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
-        if (!result) return res.status(500).send("Not an eligible answer ID");
+        if (!result) return res.status(400).send("Not an eligible answer ID");
         
         if (result.deadline) {
             if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
@@ -192,7 +192,7 @@ router.post('/answer/edit/:answerID', isLoggedIn, function (req, res) {
         
         AnswerModel.findOneAndUpdate({ _id: answerID }, { $set: { answers: editedanswer } }, { upsert: false } , function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).send(response);
+            if (response != "ok") return res.status(400).send(response);
             res.sendStatus(201);
         });
     });
@@ -218,7 +218,7 @@ router.post("/edit", isLoggedIn, function (req, res) {
         
         UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).send(response);
+            if (response != "ok") return res.status(400).send(response);
             res.sendStatus(201);
         });
     });

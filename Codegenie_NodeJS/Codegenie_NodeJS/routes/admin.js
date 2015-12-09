@@ -30,6 +30,16 @@ router.get('/user/:userID', isAdmin, function (req, res) {
     })
 });
 
+router.get('/user/:userID/answers', isAdmin, function (req, res) {
+    var userID = req.params.userID;
+
+    AnswerModel.find({ userid: userID }, function (err, result) {
+        if (err) return console.error(err);
+
+        res.status(200).json(result);
+    })
+});
+
 //USER POST (MAINLY FOR MAKING ADMIN ACCOUNTS)
 
 router.post("/user", isAdmin, function (req, res) {
@@ -37,7 +47,7 @@ router.post("/user", isAdmin, function (req, res) {
     
     newuser.save(function (err) {
         var response = errhandler(err);
-        if (response != "ok") return res.status(500).send(response);
+        if (response != "ok") return res.status(400).send(response);
         res.sendStatus(201);
     });
 });
@@ -91,7 +101,7 @@ router.post("/exercises/post", isAdmin, function (req, res) {
     
     newexercise.save(function (err) {
         var response = errhandler(err);
-        if (response != "ok") return res.status(500).send(response);
+        if (response != "ok") return res.status(400).send(response);
         res.sendStatus(201);
     });
 });
@@ -108,7 +118,7 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
         
         ExerciseModel.update({ _id: exerciseID }, newexercise, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).send(response);
+            if (response != "ok") return res.status(400).send(response);
             res.sendStatus(201);
         });
     });
@@ -182,7 +192,7 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         
         AnswerModel.update({ _id: answerID }, { $set: newanswer }, { runValidators: true }, function (err) {
             var response = errhandler(err);
-            if (response != "ok") return res.status(500).send(response);
+            if (response != "ok") return res.status(400).send(response);
             res.sendStatus(201);
         });
     });
