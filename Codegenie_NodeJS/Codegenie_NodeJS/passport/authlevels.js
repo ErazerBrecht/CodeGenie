@@ -7,9 +7,9 @@ var errorNotAdmin = "Unauthorized, not an admin.";
 var errorNotCorrectUser = "Unauthorized, not the correct user.";
 
 var updatelastseen = function (user) {
-    UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
+    /*UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
         if (err) console.log('Error updating lastseen for user: ' + user.name);
-    });
+    });*/
 }
 
 exports.isLoggedIn = function (req, res, next) {

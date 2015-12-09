@@ -335,6 +335,7 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 
 - Finish user panel
 - Expand statistics portal
+- Fix lastseen update
 - Make fancy graphics
 - Make profile manager
 - Implement courses (e.g. OO, Programeren) instead of classes
