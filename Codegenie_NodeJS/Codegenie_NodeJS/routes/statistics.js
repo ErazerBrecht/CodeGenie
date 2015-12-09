@@ -60,7 +60,6 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var filter = req.query.filter;
-    console.log(filter);
 
     AnswerModel.aggregate(
         [
@@ -69,7 +68,9 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                 $group: {
                     "_id": {
                         "year": { $year: "$created" },
-                        "week": { $week: "$created" }
+                        "week": { $week: "$created" },
+                        "revised": { $cond: [{ $eq: ['$revised', true] }, 1, 0] },
+                        "unrevised": { $cond: [{ $eq: ['$revised', false] }, 1, 0] },
                     },
                     "answers": { $push: "$answers" }
                 }
@@ -78,23 +79,25 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
             {
                 $group: {
                     "_id": { $cond: [{ $eq: [filter, "year"] }, "$_id.year", "$_id.week"] },
-                    "count": {
-                        $sum: 1
-                    }
+                    "count": { $sum: 1 },
+                    "revised": { $sum: "$_id.revised" },
+                    "unrevised": { $sum: "$_id.unrevised" }
                 }
             },
             {
                 $project: {
                     "_id": 0,
                     "count": "$count",
-                    "year": "$_id"
+                    "year": "$_id",
+                    "revised": "$revised",
+                    "unrevised": "$unrevised"
                 }
             }
         ],
-        function (err, agresult) {
+        function (err, aggresult) {
             if (err) console.error(err);
             else {
-                res.status(200).json(agresult);
+                res.status(200).json(aggresult);
             }
         }
     );
@@ -170,14 +173,14 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                     }
                 }
             ],
-            function (err, agresult) {
+            function (err, aggresult) {
                 if (err) console.error(err);
                 else {
-                    for (var i = 0; i < agresult.length; i++) {
+                    for (var i = 0; i < aggresult.length; i++) {
                         for (var x = 0; x < final.length; x++) {
-                            var agobj = agresult[i];
-                            if (agobj._id == final[x].questiontitle) {
-                                final[x].average = agobj.average;
+                            var aggobj = aggresult[i];
+                            if (aggobj._id == final[x].questiontitle) {
+                                final[x].average = aggobj.average;
                             }
                         }
                     }
