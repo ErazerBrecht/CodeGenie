@@ -57,22 +57,27 @@ router.get('/exercises', isLoggedIn, function (req, res) {
     });
 });
 
-router.get('/exercises/year/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
+    var filter = req.query.filter;
+    console.log(filter);
 
     AnswerModel.aggregate(
         [
             { "$match": { "exerciseid": exerciseID } },
             {
                 $group: {
-                    "_id": { $year: "$created" },
+                    "_id": {
+                        "year": { $year: "$created" },
+                        "week": { $week: "$created" }
+                    },
                     "answers": { $push: "$answers" }
                 }
             },
             { $unwind: "$answers" },
             {
                 $group: {
-                    "_id": "$_id",
+                    "_id": { $cond: [{ $eq: [filter, "year"] }, "$_id.year", "$_id.week"] },
                     "count": {
                         $sum: 1
                     }
@@ -89,7 +94,6 @@ router.get('/exercises/year/:exerciseID', isLoggedIn, function (req, res) {
         function (err, agresult) {
             if (err) console.error(err);
             else {
-                console.log(agresult)
                 res.status(200).json(agresult);
             }
         }
