@@ -18,16 +18,16 @@ module.exports = function (passport) {
                         return done(null, false, err);
                     }
                     if (user && email) {
-                        return done(null, false, req.flash('message', 'Email is already used'));
+                        return done(null, false, req.flash('message', 'Email is already in use'));
                     } else {
                         UserModel.findOne({ 'name': username }, function (err, user) {
                             if (err) {
-                                console.log('Error in SignUp: ' + err);
+                                console.log('Error in signup: ' + err);
                                 return done(null, false, err);
                             }
                             if (user) {
                                 console.log('User already exists');
-                                return done(null, false, req.flash('message', 'User Already Exists'));
+                                return done(null, false, req.flash('message', 'User already exists'));
                             } else {
                                 var newUser = new UserModel({
                                     name: username,

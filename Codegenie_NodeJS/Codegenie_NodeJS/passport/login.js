@@ -16,19 +16,19 @@ module.exports = function (passport) {
                 return done(err);
             }
             if (!user) {
-                console.log('User Not Found with username ' + username);
+                console.log('User not found with username ' + username);
                 return done(null, false, req.flash('message', 'Incorrect username.'));
             }
             if (!isValidPassword(user, password)) {
-                console.log('Invalid Password for user: ' + username);
+                console.log('Invalid password for user: ' + username);
                 return done(null, false, req.flash('message', 'Incorrect password.'));
             }
             
             UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
                 var response = errhandler(err);
                 if (response != "ok") {
-                    done(null, false, response);
-                    console.log('Error updating lastseen for user: ' + user.name);
+                    done(null, false, req.flash('message', "Error in updating lastseen"));
+                    console.log('Error updating lastseen for user: ' + user.name + "\n" + response);
                 }
             });
             

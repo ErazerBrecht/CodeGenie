@@ -23,9 +23,9 @@ var isAdmin = auth.isAdmin;
 router.get('/', isAdmin, function (req, res) {
     UserModel.find({}, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
-        
+
         for (var user in result) result[user]["password"] = undefined;
-        
+
         res.status(200).json(result);
     })
 });
@@ -33,17 +33,22 @@ router.get('/', isAdmin, function (req, res) {
 router.get('/mine', isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, { password: 0 }, function (err, result) {
         if (err) return console.error(err);
-        
+
         res.status(200).json(result);
     })
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
-    ExerciseModel.find({ class: req.user.class }, function (err, result) {
+    ExerciseModel.find({ class: req.user.class }).lean().exec(function (err, exresult) {
         if (err) return console.error(err);
-        
-        res.status(200).json(result);
-    })
+        for (var index in exresult) {
+            AnswerModel.findOne({ exerciseid: exresult[index]._id }, function (err, anresult) {
+                if (err) return console.error(err);
+                if (anresult) exresult[index].solved = true;
+                res.status(200).json(exresult)
+            });
+        }
+    });
 });
 
 
@@ -53,14 +58,14 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         case 'solved':
             AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
-                
+
                 var exerciseIDs = [];
-                
+
                 for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
-                
+
                 ExerciseModel.find({ _id: { $in: exerciseIDs } }, function (err, exresult) {
                     if (err) return console.error(err);
-                    
+
                     res.status(200).json(exresult);
                 })
             })
@@ -68,14 +73,14 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         case 'unsolved':
             AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
-                
+
                 var exerciseIDs = [];
-                
+
                 for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
-                
+
                 ExerciseModel.find({ _id: { $nin: exerciseIDs }, class: req.user.class }, function (err, exresult) {
                     if (err) return console.error(err);
-                    
+
                     res.status(200).json(exresult);
                 })
             })
@@ -83,7 +88,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
         default:
             ExerciseModel.find({ _id: exerciseID, class: req.user.class }, function (err, result) {
                 if (err) return console.error(err);
-                
+
                 res.status(200).json(result);
             })
             break;
@@ -93,17 +98,17 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 router.get('/answers', isLoggedIn, function (req, res) {
     AnswerModel.find({ userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
-        
+
         res.status(200).json(result);
     })
 });
 
 router.get('/answers/:answerID', isLoggedIn, function (req, res) {
     var answerID = req.params.answerID;
-    
+
     AnswerModel.find({ _id: answerID, userid: req.user._id }, function (err, result) {
         if (err) return console.error(err);
-        
+
         res.status(200).json(result);
     })
 });
@@ -114,22 +119,23 @@ router.get('/answers/:answerID', isLoggedIn, function (req, res) {
 
 router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
-    
-    AnswerModel.find({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
+
+    AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, anresult) {
         if (err) return console.log(err);
-        if (!result) {
+        if (!anresult) {
             // POST ANSWER
+            console.log("post");
             ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
-                
+
                 var answer = req.body;
                 var newanswer = new AnswerModel();
-                
+
                 if (!answer.answers) return res.status(400).send("There were no answers given.");
-                
+
                 if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
-                
+
                 newanswer.userid = req.user._id;
                 newanswer.exerciseid = exerciseID;
                 newanswer.title = result.title;
@@ -137,7 +143,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 newanswer.classification = result.classification;
                 newanswer.class = result.class;
                 newanswer.created = new Date().toISOString();
-                
+
                 for (var answerIndex in answer.answers) {
                     if (!questionExists(answer.answers[answerIndex], result.questions)) {
                         console.log(answer.answers)
@@ -160,7 +166,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 
                 //(MAYBE)TODO: check if questionids that were posted are actually unique
                 if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
-                
+
                 newanswer.save(function (err) {
                     var response = errhandler(err);
                     if (response != "ok") return res.status(400).send(response);
@@ -171,13 +177,15 @@ router.post('/answer', isLoggedIn, function (req, res) {
         }
         else {
             //EDIT ANSWER
+            console.log("edit");
             AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
                 if (err) return console.error(err);
+                if (!result) return res.status(400).send("Not an eligible exercise ID");
                 
                 if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
-                
+
                 var editedanswer = result.answers;
-                
+
                 var newanswerlist = req.body.answers;
                 for (var i in newanswerlist) {
                     for (var x in editedanswer) {
@@ -186,11 +194,11 @@ router.post('/answer', isLoggedIn, function (req, res) {
                         }
                     }
                 }
-                
-                AnswerModel.findOneAndUpdate({ _id: answerID }, { $set: { answers: editedanswer } }, { upsert: false } , function (err) {
+
+                AnswerModel.findOneAndUpdate({ _id: anresult._id }, { $set: { answers: editedanswer } }, { upsert: false }, function (err) {
                     var response = errhandler(err);
                     if (response != "ok") return res.status(400).send(response);
-                    res.sendStatus(201);
+                    res.sendStatus(200);
                 });
             });
             //EDIT ANSWER END
@@ -201,20 +209,20 @@ router.post('/answer', isLoggedIn, function (req, res) {
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
-        
+
         var newuser = new UserModel(result);
-        
+
         for (var field in req.body) newuser[field] = req.body[field];
-        
+
         newuser._id = undefined;
         newuser.admin = undefined; //prevent user from editing random/protected information, everything else is allowed.
         newuser.password = createhash(password);
         newuser.status = undefined;
-        
+
         newuser.registerdate = undefined;
         newuser.lastseen = undefined;
         newuser.__v = undefined;
-        
+
         UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(400).send(response);
