@@ -34,11 +34,11 @@
                     <div id="collapse{{$index}}" class="panel-collapse collapse">
                         <div class="panel-body" ng-switch on="answer.type">
                             <div ng-switch-when="Checkbox">
-                                Check / Uncheck <input ng-model="answer.text" type="checkbox" />
+                                Check / Uncheck <input ng-model="answer.result" type="checkbox" />
                             </div>
 
                             <div ng-switch-when="Code">
-                                <div ng-model="answer.text" style="height: 200px" ui-ace="{
+                                <div ng-model="answer.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
@@ -48,12 +48,12 @@
                             </div>
 
                             <div ng-switch-when="Question">
-                                <input type="text" ng-model="answer.text" class="answer" />
+                                <input type="text" ng-model="answer.result" class="answer" />
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
                                 <div ng-repeat="choice in answer.choices" class="radio">
-                                    <label><input type="radio" text />{{choice.text}}</label>
+                                    <label><input type="radio" ng-model="answer.result" ng-value="choice.text" />{{choice.text}}</label>
                                 </div>
                             </div>
                         </div>
