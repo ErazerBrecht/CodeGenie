@@ -47,7 +47,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 if (anresult) exresult[index].solved = true;
             });
         }
-        process.nextTick(res.status(200).json(exresult));
+        process.nextTick(function () { res.status(200).json(exresult) });
     });
 });
 
