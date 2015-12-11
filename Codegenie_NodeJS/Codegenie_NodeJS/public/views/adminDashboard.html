@@ -21,7 +21,8 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{{new}}</div>
-                        <div>New answers!</div>
+                        <div ng-if="new > 1">New answers!</div>
+                        <div ng-if="new == 1">New answer!</div>
                     </div>
                 </div>
             </div>
