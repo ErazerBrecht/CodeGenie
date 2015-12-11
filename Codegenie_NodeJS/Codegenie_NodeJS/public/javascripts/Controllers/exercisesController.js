@@ -8,18 +8,25 @@
         function loadData() {
             restData.getExercises.query(function (data) {
                 $scope.exercises = data;
-                var addExercise = {};
-                addExercise.title = "Add Exercise";
-                $scope.exercises.unshift(addExercise);
             });
         };
 
-        $scope.select = function(id) {
+        $scope.add = function()
+        {
+            $scope.selected = {}
+            $scope.selected.deadline = new Date();
+        }
+
+        $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
             $scope.selected.deadline = new Date($scope.selected.deadline);
+        };
+
+        //Will execute every time "selected" is changed
+        $scope.$watch('selected', function(newValue, oldValue) {
             $scope.error = null;
             $scope.message = null;
-        };
+        });
 
         $scope.addButton = function () {
             var question = {};
@@ -29,7 +36,7 @@
             $scope.selected.questions.push(question);
         };
 
-        $scope.typeChanged = function(id) {
+        $scope.typeChanged = function (id) {
             if ($scope.selected.questions[id].type === 'MultipleChoice') {
                 $scope.selected.questions[id].choices = [];
                 $scope.addChoice(id);
@@ -52,10 +59,12 @@
 
         //Drag and drop
         $scope.centerAnchor = true;
-        $scope.toggleCenterAnchor = function () { $scope.centerAnchor = !$scope.centerAnchor }
+        $scope.toggleCenterAnchor = function () {
+            $scope.centerAnchor = !$scope.centerAnchor
+        }
         $scope.onDropComplete = function (data) {
             var id = $scope.exercises.indexOf(data);
-            if(id === 0) {
+            if (id === 0) {
                 $scope.exercises[0] = {};
                 $scope.exercises[0].title = "Add Exercise";
             }
@@ -65,6 +74,11 @@
             }
             $scope.selected = null;
         }
+
+        $scope.cancel = function ()
+        {
+            $scope.selected = null;
+        };
 
         //AJAX Call POST
         $scope.processForm = function () {
