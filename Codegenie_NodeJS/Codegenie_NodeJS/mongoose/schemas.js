@@ -30,7 +30,10 @@ var exerciseSchema = mongoose.Schema({
             weight: { type: Number, required: true },
             extra: { type: Boolean, default: false },
             type: { type: String, required: true, enum: typeEnum },
-            choices: [{ text: String }]
+            choices: [{
+                    text: String,
+                    correct: { type: Boolean, default: false }
+                }]
         }]
 });
 
@@ -78,6 +81,7 @@ exports.errhandler = function (err) {
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
+        if (!answer.hasProperty(questionid)) return false;
         if (questions[index]._id == answer.questionid) return true;
     }
     return false;
@@ -85,6 +89,7 @@ exports.questionExists = function (answer, questions) {
 
 exports.answerExists = function (answer, answers) {
     for (var index in answers) {
+        if (!answer.hasProperty(questionid)) return false;
         if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
