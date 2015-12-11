@@ -30,7 +30,7 @@ router.get('/', isLoggedIn, function (req, res) {
                 UserModel.count({ admin: true }, function (err, c) {
                     response.admins = c;
 
-                    UserModel.find({}, { class: 1 }, function (err, result) {
+                    UserModel.find({}, { class: 1 }).lean().exec(function (err, result) {
                         var ar = countclasses(result);
                         for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
 
@@ -48,7 +48,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
     ExerciseModel.count(function (err, c) {
         response.count = c;
 
-        ExerciseModel.find({}, { class: 1 }, function (err, result) {
+        ExerciseModel.find({}, { class: 1 }).lean().exec(function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
 
@@ -122,7 +122,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
         }]
     };
 
-    AnswerModel.find({ exerciseid: exerciseID, revised: true }, function (err, result) {
+    AnswerModel.find({ exerciseid: exerciseID, revised: true }).lean().exec(function (err, result) {
         if (!result.length) return res.status(200).json([]);
         response.count = result.length;
 
@@ -200,7 +200,7 @@ router.get('/answers', isLoggedIn, function (req, res) {
     AnswerModel.count(function (err, c) {
         response.count = c;
 
-        AnswerModel.find({}, { class: 1 }, function (err, result) {
+        AnswerModel.find({}, { class: 1 }).lean().exec(function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
 
@@ -215,7 +215,7 @@ router.get('/answers/revised', isLoggedIn, function (req, res) {
     AnswerModel.count({ revised: true }, function (err, c) {
         response.count = c;
 
-        AnswerModel.find({ revised: true }, { class: 1 }, function (err, result) {
+        AnswerModel.find({ revised: true }, { class: 1 }).lean().exec(function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
 
@@ -230,7 +230,7 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     AnswerModel.count({ revised: false }, function (err, c) {
         response.count = c;
 
-        AnswerModel.find({ revised: false }, { class: 1 }, function (err, result) {
+        AnswerModel.find({ revised: false }, { class: 1 }).lean().exec(function (err, result) {
             var ar = countclasses(result);
             for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
 

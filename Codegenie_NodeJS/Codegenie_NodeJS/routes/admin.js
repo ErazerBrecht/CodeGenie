@@ -23,7 +23,7 @@ router.get('/', isAdmin, function (req, res) {
 router.get('/user/:userID', isAdmin, function (req, res) {
     var userID = req.params.userID;
     
-    UserModel.findById(userID, { password: 0 }, function (err, result) {
+    UserModel.findById(userID, { password: 0 }).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
         res.status(200).json(result);
@@ -33,7 +33,7 @@ router.get('/user/:userID', isAdmin, function (req, res) {
 router.get('/user/:userID/answers', isAdmin, function (req, res) {
     var userID = req.params.userID;
 
-    AnswerModel.find({ userid: userID }, function (err, result) {
+    AnswerModel.find({ userid: userID }).lean().exec(function (err, result) {
         if (err) return console.error(err);
 
         res.status(200).json(result);
@@ -67,7 +67,7 @@ router.get('/exercises', isAdmin, function (req, res) {
 router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    ExerciseModel.findById(exerciseID, function (err, result) {
+    ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
         res.status(200).json(result);
@@ -77,7 +77,7 @@ router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
 router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    AnswerModel.find({ exerciseid: exerciseID }, function (err, result) {
+    AnswerModel.find({ exerciseid: exerciseID }).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
         res.status(200).json(result);
@@ -112,7 +112,7 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
 
-    ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
+    ExerciseModel.findOne({ _id: exerciseID }).lean().exec(function (err, result) {
         if (err)
             return res.status(400).send("Exercise doesn't exist.");
         
@@ -145,21 +145,21 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
     
     switch (answerID) {
         case 'revised':
-            AnswerModel.find({ revised: true }, function (err, result) {
+            AnswerModel.find({ revised: true }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
             })
             break;
         case 'unrevised':
-            AnswerModel.find({ revised: false }, function (err, result) {
+            AnswerModel.find({ revised: false }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
             })
             break;
         default:
-            AnswerModel.find({ _id: answerID }, function (err, result) {
+            AnswerModel.find({ _id: answerID }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
@@ -183,7 +183,7 @@ router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     
-    AnswerModel.findOne({ _id: answerID }, function (err, result) {
+    AnswerModel.findOne({ _id: answerID }).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
         if (result.deadline) {
