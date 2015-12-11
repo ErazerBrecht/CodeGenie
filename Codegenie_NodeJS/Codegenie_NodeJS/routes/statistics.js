@@ -88,7 +88,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                 $project: {
                     "_id": 0,
                     "count": "$count",
-                    "year": "$_id",
+                    "filter": "$_id",
                     "revised": "$revised",
                     "unrevised": "$unrevised"
                 }
