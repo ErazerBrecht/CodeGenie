@@ -45,9 +45,9 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             AnswerModel.findOne({ exerciseid: exresult[index]._id }, function (err, anresult) {
                 if (err) return console.error(err);
                 if (anresult) exresult[index].solved = true;
-                res.status(200).json(exresult)
             });
         }
+        process.nextTick(res.status(200).json(exresult));
     });
 });
 
@@ -177,7 +177,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
             AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
-                
+
                 if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
 
                 var editedanswer = result.answers;
