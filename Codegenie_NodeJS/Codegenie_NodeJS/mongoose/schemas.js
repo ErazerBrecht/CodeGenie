@@ -74,9 +74,7 @@ exports.errhandler = function (err) {
         }
         return errmessage;
     }
-    else {
-        return "ok";
-    }
+    else return "ok";
 }
 
 exports.questionExists = function (answer, questions) {

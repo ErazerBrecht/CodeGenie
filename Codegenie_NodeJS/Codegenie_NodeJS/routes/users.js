@@ -114,90 +114,89 @@ router.get('/answers/:answerID', isLoggedIn, function (req, res) {
 
 router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
-    console.log(req.body);
     
-    ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
-        if (err) return console.error(err);
-        if (!result) return res.status(400).send("Not an eligible exercise ID");
-        
-        var answer = req.body;
-        var newanswer = new AnswerModel();
-
-        if (!answer.answers) return res.status(400).send("There were no answers given.");
-        
-        if (result.deadline) {
-            if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
-        }
-        
-        newanswer.userid = req.user._id;
-        newanswer.exerciseid = exerciseID;
-        newanswer.title = result.title;
-        newanswer.extra = result.extra;
-        newanswer.classification = result.classification;
-        newanswer.class = result.class;
-        newanswer.created = new Date().toISOString();
-        
-        for (var answerIndex in answer.answers) {
-            if (!questionExists(answer.answers[answerIndex], result.questions)) {
-                console.log(answer.answers)
-                console.log(answer.answers[answerIndex].questionid)
-                return res.status(400).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
-            }
-            for (var questionIndex in result.questions) {
-                var an = answer.answers[answerIndex];
-                var qu = result.questions[questionIndex];
-                if (an.questionid == qu._id) {
-                    an.received = 0;
-                    an.questiontitle = qu.questiontitle;
-                    an.type = qu.type;
-                    an.weight = qu.weight;
-                    an.extra = qu.extra;
-                    newanswer.answers.push(an);
+    AnswerModel.find({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
+        if (err) return console.log(err);
+        if (!result) {
+            // POST ANSWER
+            ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }, function (err, result) {
+                if (err) return console.error(err);
+                if (!result) return res.status(400).send("Not an eligible exercise ID");
+                
+                var answer = req.body;
+                var newanswer = new AnswerModel();
+                
+                if (!answer.answers) return res.status(400).send("There were no answers given.");
+                
+                if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
+                
+                newanswer.userid = req.user._id;
+                newanswer.exerciseid = exerciseID;
+                newanswer.title = result.title;
+                newanswer.extra = result.extra;
+                newanswer.classification = result.classification;
+                newanswer.class = result.class;
+                newanswer.created = new Date().toISOString();
+                
+                for (var answerIndex in answer.answers) {
+                    if (!questionExists(answer.answers[answerIndex], result.questions)) {
+                        console.log(answer.answers)
+                        console.log(answer.answers[answerIndex].questionid)
+                        return res.status(400).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
+                    }
+                    for (var questionIndex in result.questions) {
+                        var an = answer.answers[answerIndex];
+                        var qu = result.questions[questionIndex];
+                        if (an.questionid == qu._id) {
+                            an.received = 0;
+                            an.questiontitle = qu.questiontitle;
+                            an.type = qu.type;
+                            an.weight = qu.weight;
+                            an.extra = qu.extra;
+                            newanswer.answers.push(an);
+                        }
+                    }
                 }
-            }
+                
+                //(MAYBE)TODO: check if questionids that were posted are actually unique
+                if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
+                
+                newanswer.save(function (err) {
+                    var response = errhandler(err);
+                    if (response != "ok") return res.status(400).send(response);
+                    return res.sendStatus(201);
+                });
+            })
+            // POST ANSWER END
         }
-        
-        //(MAYBE)TODO: check if questionids that were posted are actually unique
-        if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
-        
-        newanswer.save(function (err) {
-            var response = errhandler(err);
-            if (response != "ok") return res.status(400).send(response);
-            return res.sendStatus(201);
-        });
+        else {
+            //EDIT ANSWER
+            AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
+                if (err) return console.error(err);
+                
+                if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
+                
+                var editedanswer = result.answers;
+                
+                var newanswerlist = req.body.answers;
+                for (var i in newanswerlist) {
+                    for (var x in editedanswer) {
+                        if (newanswerlist[i]._id == editedanswer[x]._id) {
+                            editedanswer[x].text = newanswerlist[i].text;
+                        }
+                    }
+                }
+                
+                AnswerModel.findOneAndUpdate({ _id: answerID }, { $set: { answers: editedanswer } }, { upsert: false } , function (err) {
+                    var response = errhandler(err);
+                    if (response != "ok") return res.status(400).send(response);
+                    res.sendStatus(201);
+                });
+            });
+            //EDIT ANSWER END
+        }
     })
 });
-
-router.post('/answer/edit/:answerID', isLoggedIn, function (req, res) {
-    var answerID = req.params.answerID;
-    
-    AnswerModel.findOne({ _id: answerID, class: req.user.class, userid: req.user._id }, function (err, result) {
-        if (err) return console.error(err);
-        if (!result) return res.status(400).send("Not an eligible answer ID");
-        
-        if (result.deadline) {
-            if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
-        }
-        
-        var editedanswer = result.answers;
-        
-        var newanswerlist = req.body.answers;
-        for (var i in newanswerlist) {
-            for (var x in editedanswer) {
-                if (newanswerlist[i]._id == editedanswer[x]._id) {
-                    editedanswer[x].text = newanswerlist[i].text;
-                }
-            }
-        }
-        
-        AnswerModel.findOneAndUpdate({ _id: answerID }, { $set: { answers: editedanswer } }, { upsert: false } , function (err) {
-            var response = errhandler(err);
-            if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(201);
-        });
-    });
-});
-
 
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
