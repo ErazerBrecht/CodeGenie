@@ -88,7 +88,8 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
     ExerciseModel.remove({ _id: exerciseID }, function (err) {
-        if (err) return console.error(err);
+        if (err)
+            return res.status(400).send("Exercise doesn't exist!");
         
         res.sendStatus(200);
     });
@@ -98,7 +99,7 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
 
 router.post("/exercises/post", isAdmin, function (req, res) {
     var newexercise = new ExerciseModel(req.body);
-    
+
     newexercise.save(function (err) {
         var response = errhandler(err);
         if (response != "ok") return res.status(400).send(response);
@@ -108,9 +109,11 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
-    
+
+
     ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
-        if (err) return console.error(err);
+        if (err)
+            return res.status(400).send("Exercise doesn't exist!");
         
         var newexercise = new ExerciseModel(result);
         
