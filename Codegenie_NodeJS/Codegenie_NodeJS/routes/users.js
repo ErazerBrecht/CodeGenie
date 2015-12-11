@@ -121,10 +121,9 @@ router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
 
     AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, anresult) {
-        if (err) return console.log(err);
+        if (err) return console.error(err);
         if (!anresult) {
-            // POST ANSWER
-            console.log("post");
+            //CREATE ANSWER
             ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
@@ -171,11 +170,10 @@ router.post('/answer', isLoggedIn, function (req, res) {
                     return res.sendStatus(201);
                 });
             })
-            // POST ANSWER END
+            //CREATE ANSWER END
         }
         else {
             //EDIT ANSWER
-            console.log("edit");
             AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");

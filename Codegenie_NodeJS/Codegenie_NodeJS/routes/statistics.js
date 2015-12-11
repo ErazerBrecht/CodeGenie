@@ -1,6 +1,7 @@
 ﻿var schemas = require('../mongoose/schemas');
 var bodyParser = require('body-parser');
 var express = require('express');
+var mongoose = require('mongoose');
 var auth = require('../passport/authlevels');
 var router = express.Router();
 var moment = require('moment')
@@ -16,8 +17,7 @@ var isLoggedIn = auth.isLoggedIn;
 
 router.get('/', isLoggedIn, function (req, res) {
     var response = { users: 0, admins: 0, exercises: 0, answers: 0, classes: [] };
-    
-    //Godzilla has to stay, there is no sync method for queries
+
     ExerciseModel.count(function (err, c) {
         response.exercises = c;
 
@@ -63,7 +63,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
 
     AnswerModel.aggregate(
         [
-            { "$match": { "exerciseid": exerciseID } },
+            { "$match": { "exerciseid": mongoose.Types.ObjectId(exerciseID) } },
             {
                 $group: {
                     "_id": {
@@ -151,7 +151,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
 
         AnswerModel.aggregate(
             [
-                { "$match": { "exerciseid": exerciseID, "revised": true } },
+                { "$match": { "exerciseid": mongoose.Types.ObjectId(exerciseID), "revised": true } },
                 {
                     $group: {
                         "_id": "$exerciseid",
@@ -163,13 +163,15 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                 {
                     $group: {
                         "_id": "$answers.questiontitle",
-                        "average": { $avg: "$answers.received" }
+                        "received": { $avg: "$answers.received" },
+                        "feedback": { $avg: "$answers.feedback" }
                     }
                 },
                 {
                     $group: {
                         "_id": "$_id",
-                        "average": { $avg: "$average" }
+                        "received": { $avg: "$received" },
+                        "feedback": { $avg: "$feedback" }
                     }
                 }
             ],
@@ -180,7 +182,8 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                         for (var x = 0; x < final.length; x++) {
                             var aggobj = aggresult[i];
                             if (aggobj._id == final[x].questiontitle) {
-                                final[x].average = aggobj.average;
+                                final[x].received = aggobj.received;
+                                final[x].feedback = aggobj.feedback;
                             }
                         }
                     }
@@ -244,7 +247,7 @@ router.get('/answers/users/:userID', isLoggedIn, function (req, res) {
 
     AnswerModel.aggregate(
         [
-            { "$match": { "userid": userID } },
+            { "$match": { "userid": mongoose.Types.ObjectId(userID) } },
             {
                 $group: {
                     "_id": {
