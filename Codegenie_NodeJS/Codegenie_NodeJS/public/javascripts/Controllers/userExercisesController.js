@@ -11,6 +11,10 @@
         $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
 
+            //Clear error and message
+            $scope.error = null;
+            $scope.message = null;
+
             //Convert question object to answer object
             $scope.answers = $scope.selected.questions;
 
@@ -27,6 +31,10 @@
         }
         
         $scope.processForm = function () {
+            //Clear error and message
+            $scope.error = null;
+            $scope.message = null;
+
             $http({
                 method  : 'POST',
                 url     : '/users/answer/',
@@ -35,11 +43,11 @@
             }).then(
                 //SUCCESS
                 function (response) {
-                    alert(response.data);
+                    $scope.message = response.data;
                 },
                 //ERROR
                 function (error) {
-                    alert(error.data);
+                    $scope.error = error.data;
                 }
             );
             
