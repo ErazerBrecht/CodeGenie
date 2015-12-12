@@ -99,7 +99,7 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
 router.post("/exercises/post", isAdmin, function (req, res) {
     var newexercise = new ExerciseModel(req.body);
 
-    if (req.body.questions.length == 0) return res.status(400).send("No questions were given.");
+    if (req.body.questions == undefined || req.body.questions.length == 0) return res.status(400).send("No questions were sent. Please make at least one question!");
 
     newexercise.save(function (err) {
         var response = errhandler(err);
