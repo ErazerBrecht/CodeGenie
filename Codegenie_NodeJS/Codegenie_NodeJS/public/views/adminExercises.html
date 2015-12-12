@@ -79,20 +79,17 @@
                     <caption>
                         <div class="clearfix"
                              style="margin-top: 10px; margin-bottom: 10px; padding-left: 8px; padding-right: 8px">
-                            <span style="font-size: 20px; padding-top: 7px;"
-                                  class="pull-left">Question {{$index + 1}}</span>
+                            <span style="font-size: 20px; padding-top: 7px;" class="pull-left">Question {{$index + 1}}</span>
 
                             <div class="btn-group pull-right">
-                                <a class="btn btn-default btn-sm" ng-click="removeButton($index)"><span
-                                        class="glyphicon glyphicon-minus"></span></a>
+                                <a class="btn btn-default btn-sm" ng-click="removeButton($index)"><span class="glyphicon glyphicon-minus"></span></a>
                             </div>
                         </div>
                     </caption>
 
                     <tr>
                         <td colspan="3">
-                            <input type="text" class="form-control" placeholder="Title"
-                                   ng-model="question.questiontitle"/>
+                            <input type="text" class="form-control" placeholder="Title" ng-model="question.questiontitle"/>
                         </td>
                     </tr>
                     <tr>
@@ -124,15 +121,13 @@
                                     <input class="form-control" ng-model="choice.text"
                                            placeholder="Choice {{$index + 1}}" type="text"/>
 
-                                    <div class="input-group-addon"><span class="glyphicon glyphicon-remove-circle"
-                                                                         ng-click="removeChoice(questionIndex, $index)"></span>
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-remove-circle" ng-click="removeChoice(questionIndex, $index)"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
-                                <a class="btn btn-default btn-sm form-control" ng-click="addChoice($index)"><span
-                                        class="glyphicon glyphicon-plus"></span></a>
+                                <a class="btn btn-default btn-sm form-control" ng-click="addChoice($index)"><span class="glyphicon glyphicon-plus"></span></a>
                             </div>
                         </td>
                     </tr>

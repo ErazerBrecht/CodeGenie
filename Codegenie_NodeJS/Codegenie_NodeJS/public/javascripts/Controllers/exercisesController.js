@@ -15,18 +15,23 @@
         {
             $scope.selected = {}
             $scope.selected.deadline = new Date();
+            $scope.error = null;
+            $scope.message = null;
         }
 
         $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
             $scope.selected.deadline = new Date($scope.selected.deadline);
-        };
-
-        //Will execute every time "selected" is changed
-        $scope.$watch('selected', function(newValue, oldValue) {
             $scope.error = null;
             $scope.message = null;
-        });
+        };
+
+        //THIS IS TO SLOWWW!
+        //Will execute every time "selected" is changed
+        //$scope.$watch('selected', function(newValue, oldValue) {
+        //    $scope.error = null;
+        //    $scope.message = null;
+        //});
 
         $scope.addButton = function () {
             var question = {};
@@ -64,20 +69,16 @@
         }
         $scope.onDropComplete = function (data) {
             var id = $scope.exercises.indexOf(data);
-            if (id === 0) {
-                $scope.exercises[0] = {};
-                $scope.exercises[0].title = "Add Exercise";
-            }
-            else {
-                $scope.DeleteExercise($scope.exercises[id]);
-                $scope.exercises.splice(id, 1);
-            }
+            $scope.DeleteExercise($scope.exercises[id]);
+            $scope.exercises.splice(id, 1);
             $scope.selected = null;
-        }
+        };
 
         $scope.cancel = function ()
         {
             $scope.selected = null;
+            $scope.error = null;
+            $scope.message = null;
         };
 
         //AJAX Call POST
@@ -94,7 +95,8 @@
                 }).then(
                     //SUCCESS
                     function (response) {
-                        loadData();     //Reload all exercises, this is done to add new exercise with id from the server...
+                        loadData();     //Reload all exercises, this is done to add new exercise with id from the server... => Otherwise this exercise can't be updated till the page is refreshed
+                        $scope.selected = null;
                         $scope.message = response.data;
                     },
                     //ERROR
