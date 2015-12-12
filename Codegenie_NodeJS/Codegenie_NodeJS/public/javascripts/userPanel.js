@@ -23,7 +23,7 @@ $(function () {
 
 (function () {
     
-    var userApp = angular.module('userApp', ['ngRoute', 'ngResource', 'ui.ace']);
+    var userApp = angular.module('userApp', ['ngRoute',  'angularMoment', 'ngResource', 'ui.ace']);
     
     userApp.config(function ($routeProvider) {
         $routeProvider

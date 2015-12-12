@@ -101,6 +101,10 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 
     if (req.body.questions == undefined || req.body.questions.length == 0) return res.status(400).send("No questions were sent. Please make at least one question!");
 
+    newexercise.deadline.setHours(23);
+    newexercise.deadline.setMinutes(59);
+    newexercise.deadline.setSeconds(59);
+
     newexercise.save(function (err) {
         var response = errhandler(err);
         if (response != "ok") return res.status(400).send(response);
@@ -119,6 +123,12 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
         var newexercise = new ExerciseModel(result);
         
         for (var field in req.body) newexercise[field] = req.body[field];
+
+        newexercise.deadline.setHours(23);
+        newexercise.deadline.setMinutes(59);
+        newexercise.deadline.setSeconds(59);
+
+        console.log(newexercise);
         
         ExerciseModel.update({ _id: exerciseID }, newexercise, { runValidators: true }, function (err) {
             var response = errhandler(err);
