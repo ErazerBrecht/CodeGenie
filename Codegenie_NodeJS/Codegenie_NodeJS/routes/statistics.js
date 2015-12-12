@@ -122,19 +122,19 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
         }]
     };
 
-    AnswerModel.find({ exerciseid: exerciseID, revised: true }).lean().exec(function (err, result) {
-        if (!result.length) return res.status(200).json([]);
+    AnswerModel.findOne({ exerciseid: exerciseID, revised: true }).lean().exec(function (err, result) {
+        if (!result) return res.status(200).json([]);
         response.count = result.length;
 
-        response.title = result[0].title;
-        response.classification = result[0].classification;
-        response.class = result[0].class;
-        response.weight = result[0].weight;
-        response.received = result[0].received;
-        response.extra = result[0].extra;
+        response.title = result.title;
+        response.classification = result.classification;
+        response.class = result.class;
+        response.weight = result.weight;
+        response.received = result.received;
+        response.extra = result.extra;
 
         var final = [];
-        var questiontemplate = result[0].answers;
+        var questiontemplate = result.answers;
         for (var i = 0; i < questiontemplate.length; i++) {
             var obj = questiontemplate[i];
             if (!final.hasOwnProperty(obj)) {

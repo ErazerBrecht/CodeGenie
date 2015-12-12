@@ -24,8 +24,6 @@ router.get('/', isAdmin, function (req, res) {
     UserModel.find({}, { password: 0 }).lean().exec(function (err, result) {
         if (err) return console.error(err);
 
-        for (var user in result) result[user]["password"] = undefined;
-
         res.status(200).json(result);
     })
 });
@@ -40,20 +38,19 @@ router.get('/mine', isLoggedIn, function (req, res) {
 
 router.get('/exercises', isLoggedIn, function (req, res) {
 
-
     ExerciseModel.find({ class: req.user.class }).lean().exec(function (err, exresult) {
         if (err) return console.error(err);
 
-        var exerciseIDs = [];
+        var exerciselist = [];
 
-        for (var index in exresult) exerciseIDs.push(exresult[index]._id);
+        for (var index in exresult) exerciselist.push({ "id": exresult[index]._id, "index": index });
 
-        var promises = exerciseIDs.map(function (ID) {
+        var promises = exerciselist.map(function (exobj) {
             return new Promise(function (resolve, reject) {
-                AnswerModel.findOne({ exerciseid: ID, userid: req.user._id }, function (err, anresult) {
+                AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, function (err, anresult) {
                     if (err) return reject(err);
-                    if (anresult) exresult[index].solved = true;
-                    else exresult[index].solved = false;
+                    if (anresult) exresult[exobj.index].solved = true;
+                    else exresult[exobj.index].solved = false;
                     resolve();
                 });
             });
@@ -63,15 +60,6 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             .all(promises)
             .then(function () { res.status(200).json(exresult) })
             .catch(console.error);
-
-
-        /*for (var index in exresult) {
-            AnswerModel.findOne({ exerciseid: exresult[index]._id }, function (err, anresult) {
-                if (err) return console.error(err);
-                if (anresult) exresult[index].solved = true;
-            });
-        }
-        process.nextTick(function () { res.status(200).json(exresult) });*/
     });
 });
 
