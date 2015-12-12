@@ -43,6 +43,7 @@
     <Compile Include="passport\login.js" />
     <Compile Include="passport\signup.js" />
     <Compile Include="public\javascripts\adminpanel.js" />
+    <Compile Include="public\javascripts\Controllers\editProfileController.js" />
     <Compile Include="public\javascripts\Controllers\exercisesController.js" />
     <Compile Include="public\javascripts\Controllers\adminPanelController.js" />
     <Compile Include="public\javascripts\Beautify\beautify.js" />
@@ -70,6 +71,8 @@
     <Compile Include="routes\users.js" />
     <Compile Include="server.js" />
     <Content Include=".gitignore" />
+    <Content Include="public\fonts\fontawesome-webfont.woff2" />
+    <Content Include="public\views\profile.html" />
     <Content Include="Web.config" />
     <None Include="codegenie - Web Deploy.pubxml" />
     <Content Include="package.json" />

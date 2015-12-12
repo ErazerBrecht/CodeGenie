@@ -38,21 +38,20 @@ $(function () {
                 controller: 'adminDashBoardController'
             })
 
-            // route to watch and edit all exercises
+            // route to watch and edit all exercises + add exercises
             .when('/exercises', {
                 templateUrl: 'views/adminExercises.html',
                 controller: 'exercisesController'
-            })
-			
-            // route to add new exercises
-			.when('/addexercise', {
-                templateUrl: 'views/addexercise.html',
-                controller: 'addExerciseController'
             })
             
             .when('/answers', {
                 templateUrl: 'views/answers.html',
                 controller: 'answersController'
+            })
+
+            .when('/profile', {
+                templateUrl: 'views/profile.html',
+                controller: 'editProfileController'
             })
 			
             .otherwise({ redirectTo: "/" });

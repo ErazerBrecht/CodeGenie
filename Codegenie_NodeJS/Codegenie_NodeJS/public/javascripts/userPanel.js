@@ -31,11 +31,18 @@ $(function () {
 			.when('/', {
             templateUrl: 'views/userDashboard.html',
             controller: 'userDashboardController'
-        })
+            })
+
             .when('/exercises', {
             templateUrl: 'views/userExercises.html',
             controller: 'userExercisesController'
-        })
+            })
+
+            .when('/profile', {
+                templateUrl: 'views/profile.html',
+                controller: 'editProfileController'
+            })
+
             .otherwise({ redirectTo: "/" });
     });
 }());
