@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var auth = require('../passport/authlevels');
 var bCrypt = require('bcrypt-nodejs');
+var mongoose = require('mongoose');
 var moment = require('moment');
 var router = express.Router();
 
@@ -108,11 +109,64 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 });
 
 router.get('/answers', isLoggedIn, function (req, res) {
-    AnswerModel.find({ userid: req.user._id }).lean().exec(function (err, result) {
-        if (err) return console.error(err);
+    var display = req.query.display;
 
-        res.status(200).json(result);
-    })
+    if (display == "summary") {
+        AnswerModel.aggregate(
+            [
+                { "$match": { "userid": mongoose.Types.ObjectId(req.user._id) } },
+                {
+                    $group: {
+                        "_id": {
+                            "exerciseid": "$exerciseid",
+                            "exercisetitle": "$title",
+                            "created": "$created",
+                            "revised": "$revised"
+                        },
+                        "answers": { $push: "$answers" }
+                    }
+                },
+                { $unwind: "$answers" },
+                { $unwind: "$answers" },
+                {
+                    $group: {
+                        "_id": {
+                            "exerciseid": "$_id.exerciseid",
+                            "exercisetitle": "$_id.exercisetitle",
+                            "created": "$_id.created",
+                            "revised": "$_id.revised"
+                        },
+                        "weight": { $sum: "$answers.weight" },
+                        "received": { $sum: "$answers.received" }
+                    }
+                },
+                {
+                    $project: {
+                        "_id": 0,
+                        "exerciseid": "$_id.exerciseid",
+                        "exercisetitle": "$_id.exercisetitle",
+                        "created": "$_id.created",
+                        "revised": "$_id.revised",
+                        "weight": "$weight",
+                        "received": "$received"
+                    }
+                }
+            ],
+            function (err, aggresult) {
+                if (err) console.error(err);
+                else {
+                    res.status(200).json(aggresult);
+                }
+            }
+        );
+    }
+    else {
+        AnswerModel.find({ userid: req.user._id }).lean().exec(function (err, result) {
+            if (err) return console.error(err);
+
+            res.status(200).json(result);
+        })
+    }
 });
 
 router.get('/answers/:answerID', isLoggedIn, function (req, res) {
