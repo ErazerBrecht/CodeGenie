@@ -13,7 +13,6 @@
             $scope.new = data.count;
         });
 
-		
 	};
 	app.controller("adminDashBoardController", adminDashBoardController);
 }());

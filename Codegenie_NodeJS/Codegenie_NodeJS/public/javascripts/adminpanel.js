@@ -38,6 +38,12 @@ $(function () {
                 controller: 'adminDashBoardController'
             })
 
+            // route to watch and edit the users
+            .when('/users', {
+                templateUrl: 'views/adminUsers.html',
+                controller: 'adminUsersController'
+            })
+
             // route to watch and edit all exercises + add exercises
             .when('/exercises', {
                 templateUrl: 'views/adminExercises.html',
@@ -45,7 +51,7 @@ $(function () {
             })
             
             .when('/answers', {
-                templateUrl: 'views/answers.html',
+                templateUrl: 'views/adminAnswers.html',
                 controller: 'answersController'
             })
 

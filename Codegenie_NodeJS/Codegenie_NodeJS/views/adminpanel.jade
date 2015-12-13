@@ -43,7 +43,11 @@ block content
               li
                 a(href='#/')
                   i.fa.fa-fw.fa-dashboard
-                  | Dashboard                        
+                  | Dashboard
+              li
+                a(href='#/users')
+                  i.fa.fa-fw.fa-users
+                  | Users
               li
                 a(href='#/exercises')
                   i.fa.fa-fw.fa-edit
@@ -64,9 +68,10 @@ block content
      script(src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js")
      script(src='/javascripts/adminpanel.js')
      script(src='/javascripts/Controllers/adminPanelController.js')
+     script(src='/javascripts/Controllers/editProfileController.js')
      script(src='/javascripts/Controllers/adminDashBoardController.js')
-     script(src='/javascripts/Controllers/exercisesController.js')
-     script(src='/javascripts/Controllers/addExerciseController.js')
+     script(src='/javascripts/Controllers/adminExercisesController.js')
+     script(src='/javascripts/Controllers/adminUsersController.js')
      script(src='/javascripts/Controllers/answersController.js')
      script(src='/javascripts/Service/restDataService.js')
      script(src="/javascripts/ngDraggable.js")
