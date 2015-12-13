@@ -35,14 +35,16 @@ Viewing the answers is far from done and will be our next top priority after the
 Current modules used (NodeJS => Backend): 
 * nodemon: needs to be installed globally to work, if you want to use the regular node.exe delete the 'Node.exe path' string in the project properties.
 * bcrypt: salts and hashes the password, also has a built-in check function.
+* body-parser: parsing json posted information.
 * connect-flash: for sending messages to the client.
+* connect-mongo: user session storage.
 * express: REST API-fication of NodeJS.
 * express-session: for user sessions.
 * jade: view engine.
 * moment: date formatting.
 * passport: user login/signup/authorization and sessions.
 * passport-local: we are using the local method, aka storing it in a database yourself
-* serve-favicon: this serves the favicon? no idea it's there when you make a blank project :p
+* serve-favicon: this serves the favourite icon.
 
 
 Frontend:
@@ -151,10 +153,12 @@ Required:
 Defaults:
 * extra: boolean, check if this question is an extra question or not, defaults to false.
 * type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')(defaults to "Checkbox")
-* choices: array of objects with field 'text', the different choices if the question is a multiple choice one.
+
+Not required but field is available:
+* choices: array of objects with field 'text' and 'correct', multiple choice questions are saved here, correct indicates if it is the correct choice or not.
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 7 fields, 5 of which are required and 1 which has a default.
+The answer object exists out of 9 fields, 5 of which are required and 1 which has a default.
 
 Required:
 * questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
@@ -167,7 +171,9 @@ Defaults:
 * received: number, how much the user received for this exercise (e.g. 5) (defaults to 0 obviously)
 
 Not required but field is available: 
-* text: string, if code/question was asked, this is the field it will be placed in.
+* result: string, if code/question was asked, this is the field it will be placed in.
+* feedback: number, the user's feedback to this question.
+* choices: array of objects with field 'text', multiple choice answers are saved here.
 
 
 
@@ -178,7 +184,7 @@ There are currently 3 portals, the /admin/ portal, /users/ portal and the /stati
 
 
 ###User portal
-The user portal has 8 gets and 3 posts.
+The user portal has 8 gets and 2 posts.
 
 
 ####GET: /users/
@@ -207,23 +213,21 @@ This gives a specific exercise that the user is allowed to solve.
 
 ####GET: /users/answers
 
-This gives all the answers that the user has submitted.
+This gives all the answers that the user has submitted.<br/>
+?display=summary can be added to this statement to get a summary instead of the whole thing.
 
 ####GET: /users/answers/{ID} 
 
 This gives a specific answer that the user has submitted.
 
+
 ####POST: /users/answer
 
-Users can post solved exercises here.
+Users can post/edit solved exercises here.
 
-**Only information needed:**</br>
-Original exercise ID in a field named 'exerciseid'</br>
-Array of [answer objects](#answerobject) with the field 'questionid' and 'text' filled in</br>
-
-####POST: /users/answer/edit/{ID}
-
-Users can edit one of their answers here.
+**Only information needed:**<br/>
+Original exercise ID in a field named 'exerciseid'<br/>
+Array of [answer objects](#answerobject) with the field 'questionid' and 'text' filled in<br/>
 
 ####POST: /users/edit
 
@@ -233,7 +237,7 @@ Users can edit their profiles here.
 
 
 ###Admin portal
-The admin portal has 11 gets and 4 posts.
+The admin portal has 12 gets and 4 posts.
 
 
 ####GET: /admin/
@@ -241,13 +245,18 @@ The admin portal has 11 gets and 4 posts.
 HTML page for the admin panel.
 
 
-####POST: /admin/user
+####POST: /admin/users
 
 Admins can create new users by posting here.
 
-####GET: /admin/user/{ID}
+####GET: /admin/users/{ID}
 
 Gives the userdata of userid {ID}
+
+####GET: /admin/users/{ID}/answers
+
+Gives all answers of userid {ID}<br/>
+?display=summary can be added to this statement to get a summary instead of the whole thing.
 
 
 ####GET: /admin/exercises
@@ -302,7 +311,7 @@ The admin can edit answers by posting here.
 
 
 ###Statistics portal
-The statistics has 
+The statistics has 8 gets.
 
 ####GET: /statistics/
 
@@ -312,9 +321,13 @@ Gives various numbers on the amount of users, admins, exercises, answers and use
 
 Gives the amount of exercises and amount of exercises per class.
 
-####GET: /statistics/exercises/{ID}
+####GET: /statistics/exercises/graph/{ID}
 
-Gives the amount of times this exercise has been solved and the averages received point of each solved and revised question.
+Gives summaries about when users solved this exercise that can be used in a fancy graph.
+
+####GET: /statistics/exercises/average/{ID}
+
+Gives summary about the average score from this exercise that can be used in a fancy graph. (excludes unrevised answers)
 
 ####GET: /statistics/answers
 
@@ -328,14 +341,16 @@ Gives the amount of answers that have been revised and amount of revised answers
 
 Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
 
+####GET: /statistics/answers/users/{ID}
+
+Gives summary about all this users solved exercises
 
 
 
 ##TODO:
 
 - Finish user panel
-- Expand statistics portal
 - Fix lastseen update
-- Make fancy graphics
-- Make profile manager
+- Make fancy graphs
+- Finish profile manager
 - Implement courses (e.g. OO, Programeren) instead of classes

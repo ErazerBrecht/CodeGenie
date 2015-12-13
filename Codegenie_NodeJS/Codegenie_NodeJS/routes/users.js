@@ -109,9 +109,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 });
 
 router.get('/answers', isLoggedIn, function (req, res) {
-    var display = req.query.display;
-
-    if (display == "summary") {
+    if (req.query.display == "summary") {
         AnswerModel.aggregate(
             [
                 { "$match": { "userid": mongoose.Types.ObjectId(req.user._id) } },
