@@ -317,6 +317,10 @@ The statistics has 8 gets.
 
 Gives various numbers on the amount of users, admins, exercises, answers and users per class.
 
+####GET: /statistics/users/{ID}
+
+Gives summary about all this users answers.
+
 ####GET: /statistics/graph
 
 Gives the week information about all answers.<br/>
@@ -346,10 +350,6 @@ Gives the amount of answers that have been revised and amount of revised answers
 ####GET: /statistics/answers/unrevised
 
 Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
-
-####GET: /statistics/answers/users/{ID}
-
-Gives summary about all this users solved exercises
 
 
 

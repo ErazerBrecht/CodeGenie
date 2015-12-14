@@ -44,7 +44,7 @@ router.get('/', isLoggedIn, function (req, res) {
 
 router.get('/graph', isLoggedIn, function (req, res) {
     var filter = req.query.filter;
-
+    
     AnswerModel.aggregate(
         [
             {
@@ -77,6 +77,58 @@ router.get('/graph', isLoggedIn, function (req, res) {
                 res.status(200).json(aggresult);
             }
         });
+});
+
+router.get('/users/:userID', isLoggedIn, function (req, res) {
+    var userID = req.params.userID;
+    
+    AnswerModel.aggregate(
+        [
+            { "$match": { "userid": mongoose.Types.ObjectId(userID) } },
+            {
+                $group: {
+                    "_id": {
+                        "exerciseid": "$exerciseid",
+                        "exercisetitle": "$title",
+                        "created": "$created",
+                        "revised": "$revised"
+                    },
+                    "answers": { $push: "$answers" }
+                }
+            },
+            { $unwind: "$answers" },
+            { $unwind: "$answers" },
+            {
+                $group: {
+                    "_id": {
+                        "exerciseid": "$_id.exerciseid",
+                        "exercisetitle": "$_id.exercisetitle",
+                        "created": "$_id.created",
+                        "revised": "$_id.revised"
+                    },
+                    "weight": { $sum: "$answers.weight" },
+                    "received": { $sum: "$answers.received" }
+                }
+            },
+            {
+                $project: {
+                    "_id": 0,
+                    "exerciseid": "$_id.exerciseid",
+                    "exercisetitle": "$_id.exercisetitle",
+                    "created": "$_id.created",
+                    "revised": "$_id.revised",
+                    "weight": "$weight",
+                    "received": "$received"
+                }
+            }
+        ],
+        function (err, aggresult) {
+            if (err) console.error(err);
+            else {
+                res.status(200).json(aggresult);
+            }
+        }
+    );
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
@@ -277,58 +329,6 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
             res.status(200).json(response);
         });
     });
-});
-
-router.get('/answers/users/:userID', isLoggedIn, function (req, res) {
-    var userID = req.params.userID;
-    
-    AnswerModel.aggregate(
-        [
-            { "$match": { "userid": mongoose.Types.ObjectId(userID) } },
-            {
-                $group: {
-                    "_id": {
-                        "exerciseid": "$exerciseid",
-                        "exercisetitle": "$title",
-                        "created": "$created",
-                        "revised": "$revised"
-                    },
-                    "answers": { $push: "$answers" }
-                }
-            },
-            { $unwind: "$answers" },
-            { $unwind: "$answers" },
-            {
-                $group: {
-                    "_id": {
-                        "exerciseid": "$_id.exerciseid",
-                        "exercisetitle": "$_id.exercisetitle",
-                        "created": "$_id.created",
-                        "revised": "$_id.revised"
-                    },
-                    "weight": { $sum: "$answers.weight" },
-                    "received": { $sum: "$answers.received" }
-                }
-            },
-            {
-                $project: {
-                    "_id": 0,
-                    "exerciseid": "$_id.exerciseid",
-                    "exercisetitle": "$_id.exercisetitle",
-                    "created": "$_id.created",
-                    "revised": "$_id.revised",
-                    "weight": "$weight",
-                    "received": "$received"
-                }
-            }
-        ],
-        function (err, aggresult) {
-            if (err) console.error(err);
-            else {
-                res.status(200).json(aggresult);
-            }
-        }
-    );
 });
 
 function countclasses(arr) {
