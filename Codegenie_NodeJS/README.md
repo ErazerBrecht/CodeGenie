@@ -317,13 +317,19 @@ The statistics has 8 gets.
 
 Gives various numbers on the amount of users, admins, exercises, answers and users per class.
 
+####GET: /statistics/graph
+
+Gives the week information about all answers.<br/>
+?filter=year or ?filter=week to filter the exercises by year or week.
+
 ####GET: /statistics/exercises
 
 Gives the amount of exercises and amount of exercises per class.
 
 ####GET: /statistics/exercises/graph/{ID}
 
-Gives summaries about when users solved this exercise that can be used in a fancy graph.
+Gives summaries about when users solved this exercise that can be used in a fancy graph.<br/>
+?filter=year or ?filter=week to filter the exercises by year or week.
 
 ####GET: /statistics/exercises/average/{ID}
 
