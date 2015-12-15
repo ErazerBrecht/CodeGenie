@@ -17,6 +17,7 @@
 
             });
         };
+
     }
     app.controller("answersController", answersController);
 }());

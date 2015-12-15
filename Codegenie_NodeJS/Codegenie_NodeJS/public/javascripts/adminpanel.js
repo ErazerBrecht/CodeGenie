@@ -28,7 +28,7 @@ $(function () {
 });
 
 (function () {
-    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource', 'ngDraggable']);
+    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource', 'ngDraggable','ui.ace']);
     
     adminApp.config(function ($routeProvider) {
         $routeProvider
@@ -55,10 +55,10 @@ $(function () {
                 controller: 'answersController'
             })
 
-            .when('/profile', {
+           /* .when('/profile', {
                 templateUrl: 'views/profile.html',
                 controller: 'editProfileController'
-            })
+            })*/
 			
             .otherwise({ redirectTo: "/" });
     });
