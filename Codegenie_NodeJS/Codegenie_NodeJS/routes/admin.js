@@ -187,7 +187,6 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    
     ExerciseModel.findOne({ _id: exerciseID }).lean().exec(function (err, result) {
         if (err) return res.status(400).send("Exercise doesn't exist.");
         
@@ -199,7 +198,7 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
         newexercise.deadline.setMinutes(59);
         newexercise.deadline.setSeconds(59);
         
-        ExerciseModel.update({ _id: exerciseID }, newexercise, { runValidators: true }, function (err) {
+        ExerciseModel.update({ _id: exerciseID }, { $set: newexercise }, { runValidators: true }, function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(400).send(response);
             res.sendStatus(201);
