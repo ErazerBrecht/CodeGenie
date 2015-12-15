@@ -52,7 +52,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
                 exerciselist.push({ "id": obj._id, "index": index, "lastseen": userResult.lastseen });
             }
-
+            
             var promises = exerciselist.map(function (exobj) {
                 return new Promise(function (resolve, reject) {
                     AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, function (err, anresult) {
@@ -103,7 +103,10 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                 
                 var exerciseIDs = [];
                 
-                for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
+                for (var index in anresult) {
+                    if (anresult[index].revealdate && new Date().toISOString() < anresult[index].revealdate.toISOString()) continue;
+                    exerciseIDs.push(anresult[index].exerciseid);
+                }
                 
                 ExerciseModel.find({ _id: { $nin: exerciseIDs }, course: req.user.course }, function (err, exresult) {
                     if (err) return console.error(err);
