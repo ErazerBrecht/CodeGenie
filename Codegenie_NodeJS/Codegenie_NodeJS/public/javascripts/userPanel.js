@@ -40,7 +40,7 @@ $(function () {
 
             .when('/profile', {
                 templateUrl: 'views/profile.html',
-                controller: 'editProfileController'
+                controller: 'editUserProfileController'
             })
 
             .otherwise({redirectTo: "/"});

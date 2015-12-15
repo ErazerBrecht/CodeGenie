@@ -55,10 +55,10 @@ $(function () {
                 controller: 'answersController'
             })
 
-           /* .when('/profile', {
+           .when('/profile', {
                 templateUrl: 'views/profile.html',
-                controller: 'editProfileController'
-            })*/
+                controller: 'editAdminProfileController'
+            })
 			
             .otherwise({ redirectTo: "/" });
     });
