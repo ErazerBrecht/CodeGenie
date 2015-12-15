@@ -41,6 +41,15 @@
             $scope.selected.questions.push(question);
         };
 
+        //Remove correct question table from the form
+        $scope.removeButton = function (id) {
+            $scope.selected.questions.splice(id, 1);
+            if ($scope.selected.questions.length < 1) {
+                delete $scope.selected.questions;
+            }
+        };
+
+
         $scope.typeChanged = function (id) {
             if ($scope.selected.questions[id].type === 'MultipleChoice') {
                 $scope.selected.questions[id].choices = [];
