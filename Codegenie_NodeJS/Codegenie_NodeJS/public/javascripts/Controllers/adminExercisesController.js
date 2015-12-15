@@ -2,7 +2,7 @@
     
     var app = angular.module("adminApp");
 
-    var exercisesController = function ($scope, $http, restData, $routeParams) {
+    var exercisesController = function ($scope, $http, restData, $anchorScroll, $routeParams) {
         loadData();
 
         function loadData() {
@@ -101,6 +101,8 @@
                     },
                     //ERROR
                     function (error) {
+                        //Scroll to top to show error
+                        $anchorScroll();
                         $scope.error = error.data;
                     }
                 );
@@ -115,10 +117,14 @@
                 }).then(
                     //SUCCESS
                     function (response) {
+                        //Scroll to top to show message
+                        $anchorScroll();
                         $scope.message = response.data;
                     },
                     //ERROR
                     function (error) {
+                        //Scroll to top to show error
+                        $anchorScroll();
                         $scope.error = error.data;
                     }
                 );
@@ -142,6 +148,8 @@
                 },
                 //ERROR
                 function (error) {
+                    //Scroll to top to show error
+                    $anchorScroll();
                     $scope.error = error.data;
                 }
             );
