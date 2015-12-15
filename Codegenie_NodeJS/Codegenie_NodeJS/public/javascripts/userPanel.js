@@ -22,20 +22,20 @@ $(function () {
 });
 
 (function () {
-    
-    var userApp = angular.module('userApp', ['ngRoute',  'angularMoment', 'ngResource', 'ui.ace']);
-    
+
+    var userApp = angular.module('userApp', ['ngRoute', 'angularMoment', 'ngResource', 'ui.ace']);
+
     userApp.config(function ($routeProvider) {
         $routeProvider
-			// route for the dashboard
-			.when('/', {
-            templateUrl: 'views/userDashboard.html',
-            controller: 'userDashboardController'
+        // route for the dashboard
+            .when('/', {
+                templateUrl: 'views/userDashboard.html',
+                controller: 'userDashboardController'
             })
 
             .when('/exercises', {
-            templateUrl: 'views/userExercises.html',
-            controller: 'userExercisesController'
+                templateUrl: 'views/userExercises.html',
+                controller: 'userExercisesController'
             })
 
             .when('/profile', {
@@ -43,6 +43,6 @@ $(function () {
                 controller: 'editProfileController'
             })
 
-            .otherwise({ redirectTo: "/" });
+            .otherwise({redirectTo: "/"});
     });
 }());
