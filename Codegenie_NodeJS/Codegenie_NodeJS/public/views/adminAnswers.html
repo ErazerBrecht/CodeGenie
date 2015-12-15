@@ -30,6 +30,7 @@
                                 <div class="panel-body" ng-switch on="a.type">
                                     <div ng-switch-when="Checkbox">
                                         <h4>{{a.questiontitle}}</h4>
+                                        Check / Uncheck <input ng-model="a.result" type="checkbox" ng-checked="a.result == 'true'" onclick="return false" />
                                     </div>
 
                                     <div ng-switch-when="Code">
@@ -46,10 +47,14 @@
 
                                     <div ng-switch-when="Question">
                                         <h4>{{a.questiontitle}}</h4>
+                                        <span style="font-weight: normal">{{a.result}}</span>
                                     </div>
 
                                     <div ng-switch-when="MultipleChoice">
                                         <h4>{{a.questiontitle}}</h4>
+                                        <div ng-repeat="choice in a.choices" class="radio">
+                                            <label><input type="radio" ng-model="answer.result" ng-value="a.result" />{{choice.text}}</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
