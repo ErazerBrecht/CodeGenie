@@ -39,23 +39,27 @@ router.get('/mine', isLoggedIn, function (req, res) {
 
 router.get('/exercises', isLoggedIn, function (req, res) {
     
-    ExerciseModel.find({ class: req.user.class }).lean().exec(function (err, exresult) {
+    ExerciseModel.find({ course: req.user.course }).lean().exec(function (err, exresult) {
         if (err) return console.error(err);
         
         UserModel.findOne({ _id: req.user._id }, { lastseen: 1 }, function (err, userResult) {
             if (err) return console.error(err);
-
+            
             var exerciselist = [];
-            for (var index in exresult) exerciselist.push({ "id": exresult[index]._id, "index": index, "lastseen": userResult.lastseen });
-
+            for (var index in exresult) {
+                var obj = exresult[index];
+                if (obj.revealdate && new Date().toISOString() < obj.revealdate) continue;
+                exerciselist.push({ "id": obj._id, "index": index, "lastseen": userResult.lastseen });
+            }
+            
             var promises = exerciselist.map(function (exobj) {
                 return new Promise(function (resolve, reject) {
                     AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, function (err, anresult) {
                         if (err) return reject(err);
                         if (anresult) exresult[exobj.index].solved = true;
                         else exresult[exobj.index].solved = false;
-                        console.log()
-                        if (new Date(exobj.lastseen.toISOString()).getTime() > new Date(exresult[exobj.index].created).getTime()) exresult[exobj.index].seen = true;
+                        
+                        if (exobj.lastseen.toISOString() > exresult[exobj.index].created) exresult[exobj.index].seen = true;
                         else exresult[exobj.index].seen = false;
                         resolve();
                     });
@@ -65,7 +69,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             Promise.all(promises).then(function () {
                 UserModel.update({ _id: req.user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
                     if (err) console.log('Error updating lastseen for user: ' + user.name);
-                    res.status(200).json(exresult)
+                    res.status(200).json(exresult);
                 });
             }).catch(console.error);
         });
@@ -99,7 +103,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                 
                 for (var index in anresult) exerciseIDs.push(anresult[index].exerciseid);
                 
-                ExerciseModel.find({ _id: { $nin: exerciseIDs }, class: req.user.class }, function (err, exresult) {
+                ExerciseModel.find({ _id: { $nin: exerciseIDs }, course: req.user.course }, function (err, exresult) {
                     if (err) return console.error(err);
                     
                     res.status(200).json(exresult);
@@ -107,7 +111,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
             })
             break;
         default:
-            ExerciseModel.find({ _id: exerciseID, class: req.user.class }).lean().exec(function (err, result) {
+            ExerciseModel.find({ _id: exerciseID, course: req.user.course }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
@@ -206,7 +210,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
         if (err) return console.error(err);
         if (!anresult) {
             //CREATE ANSWER
-            ExerciseModel.findOne({ _id: exerciseID, class: req.user.class }).lean().exec(function (err, result) {
+            ExerciseModel.findOne({ _id: exerciseID, course: req.user.course }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
                 
@@ -215,16 +219,20 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 
                 if (!answer.answers) return res.status(400).send("There were no answers given.");
                 
-                if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
+                var ded = result.deadline;
+                console.log(ded.setYear(new Date().getYear()));
+                console.log(ded);
+                
+                if (result.deadline) if (new Date().toISOString() > result.deadline) return res.status(400).send("Deadline is already over.");
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate) return res.status(400).send("Not an eligible exercise ID");
                 
                 newanswer.userid = req.user._id;
                 newanswer.exerciseid = exerciseID;
                 newanswer.title = result.title;
                 newanswer.extra = result.extra;
                 newanswer.classification = result.classification;
-                newanswer.class = result.class;
+                newanswer.course = result.course;
                 newanswer.created = new Date().toISOString();
-                
                 for (var answerIndex in answer.answers) {
                     if (!questionExists(answer.answers[answerIndex], result.questions)) {
                         return res.status(400).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
@@ -252,7 +260,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                     return res.sendStatus(201);
                 });
             })
-//CREATE ANSWER END
+        //CREATE ANSWER END
         }
         else {
             //EDIT ANSWER
@@ -260,7 +268,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
                 
-                if (result.deadline) if (new Date(new Date().toISOString()).getTime() > new Date(result.deadline).getTime()) return res.status(400).send("Deadline is already over.");
+                if (result.deadline) if (new Date().toISOString() > result.deadline) return res.status(400).send("Deadline is already over.");
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate) return res.status(400).send("Not an eligible exercise ID");
                 
                 var editedanswer = result.answers;
                 var newanswerlist = req.body.answers;
@@ -280,7 +289,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                     res.sendStatus(200);
                 });
             });
-//EDIT ANSWER END
+            //EDIT ANSWER END
         }
     })
 });
@@ -293,14 +302,16 @@ router.post("/edit", isLoggedIn, function (req, res) {
         
         for (var field in req.body) newuser[field] = req.body[field];
         
-        newuser._id = undefined;
-        newuser.admin = undefined; //prevent user from editing random/protected information, everything else is allowed.
-        newuser.password = createhash(password);
-        newuser.status = undefined;
+        delete newuser._id;
+        delete newuser.admin; //prevent user from editing random/protected information, everything else is allowed.
+        delete newuser.status;
+        delete newuser.class;
         
-        newuser.registerdate = undefined;
-        newuser.lastseen = undefined;
-        newuser.__v = undefined;
+        newuser.password = createhash(password);
+        
+        delete newuser.registerdate;
+        delete newuser.lastseen;
+        delete newuser.__v;
         
         UserModel.update({ _id: req.user._id }, { $set: newuser }, { runValidators: true }, function (err) {
             var response = errhandler(err);

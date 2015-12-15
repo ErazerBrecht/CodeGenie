@@ -32,7 +32,6 @@ module.exports = function (passport) {
                                 var newUser = new UserModel({
                                     name: username,
                                     password: createHash(password),
-                                    class: req.body.group,
                                     email: email,
                                     status: 0,
                                     admin: false,

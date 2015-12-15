@@ -132,14 +132,14 @@ router.get('/users/:userID', isLoggedIn, function (req, res) {
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
-    var response = { count: 0, classes: [] };
+    var response = { count: 0, courses: [] };
     
     ExerciseModel.count(function (err, c) {
         response.count = c;
         
-        ExerciseModel.find({}, { class: 1 }).lean().exec(function (err, result) {
-            var ar = countclasses(result);
-            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
+        ExerciseModel.find({}, { course: 1 }).lean().exec(function (err, result) {
+            var ar = countcourses(result);
+            for (var index in ar[0]) response.courses.push({ course: ar[0][index], count: ar[1][index] });
             
             res.status(200).json(response);
         });
@@ -198,7 +198,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
         count: 0,
         title: "",
         classification: "",
-        class: "",
+        course: "",
         weight: 0,
         received: 0,
         extra: false,
@@ -217,7 +217,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
         
         response.title = result.title;
         response.classification = result.classification;
-        response.class = result.class;
+        response.course = result.course;
         response.weight = result.weight;
         response.received = result.received;
         response.extra = result.extra;
@@ -287,14 +287,14 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
 });
 
 router.get('/answers', isLoggedIn, function (req, res) {
-    var response = { count: 0, classes: [] };
+    var response = { count: 0, courses: [] };
     
     AnswerModel.count(function (err, c) {
         response.count = c;
         
-        AnswerModel.find({}, { class: 1 }).lean().exec(function (err, result) {
-            var ar = countclasses(result);
-            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
+        AnswerModel.find({}, { course: 1 }).lean().exec(function (err, result) {
+            var ar = countcourses(result);
+            for (var index in ar[0]) response.courses.push({ course: ar[0][index], count: ar[1][index] });
             
             res.status(200).json(response);
         });
@@ -302,14 +302,14 @@ router.get('/answers', isLoggedIn, function (req, res) {
 });
 
 router.get('/answers/revised', isLoggedIn, function (req, res) {
-    var response = { count: 0, classes: [] };
+    var response = { count: 0, courses: [] };
     
     AnswerModel.count({ revised: true }, function (err, c) {
         response.count = c;
         
-        AnswerModel.find({ revised: true }, { class: 1 }).lean().exec(function (err, result) {
-            var ar = countclasses(result);
-            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
+        AnswerModel.find({ revised: true }, { course: 1 }).lean().exec(function (err, result) {
+            var ar = countcourses(result);
+            for (var index in ar[0]) response.courses.push({ course: ar[0][index], count: ar[1][index] });
             
             res.status(200).json(response);
         });
@@ -317,19 +317,34 @@ router.get('/answers/revised', isLoggedIn, function (req, res) {
 });
 
 router.get('/answers/unrevised', isLoggedIn, function (req, res) {
-    var response = { count: 0, classes: [] };
+    var response = { count: 0, courses: [] };
     
     AnswerModel.count({ revised: false }, function (err, c) {
         response.count = c;
         
-        AnswerModel.find({ revised: false }, { class: 1 }).lean().exec(function (err, result) {
-            var ar = countclasses(result);
-            for (var index in ar[0]) response.classes.push({ class: ar[0][index], count: ar[1][index] });
+        AnswerModel.find({ revised: false }, { course: 1 }).lean().exec(function (err, result) {
+            var ar = countcourses(result);
+            for (var index in ar[0]) response.courses.push({ course: ar[0][index], count: ar[1][index] });
             
             res.status(200).json(response);
         });
     });
 });
+
+function countcourses(arr) {
+    var a = [], b = [];
+    
+    for (i = 0; i < arr.length; i++) {
+        var obj = arr[i].course;
+        if (a.indexOf(obj) == -1) {
+            a.push(obj);
+            b.push(1);
+        }
+        else b[a.indexOf(obj)] += 1;
+    }
+    
+    return [a, b];
+}
 
 function countclasses(arr) {
     var a = [], b = [];
