@@ -39,6 +39,7 @@ router.get('/mine', isLoggedIn, function (req, res) {
 
 router.get('/exercises', isLoggedIn, function (req, res) {
     
+    var response = [];
     ExerciseModel.find({ course: req.user.course }).lean().exec(function (err, exresult) {
         if (err) return console.error(err);
         
@@ -48,10 +49,10 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             var exerciselist = [];
             for (var index in exresult) {
                 var obj = exresult[index];
-                if (obj.revealdate && new Date().toISOString() < obj.revealdate) continue;
+                if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
                 exerciselist.push({ "id": obj._id, "index": index, "lastseen": userResult.lastseen });
             }
-            
+
             var promises = exerciselist.map(function (exobj) {
                 return new Promise(function (resolve, reject) {
                     AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, function (err, anresult) {
@@ -59,8 +60,9 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                         if (anresult) exresult[exobj.index].solved = true;
                         else exresult[exobj.index].solved = false;
                         
-                        if (exobj.lastseen.toISOString() > exresult[exobj.index].created) exresult[exobj.index].seen = true;
+                        if (exobj.lastseen.toISOString() > exresult[exobj.index].created.toISOString()) exresult[exobj.index].seen = true;
                         else exresult[exobj.index].seen = false;
+                        response.push(exresult[exobj.index]);
                         resolve();
                     });
                 });
@@ -69,7 +71,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             Promise.all(promises).then(function () {
                 UserModel.update({ _id: req.user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
                     if (err) console.log('Error updating lastseen for user: ' + user.name);
-                    res.status(200).json(exresult);
+                    res.status(200).json(response);
                 });
             }).catch(console.error);
         });
@@ -206,7 +208,7 @@ router.get('/answers/:answerID', isLoggedIn, function (req, res) {
 router.post('/answer', isLoggedIn, function (req, res) {
     var exerciseID = req.body.exerciseid;
     
-    AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, anresult) {
+    AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }).lean().exec(function (err, anresult) {
         if (err) return console.error(err);
         if (!anresult) {
             //CREATE ANSWER
@@ -223,8 +225,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 console.log(ded.setYear(new Date().getYear()));
                 console.log(ded);
                 
-                if (result.deadline) if (new Date().toISOString() > result.deadline) return res.status(400).send("Deadline is already over.");
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate) return res.status(400).send("Not an eligible exercise ID");
+                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
                 
                 newanswer.userid = req.user._id;
                 newanswer.exerciseid = exerciseID;
@@ -268,8 +270,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).send("Not an eligible exercise ID");
                 
-                if (result.deadline) if (new Date().toISOString() > result.deadline) return res.status(400).send("Deadline is already over.");
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate) return res.status(400).send("Not an eligible exercise ID");
+                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
                 
                 var editedanswer = result.answers;
                 var newanswerlist = req.body.answers;

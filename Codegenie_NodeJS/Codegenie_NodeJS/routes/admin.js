@@ -128,7 +128,7 @@ router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
         for (var index in result) {
-            if (result[index].revealdate && new Date().toISOString() < result[index].revealdate) result[index].revealed = false;
+            if (result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString()) result[index].revealed = false;
             else result[index].revealed = true;
         };
         
@@ -265,9 +265,7 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     AnswerModel.findOne({ _id: answerID }).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
-        if (result.deadline) {
-            if (new Date(new Date().toISOString()).getTime() < new Date(result.deadline).getTime()) return res.status(200).send("Deadline is already over.");
-        }
+        if (result.deadline) if (new Date().toISOString() < result.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
         
         var newanswer = new AnswerModel(result);
         
