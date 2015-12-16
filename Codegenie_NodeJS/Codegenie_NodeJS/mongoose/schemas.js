@@ -8,7 +8,7 @@ var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
 var courseSchema = {
     course: { type: String, required: true, enum: courseEnum },
     motd: String
-}
+};
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -76,12 +76,12 @@ exports.errhandler = function (err) {
     if (err) {
         var errmessage = "";
         for (var field in err.errors) {
-            errmessage += err.errors[field].message + " Found " + err.errors[field].value + ".\n";
+            errmessage += err.errors[field].message + " Found " + err.errors[field].value + "\n";
         }
         return errmessage;
     }
     else return "ok";
-}
+};
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
@@ -89,7 +89,7 @@ exports.questionExists = function (answer, questions) {
         if (questions[index]._id == answer.questionid) return true;
     }
     return false;
-}
+};
 
 exports.answerExists = function (answer, answers) {
     for (var index in answers) {
@@ -97,4 +97,4 @@ exports.answerExists = function (answer, answers) {
         if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
-}
+};

@@ -4,7 +4,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var auth = require('../passport/authlevels');
 var router = express.Router();
-var moment = require('moment')
+var moment = require('moment');
 
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
