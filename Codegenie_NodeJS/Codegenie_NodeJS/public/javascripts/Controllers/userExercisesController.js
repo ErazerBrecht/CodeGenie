@@ -14,26 +14,29 @@
         });
         
         $scope.select = function (id) {
-            $scope.selected = $scope.exercises[id];
+            //Prevent double click
+            if($scope.selected === undefined || $scope.selected._id != $scope.exercises[id]._id) {
+                $scope.selected = $scope.exercises[id];
 
-            //Clear error and message
-            $scope.error = null;
-            $scope.message = null;
+                //Clear error and message
+                $scope.error = null;
+                $scope.message = null;
 
-            if (!$scope.selected.solved) {
-                //Convert question object to answer object
-                $scope.questions = $scope.selected.questions;
+                if (!$scope.selected.solved) {
+                    //Convert question object to answer object
+                    $scope.questions = $scope.selected.questions;
 
-                //Rename _id field to questionid
-                angular.forEach($scope.questions, function (value, key) {
-                    value.questionid = value._id;
-                    delete value._id;
-                });
+                    //Rename _id field to questionid
+                    angular.forEach($scope.questions, function (value, key) {
+                        value.questionid = value._id;
+                        delete value._id;
+                    });
 
-                newAnswer.exerciseid = $scope.selected._id;
-                newAnswer.answers = $scope.questions;
+                    newAnswer.exerciseid = $scope.selected._id;
+                    newAnswer.answers = $scope.questions;
 
-                $scope.answer = newAnswer;
+                    $scope.answer = newAnswer;
+                }
             }
         };
 
