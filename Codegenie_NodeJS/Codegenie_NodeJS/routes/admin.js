@@ -127,11 +127,12 @@ router.post("/users/assign", isAdmin, function (req, res) {
 router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
+
         for (var index in result) {
             if (result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString()) result[index].revealed = false;
             else result[index].revealed = true;
-        };
-        
+        }
+
         res.status(200).json(result);
     })
 });
@@ -187,21 +188,19 @@ router.post("/exercises/post", isAdmin, function (req, res) {
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    ExerciseModel.findOne({ _id: exerciseID }).lean().exec(function (err, result) {
-        if (err) return res.status(400).send("Exercise doesn't exist.");
+    ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
+        if (err || !result) return res.status(400).send("Exercise doesn't exist.");
         
-        var newexercise = new ExerciseModel(result);
-        
-        for (var field in req.body) newexercise[field] = req.body[field];
-        
-        newexercise.deadline.setHours(23);
-        newexercise.deadline.setMinutes(59);
-        newexercise.deadline.setSeconds(59);
-        
-        ExerciseModel.update({ _id: exerciseID }, { $set: newexercise }, { runValidators: true }, function (err) {
+        for (var field in req.body) result[field] = req.body[field];
+
+        result.deadline.setHours(23);
+        result.deadline.setMinutes(59);
+        result.deadline.setSeconds(59);
+
+        result.save(function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(201);
+            res.sendStatus(200);
         });
     });
 });
@@ -227,21 +226,21 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
-            })
+            });
             break;
         case 'unrevised':
             AnswerModel.find({ revised: false }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
-            })
+            });
             break;
         default:
             AnswerModel.find({ _id: answerID }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
                 
                 res.status(200).json(result);
-            })
+            });
             break;
     }
 });
@@ -261,19 +260,17 @@ router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
 router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     
-    AnswerModel.findOne({ _id: answerID }).lean().exec(function (err, result) {
+    AnswerModel.findOne({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
         
         if (result.deadline) if (new Date().toISOString() < result.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
         
-        var newanswer = new AnswerModel(result);
+        for (var field in req.body) result[field] = req.body[field];
         
-        for (var field in req.body) newanswer[field] = req.body[field];
-        
-        AnswerModel.update({ _id: answerID }, { $set: newanswer }, { runValidators: true }, function (err) {
+        result.save(function (err) {
             var response = errhandler(err);
             if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(201);
+            res.sendStatus(200);
         });
     });
 });
