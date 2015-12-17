@@ -20,12 +20,14 @@ strong {
 }
 
 .tile {
+  position: relative;
   width: 100%;
+  height: 100px;
   display: inline-block;
   box-sizing: border-box;
   background: #fff;
-  padding: 20px;
   margin-bottom: 30px;
+  padding-left: 20px;
 }
 .tile .title {
   margin-top: 0px;
@@ -62,4 +64,15 @@ strong {
 }
 .tile.orange:hover {
   background: #b8431f;
+}
+
+.triangle {
+  width: 0px;
+  height: 0px;
+  border-bottom: 100px solid rgba(0, 0, 0, 0.4);
+  border-left: 90px solid transparent;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: 0;
 }
