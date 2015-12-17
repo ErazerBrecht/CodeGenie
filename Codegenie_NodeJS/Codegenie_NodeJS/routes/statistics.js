@@ -10,7 +10,7 @@ var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
-var errhandler = schemas.errhandler;
+var savehandler = schemas.savehandler;
 
 var isLoggedIn = auth.isLoggedIn;
 

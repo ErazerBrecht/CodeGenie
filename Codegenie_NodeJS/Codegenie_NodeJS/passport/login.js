@@ -3,7 +3,7 @@ var schemas = require("../mongoose/schemas");
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 var UserModel = schemas.UserModel;
-var errhandler = schemas.errhandler;
+var savehandler = schemas.savehandler;
 
 module.exports = function (passport) {
     passport.use('login', new LocalStrategy({
@@ -25,10 +25,9 @@ module.exports = function (passport) {
             }
             
             UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
-                var response = errhandler(err);
-                if (response != "ok") {
+                if (err) {
+                    console.error(err);
                     done(null, false, req.flash('message', "Error in updating lastseen"));
-                    console.log('Error updating lastseen for user: ' + user.name + "\n" + response);
                 }
             });
             

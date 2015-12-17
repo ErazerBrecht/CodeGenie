@@ -11,7 +11,7 @@ var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
-var errhandler = schemas.errhandler;
+var savehandler = schemas.savehandler;
 var questionExists = schemas.questionExists;
 
 var isLoggedIn = auth.isLoggedIn;
@@ -265,11 +265,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 //(MAYBE)TODO: check if questionids that were posted are actually unique
                 if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
                 
-                newanswer.save(function (err) {
-                    var response = errhandler(err);
-                    if (response != "ok") return res.status(400).send(response);
-                    return res.sendStatus(201);
-                });
+                newanswer.save(function (err) { savehandler(res, err); });
             });
         //CREATE ANSWER END
         }
@@ -293,11 +289,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                     }
                 }
 
-                result.save(function (err) {
-                    var response = errhandler(err);
-                    if (response != "ok") return res.status(400).send(response);
-                    res.sendStatus(200);
-                });
+                result.save(function (err) { savehandler(res, err); });
             });
             //EDIT ANSWER END
         }
@@ -323,11 +315,7 @@ router.post("/edit", isLoggedIn, function (req, res) {
         delete newuser.lastseen;
         delete newuser.__v;
         
-        result.save(function (err) {
-            var response = errhandler(err);
-            if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(201);
-        });
+        result.save(function (err) { savehandler(res, err); });
     });
 });
 

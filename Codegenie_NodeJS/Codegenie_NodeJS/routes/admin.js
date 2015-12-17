@@ -9,7 +9,7 @@ var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
-var errhandler = schemas.errhandler;
+var savehandler = schemas.savehandler;
 var answerExists = schemas.answerExists;
 
 var isAdmin = auth.isAdmin;
@@ -97,11 +97,7 @@ router.get('/users/:userID/answers', isAdmin, function (req, res) {
 router.post("/users", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
     
-    newuser.save(function (err) {
-        var response = errhandler(err);
-        if (response != "ok") return res.status(400).send(response);
-        res.sendStatus(201);
-    });
+    newuser.save(function (err) { savehandler(res, err); });
 });
 
 router.post("/users/assign", isAdmin, function (req, res) {
@@ -127,12 +123,12 @@ router.post("/users/assign", isAdmin, function (req, res) {
 router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
-
+        
         for (var index in result) {
             if (result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString()) result[index].revealed = false;
             else result[index].revealed = true;
         }
-
+        
         res.status(200).json(result);
     })
 });
@@ -178,11 +174,7 @@ router.post("/exercises/post", isAdmin, function (req, res) {
     newexercise.deadline.setMinutes(59);
     newexercise.deadline.setSeconds(59);
     
-    newexercise.save(function (err) {
-        var response = errhandler(err);
-        if (response != "ok") return res.status(400).send(response);
-        res.sendStatus(201);
-    });
+    newexercise.save(function (err) { savehandler(res, err); });
 });
 
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
@@ -192,16 +184,12 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
         if (err || !result) return res.status(400).send("Exercise doesn't exist.");
         
         for (var field in req.body) result[field] = req.body[field];
-
+        
         result.deadline.setHours(23);
         result.deadline.setMinutes(59);
         result.deadline.setSeconds(59);
-
-        result.save(function (err) {
-            var response = errhandler(err);
-            if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(200);
-        });
+        
+        result.save(function (err) { savehandler(res, err); });
     });
 });
 
@@ -267,11 +255,7 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         
         for (var field in req.body) result[field] = req.body[field];
         
-        result.save(function (err) {
-            var response = errhandler(err);
-            if (response != "ok") return res.status(400).send(response);
-            res.sendStatus(200);
-        });
+        result.save(function (err) { savehandler(res, err); });
     });
 });
 
