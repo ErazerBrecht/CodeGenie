@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminUsersController = function ($scope, restData, $routeParams) {
+    var adminUsersController = function ($scope, restData, $routeParams, $http) {
         restData.getAllUsers.query(function (data) {
             $scope.users = data;
             $scope.assign = {};
@@ -23,6 +23,29 @@
                      $scope.assign.users.splice(index, 1);
                  }
             }
+        };
+
+        $scope.processForm = function () {
+            //Clear error and message
+            $scope.error = null;
+            $scope.message = null;
+
+            $http({
+                method  : 'POST',
+                url     : '/admin/users/assign/',
+                data    : $scope.assign,
+                responseType: 'text'
+            }).then(
+                //SUCCESS
+                function (response) {
+                    $scope.message = response.data;
+                },
+                //ERROR
+                function (error) {
+                    $scope.error = error.data;
+                }
+            );
+
         };
 
         $scope.cancel = function () {

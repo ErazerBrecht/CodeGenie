@@ -101,12 +101,13 @@ router.post("/users", isAdmin, function (req, res) {
 });
 
 router.post("/users/assign", isAdmin, function (req, res) {
+    //TODO Catch errors @Matthew => No users / No course
     var userlist = [];
-    for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "class": req.body.class });
+    for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "course": req.body.course });
     
     var promises = userlist.map(function (usobj) {
         return new Promise(function (resolve, reject) {
-            UserModel.findOne({ _id: usobj.id }, { $set: { status: 1, class: usobj.class } }, function (err, anresult) {
+            UserModel.update({ _id: usobj.id }, { $set: { status: 1, course: usobj.course } }, function (err, anresult) {
                 if (err) return reject(err);
                 resolve();
             });

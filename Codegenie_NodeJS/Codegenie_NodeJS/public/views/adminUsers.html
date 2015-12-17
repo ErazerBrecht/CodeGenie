@@ -8,6 +8,14 @@
                 <i class="fa fa-users"></i> Users
             </li>
         </ol>
+        <div class="alert alert-danger fade in" ng-show="error != null">
+            <a href="" class="close" data-dismiss="alert">&times;</a>
+            <strong>Error!</strong> <span style="margin-left: 50px">{{error}}</span>
+        </div>
+        <div class="alert alert-success fade in" ng-show="message != null">
+            <a href="" class="close" data-dismiss="alert">&times;</a>
+            <strong>Success!</strong> <span style="margin-left: 50px">{{message}}</span>
+        </div>
     </div>
 </div>
 
@@ -50,7 +58,7 @@
 </div>
 
 <div class="row">
-        <div class="form-group top-20">
+    <form id="assignForm" class="top-20" ng-submit="processForm()">
             <label class="col-xs-12 col-lg-2 top-10">Move selected users to:</label>
             <div class="col-xs-12 col-lg-6">
             <select class="form-control top-10" name="course" ng-model="assign.course" required="required">
@@ -68,7 +76,7 @@
                 <button type="button" class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
             </div>
 
-        </div>
+        </form>
 </div>
 
 <div class="row top-30">
