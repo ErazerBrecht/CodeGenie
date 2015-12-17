@@ -55,12 +55,17 @@
         </div>
         <div class="form-group">
             <label>Classification</label>
-            <input type="text" class="form-control" name="classification" required="required" placeholder="Classification"
-                   ng-model="selected.classification">
+            <input type="text" class="form-control" name="classification" required="required" placeholder="Classification" ng-model="selected.classification">
         </div>
         <div class="form-group">
-            <label>Class</label>
-            <input type="text" class="form-control" name="class" required="required" placeholder="Class" ng-model="selected.class">
+            <label>Course</label>
+            <select class="form-control" name="course" required="required" placeholder="Course" ng-model="selected.course">
+                <option value="" disabled selected hidden>Select the course for this exercise!</option>
+                <option>Programming Principles</option>
+                <option>OO</option>
+                <option>Mobile-dev</option>
+                <option>SO4</option>
+            </ >
         </div>
         <div class="form-group">
             <label>Deadline</label>

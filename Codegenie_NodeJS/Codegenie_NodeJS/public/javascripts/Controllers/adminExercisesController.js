@@ -17,7 +17,7 @@
             $scope.selected.deadline = new Date();
             $scope.error = null;
             $scope.message = null;
-        }
+        };
 
         $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
