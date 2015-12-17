@@ -32,7 +32,6 @@ module.exports = function (passport) {
                                 var newUser = new UserModel({
                                     name: username,
                                     password: createHash(password),
-                                    class: req.body.group,
                                     email: email,
                                     status: 0,
                                     admin: false,
@@ -61,4 +60,4 @@ module.exports = function (passport) {
     var createHash = function (password) {
         return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
     }
-}
+};

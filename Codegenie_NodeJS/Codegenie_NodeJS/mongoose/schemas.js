@@ -3,13 +3,18 @@ var moment = require('moment');
 
 var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
-var courseEnum = ['Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
+var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
+
+var courseSchema = {
+    course: { type: String, required: true, enum: courseEnum },
+    motd: String
+};
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    class: { type: String, required: true },
-    //course: { type: String, required: true, enum: courseEnum },
+    class: { type: String, required: true, default: "None" },
+    course: { type: String, required: true, enum: courseEnum, default: "None" },
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
     admin: { type: Boolean, default: false },
@@ -20,21 +25,21 @@ var userSchema = mongoose.Schema({
 var exerciseSchema = mongoose.Schema({
     title: { type: String, required: true },
     classification: { type: String, required: true },
-    class: { type: String, required: true },
-    //course: { type: String, required: true, enum: courseEnum },
+    course: { type: String, required: true, enum: courseEnum },
+    revealdate: { type: Date },
     deadline: { type: Date },
     created: { type: Date, default: new Date().toISOString() },
     extra: { type: Boolean, default: false },
     questions: [{
-        questiontitle: { type: String, required: true },
-        weight: { type: Number, required: true },
-        extra: { type: Boolean, default: false },
-        type: { type: String, required: true, enum: typeEnum },
-        choices: [{
-            text: { type: String, required: true },
-            correct: { type: Boolean, default: false }
+            questiontitle: { type: String, required: true },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, default: false },
+            type: { type: String, required: true, enum: typeEnum },
+            choices: [{
+                    text: { type: String, required: true },
+                    correct: { type: Boolean, default: false }
+                }]
         }]
-    }]
 });
 
 var answerSchema = mongoose.Schema({
@@ -42,22 +47,21 @@ var answerSchema = mongoose.Schema({
     userid: { type: mongoose.Schema.ObjectId, required: true },
     title: { type: String, required: true },
     classification: { type: String, required: true },
-    class: { type: String, required: true },
-    //course: { type: String, required: true, enum: courseEnum },
+    course: { type: String, required: true, enum: courseEnum },
     extra: { type: Boolean, required: true },
     revised: { type: Boolean, default: false },
     created: { type: Date, default: new Date().toISOString() },
     answers: [{
-        questionid: { type: mongoose.Schema.ObjectId, required: true },
-        questiontitle: { type: String, required: true },
-        received: { type: Number, default: 0 },
-        weight: { type: Number, required: true },
-        extra: { type: Boolean, required: true },
-        type: { type: String, required: true, enum: typeEnum },
-        result: String,
-        feedback: Number,
-        choices: [{ text: String }]
-    }]
+            questionid: { type: mongoose.Schema.ObjectId, required: true },
+            questiontitle: { type: String, required: true },
+            received: { type: Number, default: 0 },
+            weight: { type: Number, required: true },
+            extra: { type: Boolean, required: true },
+            type: { type: String, required: true, enum: typeEnum },
+            result: String,
+            feedback: Number,
+            choices: [{ text: String }]
+        }]
 });
 
 var UserModel = mongoose.model('User', userSchema);
@@ -68,16 +72,14 @@ exports.UserModel = UserModel;
 exports.ExerciseModel = ExerciseModel;
 exports.AnswerModel = AnswerModel;
 
-exports.errhandler = function (err) {
+exports.savehandler = function (res, err) {
     if (err) {
-        var errmessage = "";
-        for (var field in err.errors) {
-            errmessage += err.errors[field].message + " Found " + err.errors[field].value + ".\n";
-        }
-        return errmessage;
+        var errmessage = [];
+        for (var field in err.errors) errmessage.push({ "error": err.errors[field].message + " Found " + err.errors[field].value + "." });
+        return res.status(400).send(errmessage);
     }
-    else return "ok";
-}
+    else return res.sendStatus(201);
+};
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
@@ -85,7 +87,7 @@ exports.questionExists = function (answer, questions) {
         if (questions[index]._id == answer.questionid) return true;
     }
     return false;
-}
+};
 
 exports.answerExists = function (answer, answers) {
     for (var index in answers) {
@@ -93,4 +95,4 @@ exports.answerExists = function (answer, answers) {
         if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
-}
+};
