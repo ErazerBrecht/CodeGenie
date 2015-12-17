@@ -37,6 +37,11 @@
 
                     $scope.answer = newAnswer;
                 }
+                else{
+                    userRestData.getAnswer.get({ exerciseid: $scope.selected._id }, function (data) {
+                        $scope.answer = data;
+                    });
+                }
             }
         };
 

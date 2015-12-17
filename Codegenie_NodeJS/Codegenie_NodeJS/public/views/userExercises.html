@@ -38,27 +38,27 @@
 
 <div class="row" ng-show="selected">
     <form id="exerciseForm" class="col-lg-12" ng-submit="processForm()">
-        <div ng-repeat="question in questions">
+        <div ng-repeat="a in answer.answers">
             <div class="panel-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title" ng-if="question.extra == true">
-                            <a data-toggle="collapse" href="/#collapse{{$index}}"><span style="color:red; font-weight:bolder">EXTRA: </span>{{question.questiontitle}}  <span class="pull-right">Points: {{question.weight}}</span></a>
+                        <h4 class="panel-title" ng-if="a.extra == true">
+                            <a data-toggle="collapse" href="/#collapse{{$index}}"><span style="color:red; font-weight:bolder">EXTRA: </span>{{a.questiontitle}}  <span class="pull-right">Points: {{a.weight}}</span></a>
                         </h4>
 
-                        <h4 class="panel-title" ng-if="question.extra == false">
-                            <a data-toggle="collapse" href="/#collapse{{$index}}">{{question.questiontitle}} <span class="pull-right"> Points: {{question.weight}} </span></a>
+                        <h4 class="panel-title" ng-if="a.extra == false">
+                            <a data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span class="pull-right"> Points: {{a.weight}} </span></a>
                         </h4>
                     </div>
 
                     <div id="collapse{{$index}}" class="panel-collapse collapse">
-                        <div class="panel-body" ng-switch on="question.type">
+                        <div class="panel-body" ng-switch on="a.type">
                             <div ng-switch-when="Checkbox">
-                                Check / Uncheck <input ng-model="question.result" type="checkbox" />
+                                Check / Uncheck <input ng-model="a.result" type="checkbox" ng-true-value="'true'" ng-false-value="'false'"/>
                             </div>
 
                             <div ng-switch-when="Code">
-                                <div ng-model="question.result" style="height: 200px" ui-ace="{
+                                <div ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
@@ -67,13 +67,13 @@
                                 </div>
                             </div>
 
-                            <div ng-switch-when="Question">
-                                <input type="text" ng-model="question.result" class="question" />
+                            <div ng-switch-when="a">
+                                <input type="text" ng-model="a.result" class="a" />
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
-                                <div ng-repeat="choice in question.choices" class="radio">
-                                    <label><input type="radio" ng-model="question.result" ng-value="choice.text" />{{choice.text}}</label>
+                                <div ng-repeat="choice in a.choices" class="radio">
+                                    <label><input type="radio" ng-model="a.result" ng-value="choice.text" />{{choice.text}}</label>
                                 </div>
                             </div>
                         </div>
