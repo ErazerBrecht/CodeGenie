@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col-lg-12">
         <h1 class="page-header">
             Users
@@ -8,5 +8,71 @@
                 <i class="fa fa-users"></i> Users
             </li>
         </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <p class="bg-danger">
+            TODO: Filtering!!! </br>
+            TODO: Autoselect (Select all users from OO)
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel-group" id="userGroup">
+            <div class="panel panel-default" ng-repeat="user in users | orderBy: '-registerdate'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <input type="checkbox" ng-model="user.checkbox" ng-click="checkboxUser($index)"/>
+                        <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
+                                    <span>
+                                        {{user.name}}
+                                    </span>
+
+                                    <span class="pull-right">
+                                        {{user.course}}
+                                    </span>
+                        </a>
+                    </h4>
+                </div>
+
+                <div id="collapse{{$index}}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        TODO
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+        <div class="form-group top-20">
+            <label class="col-xs-12 col-lg-2 top-10">Move selected users to:</label>
+            <div class="col-xs-12 col-lg-6">
+            <select class="form-control top-10" name="course" ng-model="assign.course" required="required">
+                <option value="" disabled selected hidden>Select the course!</option>
+                <option>Programming Principles</option>
+                <option>OO</option>
+                <option>Mobile-dev</option>
+                <option>SO4</option>
+            </select>
+                </div>
+            <div class="col-xs-6 col-lg-2 top-10">
+                <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </div>
+            <div class="col-xs-6 col-lg-2 top-10">
+                <button type="button" class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
+            </div>
+
+        </div>
+</div>
+
+<div class="row top-30">
+    <div class="col-lg-12">
+        {{assign}}
     </div>
 </div>
