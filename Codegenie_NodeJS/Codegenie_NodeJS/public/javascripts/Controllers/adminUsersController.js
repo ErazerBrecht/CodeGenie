@@ -9,15 +9,15 @@
             $scope.assign.users = [];
         });
 
-        $scope.checkboxUser =  function (id)
+        $scope.checkboxUser =  function (user)
         {
-            if ($scope.users[id].checkbox)
+            if (user.checkbox)
             {
-                $scope.assign.users.push($scope.users[id]._id);
+                $scope.assign.users.push(user._id);
             }
             else
             {
-                 var index = $scope.assign.users.indexOf($scope.users[id]._id);
+                 var index = $scope.assign.users.indexOf(user._id);
                  if (index > -1)
                  {
                      $scope.assign.users.splice(index, 1);

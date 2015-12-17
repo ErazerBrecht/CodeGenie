@@ -34,7 +34,7 @@
             <div class="panel panel-default" ng-repeat="user in users | orderBy: '-registerdate'">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <input type="checkbox" ng-model="user.checkbox" ng-click="checkboxUser($index)"/>
+                        <input type="checkbox" ng-model="user.checkbox" ng-click="checkboxUser(user)"/>
                         <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
                                     <span>
                                         {{user.name}}
