@@ -10,6 +10,14 @@
             //Convert deadline dates to real date types
             angular.forEach($scope.exercises, function (value, key) {
                 value.deadline = new Date(value.deadline);
+
+                if(value.solved)
+                {
+                    userRestData.getAnswer.get({ exerciseid: value._id }, function (data) {
+                        value.answers = data.answers;
+                        value.answerDate = new Date(data.created);
+                    });
+                }
             });
         });
         
@@ -24,23 +32,15 @@
 
                 if (!$scope.selected.solved) {
                     //Convert question object to answer object
-                    $scope.questions = $scope.selected.questions;
+                    var questions = $scope.selected.questions;
 
                     //Rename _id field to questionid
-                    angular.forEach($scope.questions, function (value, key) {
+                    angular.forEach(questions, function (value, key) {
                         value.questionid = value._id;
                         delete value._id;
                     });
 
-                    newAnswer.exerciseid = $scope.selected._id;
-                    newAnswer.answers = $scope.questions;
-
-                    $scope.answer = newAnswer;
-                }
-                else{
-                    userRestData.getAnswer.get({ exerciseid: $scope.selected._id }, function (data) {
-                        $scope.answer = data;
-                    });
+                    $scope.selected.answers = questions;
                 }
             }
         };
@@ -50,8 +50,8 @@
 
             if(tempExercise.solved)
             {
-                //TODO: Koppel antwoord bij de oefening.
-                //TODO: Check if the user wasn't to late
+                if(tempExercise.answerDate > tempExercise.deadline)
+                    return "orange";
                 return "green";
             }
             else
@@ -71,10 +71,12 @@
             $scope.error = null;
             $scope.message = null;
 
+            $scope.selected.exerciseid = $scope.selected._id;
+
             $http({
                 method  : 'POST',
                 url     : '/users/answer/',
-                data    : $scope.answer,
+                data    : $scope.selected,
                 responseType: 'text'
             }).then(
                 //SUCCESS
