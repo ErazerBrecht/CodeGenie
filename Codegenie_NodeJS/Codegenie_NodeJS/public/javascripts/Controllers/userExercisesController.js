@@ -4,6 +4,8 @@
     var newAnswer = {};
     
     var userExercisesController = function ($scope, userRestData, $routeParams, $http) {
+        $scope.today = new Date();
+
         userRestData.getExercises.query(function (data) {
             $scope.exercises = data;
 
@@ -21,10 +23,10 @@
             });
         });
         
-        $scope.select = function (id) {
+        $scope.select = function (exercise) {
             //Prevent double click
-            if($scope.selected === undefined || $scope.selected._id != $scope.exercises[id]._id) {
-                $scope.selected = $scope.exercises[id];
+            if($scope.selected === undefined || $scope.selected._id != exercise._id) {
+                $scope.selected = exercise;
 
                 //Clear error and message
                 $scope.error = null;
@@ -45,8 +47,8 @@
             }
         };
 
-        $scope.getTileClass = function (id) {
-            var tempExercise = $scope.exercises[id];
+        $scope.getTileClass = function (selected) {
+            var tempExercise = selected
 
             if(tempExercise.solved)
             {
