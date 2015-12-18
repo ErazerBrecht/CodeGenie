@@ -115,6 +115,8 @@ router.post("/users", isAdmin, function (req, res) {
 
 router.post("/users/assign", isAdmin, function (req, res) {
     var userlist = [];
+    if (req.body.course == undefined || req.body.users == undefined) return res.sendStatus(400);
+
     for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "course": req.body.course });
     
     var promises = userlist.map(function (usobj) {
