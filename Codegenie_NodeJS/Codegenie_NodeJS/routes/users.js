@@ -272,28 +272,25 @@ router.post('/answer', isLoggedIn, function (req, res) {
         }
         else {
             //EDIT ANSWER
-            AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }).lean().exec(function (err, answer) {
+            AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
                 if (err) return console.error(err);
-                if (!answer) return res.status(400).send("Not an eligible exercise ID");
+                if (!result) return res.status(400).send("Not an eligible exercise ID");
                 
-                if (answer.deadline) if (new Date().toISOString() > answer.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
-                if (answer.revealdate) if (new Date().toISOString() < answer.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
+                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
 
                 var newanswerlist = req.body.answers;
 
                 for (var i = 0; i < newanswerlist.length; i++) {
-                    for (var x = 0; x < answer.answers.length; x++) {
-                        if (answer.answers[x].questiontitle === newanswerlist[i].questiontitle) {
-                            answer.answers[x].result = newanswerlist[i].result;
-                            answer.answers[x].choices = newanswerlist[i].choices;           //I (Brecht) think this is useless, choices never changes so it shouldn't be updated.
+                    for (var x = 0; x < result.answers.length; x++) {
+                        if (result.answers[x].questiontitle === newanswerlist[i].questiontitle) {
+                            result.answers[x].result = newanswerlist[i].result;
+                            result.answers[x].choices = newanswerlist[i].choices; //If this doesn't get updated, the user can't edit his answers to any multiplechoice questions. 
                         }
                     }
                 }
 
-                console.log(answer);
-                return res.status(400).send("This feature is not working at the moment devs are working on it!");
-                //This crashes
-                //answer.save(function (err) { savehandler(res, err); });
+                result.save(function (err) { savehandler(res, err); });
             });
             //EDIT ANSWER END
         }
