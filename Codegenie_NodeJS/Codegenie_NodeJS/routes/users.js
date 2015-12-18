@@ -55,9 +55,12 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             
             var promises = exerciselist.map(function (exobj) {
                 return new Promise(function (resolve, reject) {
-                    AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, function (err, anresult) {
+                    AnswerModel.findOne({ exerciseid: exobj.id, userid: req.user._id }, { created: 1 }, function (err, anresult) {
                         if (err) return reject(err);
-                        if (anresult) exresult[exobj.index].solved = true;
+                        if (anresult) {
+                            exresult[exobj.index].solved = true;
+                            exresult[exobj.index].answercreated = anresult.created;
+                        }
                         else exresult[exobj.index].solved = false;
                         
                         if (exobj.lastseen.toISOString() > exresult[exobj.index].created.toISOString()) exresult[exobj.index].seen = true;
