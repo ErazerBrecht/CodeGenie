@@ -33,15 +33,15 @@ router.get('/users/:userID', isAdmin, function (req, res) {
 
 router.get('/users/:userID/delete', isAdmin, function (req, res) {
     var userID = req.params.userID;
-
-    console.log(userID);
-    UserModel.remove({ _id: userID }, function (err) {
+    
+    UserModel.find({ _id: userID }).remove(function (err) {
         if (err) return console.error(err);
-        res.sendStatus(200);
+        
+        AnswerModel.find({ userid: userID }).remove(function (err) {
+            if (err) return console.error(err);
+            res.sendStatus(200);
+        });
     });
-
-    //TODO: DELETE ALL ANSWERS OF THIS USER
-
 });
 
 router.get('/users/:userID/answers', isAdmin, function (req, res) {
@@ -114,7 +114,6 @@ router.post("/users", isAdmin, function (req, res) {
 });
 
 router.post("/users/assign", isAdmin, function (req, res) {
-    //TODO Catch errors @Matthew => No users / No course
     var userlist = [];
     for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "course": req.body.course });
     
@@ -170,7 +169,7 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
 router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    ExerciseModel.remove({ _id: exerciseID }, function (err) {
+    ExerciseModel.find({ _id: exerciseID }).remove(function (err) {
         if (err) return res.status(400).send("Exercise doesn't exist.");
         
         res.sendStatus(200);
@@ -250,7 +249,7 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
 router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     
-    AnswerModel.remove({ _id: answerID }, function (err) {
+    AnswerModel.find({ _id: answerID }).remove(function (err) {
         if (err) return console.error(err);
         
         res.sendStatus(200);
