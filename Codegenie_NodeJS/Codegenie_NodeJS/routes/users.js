@@ -234,7 +234,8 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 
                 if (!answer.answers) return res.status(400).send("There were no answers given.");
 
-                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
+                //User needs to be able to post after deadline.
+                //if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
                 if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
                 
                 newanswer.userid = req.user._id;
