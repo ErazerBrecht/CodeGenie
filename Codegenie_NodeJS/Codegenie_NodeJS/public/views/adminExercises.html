@@ -3,10 +3,9 @@
         <h1 class="page-header">Exercises</h1>
 
         <div class="tile green" ng-click="add()">
-            <div>
-                <div class="title">
-                    <h3>Add Exercise</h3>
-                </div>
+            <div class="title">
+                <h3>Add Exercise</h3>
+                ONDERTITEL
             </div>
         </div>
 
@@ -36,12 +35,13 @@
 
 <div class="row" ng-show="selected == undefined || selected._id != undefined">
     <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="exercise in exercises" ng-click="select($index)">
-        <div class="tile blue" ng-drag="true" ng-drag-data="exercise">
-            <div>
-                <div class="title">
-                    <h3>{{exercise.title}}</h3>
-                </div>
+        <div class="tile" ng-drag="true" ng-drag-data="exercise" ng-class="getTileClass($index)">
+            <div class="triangle" ng-if="exercise.extra"></div>
+            <div class="title">
+                <h3>{{exercise.title}}</h3>
             </div>
+            Deadline:
+            <time am-time-ago="exercise.deadline"></time>
         </div>
     </div>
 </div>
@@ -82,12 +82,15 @@
             <div class="table-responsive" ng-repeat="question in selected.questions" ng-init="questionIndex = $index">
                 <table class="table">
                     <caption>
-                        <div class="clearfix"
-                             style="margin-top: 10px; margin-bottom: 10px; padding-left: 8px; padding-right: 8px">
-                            <span style="font-size: 20px; padding-top: 7px;" class="pull-left">Question {{$index + 1}}</span>
+                        <div class="clearfix" style="margin-top: 10px; margin-bottom: 10px; padding-left: 8px; padding-right: 8px">
+                            <span style="font-size: 20px; padding-top: 7px;" class="pull-left">
+                                Question {{$index + 1}}
+                            </span>
 
                             <div class="btn-group pull-right">
-                                <a class="btn btn-default btn-sm" ng-click="removeButton($index)"><span class="glyphicon glyphicon-minus"></span></a>
+                                <a class="btn btn-default btn-sm" ng-click="removeButton($index)">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </a>
                             </div>
                         </div>
                     </caption>
@@ -98,7 +101,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><input class="form-control" ng-model="question.weight" placeholder="Weight" type="number"/>
+                        <td>
+                            <input class="form-control" ng-model="question.weight" placeholder="Weight" type="number"/>
                         </td>
                         <td>
                             <select class="form-control" ng-model="question.type" ng-change="typeChanged($index)">
@@ -126,13 +130,16 @@
                                     <input class="form-control" ng-model="choice.text"
                                            placeholder="Choice {{$index + 1}}" type="text"/>
 
-                                    <div class="input-group-addon"><span class="glyphicon glyphicon-remove-circle" ng-click="removeChoice(questionIndex, $index)"></span>
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-remove-circle"
+                                                                         ng-click="removeChoice(questionIndex, $index)"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
-                                <a class="btn btn-default btn-sm form-control" ng-click="addChoice($index)"><span class="glyphicon glyphicon-plus"></span></a>
+                                <a class="btn btn-default btn-sm form-control" ng-click="addChoice($index)">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
                             </div>
                         </td>
                     </tr>

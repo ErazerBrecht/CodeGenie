@@ -1,5 +1,5 @@
 ﻿(function () {
-    
+
     var app = angular.module("adminApp");
 
     var exercisesController = function ($scope, $http, restData, $anchorScroll, $routeParams) {
@@ -8,11 +8,14 @@
         function loadData() {
             restData.getExercises.query(function (data) {
                 $scope.exercises = data;
+
+                angular.forEach($scope.exercises, function (value, key) {
+                    value.deadline = new Date(value.deadline);
+                });
             });
         };
 
-        $scope.add = function()
-        {
+        $scope.add = function () {
             $scope.selected = {}
             $scope.selected.deadline = new Date();
             $scope.error = null;
@@ -21,7 +24,7 @@
 
         $scope.select = function (id) {
             $scope.selected = $scope.exercises[id];
-            $scope.selected.deadline = new Date($scope.selected.deadline);
+            //$scope.selected.deadline = new Date($scope.selected.deadline);
             $scope.error = null;
             $scope.message = null;
         };
@@ -83,8 +86,7 @@
             $scope.selected = null;
         };
 
-        $scope.cancel = function ()
-        {
+        $scope.cancel = function () {
             $scope.selected = null;
             $scope.error = null;
             $scope.message = null;
@@ -97,9 +99,9 @@
 
             if ($scope.selected._id === undefined) {
                 $http({
-                    method  : 'POST',
-                    url     : '/admin/exercises/post/',
-                    data    : $scope.selected
+                    method: 'POST',
+                    url: '/admin/exercises/post/',
+                    data: $scope.selected
                     //responseType: 'text'
                 }).then(
                     //SUCCESS
@@ -117,11 +119,11 @@
                 );
             }
 
-            else{
+            else {
                 $http({
-                    method  : 'POST',
-                    url     : '/admin/exercises/edit/' + $scope.selected._id,
-                    data    : $scope.selected,
+                    method: 'POST',
+                    url: '/admin/exercises/edit/' + $scope.selected._id,
+                    data: $scope.selected,
                     responseType: 'text'
                 }).then(
                     //SUCCESS
@@ -141,14 +143,14 @@
         };
 
         //AJAX Call Delete
-        $scope.DeleteExercise = function(deletedExercise) {
+        $scope.DeleteExercise = function (deletedExercise) {
             $scope.message = null;
             $scope.error = null;
 
             $http({
-                method  : 'GET',
-                url     : '/admin/exercises/delete/' + deletedExercise._id,
-                data    : deletedExercise,
+                method: 'GET',
+                url: '/admin/exercises/delete/' + deletedExercise._id,
+                data: deletedExercise,
                 responseType: 'text'
             }).then(
                 //SUCCESS
@@ -163,7 +165,20 @@
                 }
             );
         };
+
+        $scope.getTileClass = function (id) {
+            var tempExercise = $scope.exercises[id];
+
+            if (tempExercise.deadline < new Date()) {
+                return "red";
+            }
+
+            return "blue";
+
+            //TODO Add gray for invisible exercises
+        };
     };
 
     app.controller("exercisesController", exercisesController);
-})();
+})
+();
