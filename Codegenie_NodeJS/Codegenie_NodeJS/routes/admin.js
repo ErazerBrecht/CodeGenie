@@ -34,7 +34,8 @@ router.get('/users/:userID', isAdmin, function (req, res) {
 router.get('/users/:userID/delete', isAdmin, function (req, res) {
     var userID = req.params.userID;
 
-    UserModel.remove(userID, function (err) {
+    console.log(userID);
+    UserModel.remove({ _id: userID }, function (err) {
         if (err) return console.error(err);
         res.sendStatus(200);
     });
