@@ -31,6 +31,18 @@ router.get('/users/:userID', isAdmin, function (req, res) {
     })
 });
 
+router.get('/users/:userID/delete', isAdmin, function (req, res) {
+    var userID = req.params.userID;
+
+    UserModel.remove(userID, function (err) {
+        if (err) return console.error(err);
+        res.sendStatus(200);
+    });
+
+    //TODO: DELETE ALL ANSWERS OF THIS USER
+
+});
+
 router.get('/users/:userID/answers', isAdmin, function (req, res) {
     var userID = req.params.userID;
     

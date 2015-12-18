@@ -55,7 +55,14 @@
 
             $scope.assign = {};
             $scope.assign.users = [];
-        }
+        };
+
+        $scope.remove = function(user)
+        {
+            restData.removedUserById.get({ userid: user._id }, function (data) {
+                //RESPONSE!!!
+            });
+        };
 
     };
 
