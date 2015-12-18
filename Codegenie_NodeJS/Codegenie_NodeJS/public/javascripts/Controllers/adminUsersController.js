@@ -3,11 +3,20 @@
     var app = angular.module("adminApp");
 
     var adminUsersController = function ($scope, restData, $routeParams, $http) {
-        restData.getAllUsers.query(function (data) {
-            $scope.users = data;
+
+        ctor();
+
+        function ctor(){
+            getData();
             $scope.assign = {};
             $scope.assign.users = [];
-        });
+        }
+
+        function getData() {
+            restData.getAllUsers.query(function (data) {
+                $scope.users = data;
+            });
+        };
 
         $scope.checkboxUser =  function (user)
         {
@@ -39,6 +48,9 @@
                 //SUCCESS
                 function (response) {
                     $scope.message = response.data;
+                    //IS THIS THE RIGHT WAY??
+                    //Just reload everything? Or should I change all courses manually
+                    getData();
                 },
                 //ERROR
                 function (error) {
@@ -77,6 +89,23 @@
                 //SUCCESS
                 function (response) {
                     $scope.message = response.data;
+
+                    //Remove deleted user
+                    //We could also reload the data
+                    //But than our checkboxes values are lost
+                    var i = $scope.users.map(function(u) {
+                        return u._id
+                    }).indexOf(user._id);
+
+                    $scope.users.splice(i, 1);
+
+                    //Remove user from assigned list
+                    var index = $scope.assign.users.indexOf(user._id);
+                    if (index > -1)
+                    {
+                        $scope.assign.users.splice(index, 1);
+                    }
+
                 },
                 //ERROR
                 function (error) {
