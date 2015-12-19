@@ -28,7 +28,7 @@ $(function () {
 });
 
 (function () {
-    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource', 'ngDraggable','ui.ace']);
+    var adminApp = angular.module('adminApp', ['ngRoute', 'angularMoment', 'ngResource', 'ngDraggable','ui.ace', 'ui.checkbox']);
     
     adminApp.config(function ($routeProvider) {
         $routeProvider

@@ -15,6 +15,8 @@
             });
         };
 
+        $scope.today = new Date();
+
         $scope.add = function () {
             $scope.selected = {}
             $scope.selected.deadline = new Date();
