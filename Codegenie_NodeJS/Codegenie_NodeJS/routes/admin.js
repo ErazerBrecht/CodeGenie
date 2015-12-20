@@ -115,7 +115,9 @@ router.post("/users", isAdmin, function (req, res) {
 
 router.post("/users/assign", isAdmin, function (req, res) {
     var userlist = [];
-    if (req.body.course == undefined || req.body.users == undefined) return res.sendStatus(400);
+
+    if (req.body.course == undefined) return res.status(400).send('Found no course');
+    else if (req.body.users == undefined || req.body.users.length == 0) return res.status(400).send('Found no users to assign');
 
     for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "course": req.body.course });
     
