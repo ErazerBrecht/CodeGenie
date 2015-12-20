@@ -17,6 +17,10 @@
 
         $scope.today = new Date();
 
+        $scope.dismissMessage = function () {
+            $scope.message = null;
+        };
+
         $scope.add = function () {
             $scope.selected = {}
             $scope.selected.deadline = new Date();

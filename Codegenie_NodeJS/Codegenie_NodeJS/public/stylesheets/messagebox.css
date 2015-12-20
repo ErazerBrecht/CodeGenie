@@ -1,0 +1,12 @@
+#messagebox {
+    position: fixed;
+    top: 45px;
+    right: 0;
+    max-width: 40%;
+    z-index: 20;
+}
+
+#inner-message {
+    margin: 3px;
+    overflow: hidden;
+}

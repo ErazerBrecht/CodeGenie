@@ -3,9 +3,10 @@
 block header
     link(rel='stylesheet', href='/stylesheets/form.css')
     link(rel='stylesheet', href='/stylesheets/tiles.css')
-    link(rel='stylesheet', href='/stylesheets/dragdrop.css')
     link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/messagebox.css')
     link(rel='stylesheet', href='/stylesheets/sb-admin.css')
+    link(rel='stylesheet', href='/stylesheets/dragdrop.css')
 
 block content
     #wrapper(ng-app = 'adminApp' ng-controller='adminPanelController')
@@ -67,6 +68,7 @@ block content
      script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js")
      script(src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js")
      script(src='/javascripts/adminpanel.js')
+     script(src='/javascripts/messagebox.js')
      script(src='/javascripts/Controllers/adminPanelController.js')
      script(src='/javascripts/Controllers/editAdminProfileController.js')
      script(src='/javascripts/Controllers/adminDashBoardController.js')

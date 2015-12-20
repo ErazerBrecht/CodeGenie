@@ -22,7 +22,11 @@
                 }
             });
         });
-        
+
+        $scope.dismissMessage = function () {
+            $scope.message = null;
+        };
+
         $scope.select = function (exercise) {
             //Prevent double click
             if($scope.selected === undefined || $scope.selected._id != exercise._id) {

@@ -75,7 +75,7 @@ exports.AnswerModel = AnswerModel;
 exports.savehandler = function (res, err) {
     if (err) {
         var errmessage = [];
-        for (var field in err.errors) errmessage.push({ "error": err.errors[field].message + " Found " + err.errors[field].value + "." });
+        for (var field in err.errors) errmessage.push({ "message": err.errors[field].message + " Found " + err.errors[field].value + "." });
         return res.status(400).send(errmessage);
     }
     else return res.sendStatus(201);
