@@ -22,10 +22,3 @@
     transition-delay: 0.1s;
     animation-delay: 0.1s;
 }
-
-#inner-message.ng-leave  {
-    -webkit-animation: fadeOutRight 1s;
-    -moz-animation: fadeOutRight 1s;
-    -ms-animation: fadeOutRight 1s;
-    animation: fadeOutRight 1s;
-}

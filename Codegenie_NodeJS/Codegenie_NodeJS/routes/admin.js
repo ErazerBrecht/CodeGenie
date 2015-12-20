@@ -1,5 +1,4 @@
 ﻿var schemas = require('../mongoose/schemas');
-var bodyParser = require('body-parser');
 var express = require('express');
 var mongoose = require('mongoose');
 var auth = require('../passport/authlevels');
@@ -10,7 +9,6 @@ var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
 var savehandler = schemas.savehandler;
-var answerExists = schemas.answerExists;
 
 var isAdmin = auth.isAdmin;
 
@@ -37,9 +35,9 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
     UserModel.find({ _id: userID }).remove(function (err) {
         if (err) return console.error(err);
         
-        AnswerModel.find({ userid: userID }).remove(function (err) {
+        AnswerModel.find({ userid: userID }).remove(function (err, affected) {
             if (err) return console.error(err);
-            res.sendStatus(200);
+            res.send(200).send("Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
         });
     });
 });
@@ -110,27 +108,30 @@ router.get('/users/:userID/answers', isAdmin, function (req, res) {
 router.post("/users", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
     
-    newuser.save(function (err) { savehandler(res, err); });
+    newuser.save(function (err) { savehandler(res, err, "User created."); });
 });
 
 router.post("/users/assign", isAdmin, function (req, res) {
     var userlist = [];
 
-    if (req.body.course == undefined) return res.status(400).send('Found no course');
-    else if (req.body.users == undefined || req.body.users.length == 0) return res.status(400).send('Found no users to assign');
+    if (req.body.course == undefined) return res.status(400).json(['Found no course']);
+    else if (req.body.users == undefined || req.body.users.length == 0) return res.status(400).json(['Found no users to assign']);
 
     for (var index in req.body.users) userlist.push({ "id": req.body.users[index], "course": req.body.course });
-    
+
+    var totalaffected = 0;
+
     var promises = userlist.map(function (usobj) {
         return new Promise(function (resolve, reject) {
-            UserModel.update({ _id: usobj.id }, { $set: { status: 1, course: usobj.course } }, function (err, anresult) {
+            UserModel.update({ _id: usobj.id }, { $set: { status: 1, course: usobj.course } }, function (err, affected) {
                 if (err) return reject(err);
+                totalaffected += affected.nModified;
                 resolve();
             });
         });
     });
     
-    Promise.all(promises).then(function () { res.sendStatus(200); }).catch(console.error);
+    Promise.all(promises).then(function () { res.status(200).send("Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users.")); }).catch(console.error);
 });
 
 
@@ -141,10 +142,7 @@ router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
         
-        for (var index in result) {
-            if (result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString()) result[index].revealed = false;
-            else result[index].revealed = true;
-        }
+        for (var index in result) result[index].revealed = !(result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString());
         
         res.status(200).json(result);
     })
@@ -173,10 +171,9 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
 router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
-    ExerciseModel.find({ _id: exerciseID }).remove(function (err) {
-        if (err) return res.status(400).send("Exercise doesn't exist.");
-        
-        res.sendStatus(200);
+    ExerciseModel.find({ _id: exerciseID }).remove(function (err, affected) {
+        if (err) return res.status(400).json(["Exercise doesn't exist."]);
+        res.send(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
     });
 });
 
@@ -185,20 +182,20 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
 router.post("/exercises/post", isAdmin, function (req, res) {
     var newexercise = new ExerciseModel(req.body);
     
-    if (!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).send("No questions were sent. Please make at least one question!");
+    if (!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).json(["No questions were sent. Please make at least one question!"]);
     
     newexercise.deadline.setHours(23);
     newexercise.deadline.setMinutes(59);
     newexercise.deadline.setSeconds(59);
     
-    newexercise.save(function (err) { savehandler(res, err); });
+    newexercise.save(function (err) { savehandler(res, err, "Exercise created."); });
 });
 
 router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
     
     ExerciseModel.findOne({ _id: exerciseID }, function (err, result) {
-        if (err || !result) return res.status(400).send("Exercise doesn't exist.");
+        if (err || !result) return res.status(400).json(["Exercise doesn't exist."]);
         
         for (var field in req.body) result[field] = req.body[field];
         
@@ -206,7 +203,7 @@ router.post("/exercises/edit/:exerciseID", isAdmin, function (req, res) {
         result.deadline.setMinutes(59);
         result.deadline.setSeconds(59);
         
-        result.save(function (err) { savehandler(res, err); });
+        result.save(function (err) { savehandler(res, err, "Exercise edited."); });
     });
 });
 
@@ -253,10 +250,10 @@ router.get('/answers/:answerID', isAdmin, function (req, res) {
 router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     
-    AnswerModel.find({ _id: answerID }).remove(function (err) {
+    AnswerModel.find({ _id: answerID }).remove(function (err, affected) {
         if (err) return console.error(err);
         
-        res.sendStatus(200);
+        res.send(200).send("Succesfully deleted " + affected.nModified+ (affected.nModified == 1 ? " answer." : " answers."));
     });
 });
 
@@ -269,10 +266,11 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         if (err) return console.error(err);
         
         if (result.deadline) if (new Date().toISOString() < result.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
+        //TODO remove this? not sure if user should still be able to edit his answers after deadline
         
         for (var field in req.body) result[field] = req.body[field];
         
-        result.save(function (err) { savehandler(res, err); });
+        result.save(function (err) { savehandler(res, err, "Answer edited."); });
     });
 });
 

@@ -1,5 +1,4 @@
 ﻿var schemas = require('../mongoose/schemas');
-var bodyParser = require('body-parser');
 var express = require('express');
 var auth = require('../passport/authlevels');
 var bCrypt = require('bcrypt-nodejs');
@@ -63,8 +62,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                         }
                         else exresult[exobj.index].solved = false;
                         
-                        if (exobj.lastseen.toISOString() > exresult[exobj.index].created.toISOString()) exresult[exobj.index].seen = true;
-                        else exresult[exobj.index].seen = false;
+                        exresult[exobj.index].seen = exobj.lastseen.toISOString() > exresult[exobj.index].created.toISOString();
                         response.push(exresult[exobj.index]);
                         resolve();
                     });
@@ -230,16 +228,16 @@ router.post('/answer', isLoggedIn, function (req, res) {
             //CREATE ANSWER
             ExerciseModel.findOne({ _id: exerciseID, course: req.user.course }).lean().exec(function (err, result) {
                 if (err) return console.error(err);
-                if (!result) return res.status(400).send("Not an eligible exercise ID");
+                if (!result) return res.status(400).json(["Not an eligible exercise ID"]);
                 
                 var answer = req.body;
                 var newanswer = new AnswerModel();
                 
-                if (!answer.answers) return res.status(400).send("There were no answers given.");
+                if (!answer.answers) return res.status(400).json(["There were no answers given."]);
 
                 //User needs to be able to post after deadline.
-                //if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
+                //if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).json(["Deadline is already over."]);
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).json(["Not an eligible exercise ID"]);
                 
                 newanswer.userid = req.user._id;
                 newanswer.exerciseid = exerciseID;
@@ -250,7 +248,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 newanswer.created = new Date().toISOString();
                 for (var answerIndex in answer.answers) {
                     if (!questionExists(answer.answers[answerIndex], result.questions)) {
-                        return res.status(400).send("There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid);
+                        return res.status(400).json(["There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid]);
                     }
                     for (var questionIndex in result.questions) {
                         var an = answer.answers[answerIndex];
@@ -267,9 +265,9 @@ router.post('/answer', isLoggedIn, function (req, res) {
                 }
                 
                 //(MAYBE)TODO: check if questionids that were posted are actually unique
-                if (newanswer.answers.length != result.questions.length) return res.status(400).send("There were some questions missing.");
+                if (newanswer.answers.length != result.questions.length) return res.status(400).json(["There were some questions missing."]);
                 
-                newanswer.save(function (err) { savehandler(res, err); });
+                newanswer.save(function (err) { savehandler(res, err, "Answer created."); });
             });
         //CREATE ANSWER END
         }
@@ -277,10 +275,10 @@ router.post('/answer', isLoggedIn, function (req, res) {
             //EDIT ANSWER
             AnswerModel.findOne({ userid: req.user._id, exerciseid: exerciseID }, function (err, result) {
                 if (err) return console.error(err);
-                if (!result) return res.status(400).send("Not an eligible exercise ID");
+                if (!result) return res.status(400).json(["Not an eligible exercise ID"]);
                 
-                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).send("Deadline is already over.");
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).send("Not an eligible exercise ID");
+                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).json(["Deadline is already over."]);
+                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).json(["Not an eligible exercise ID"]);
 
                 var newanswerlist = req.body.answers;
 
@@ -293,7 +291,7 @@ router.post('/answer', isLoggedIn, function (req, res) {
                     }
                 }
 
-                result.save(function (err) { savehandler(res, err); });
+                result.save(function (err) { savehandler(res, err, "Answer edited."); });
             });
             //EDIT ANSWER END
         }
@@ -313,13 +311,13 @@ router.post("/edit", isLoggedIn, function (req, res) {
         delete newuser.status;
         delete newuser.class;
         
-        newuser.password = createhash(password);
+        newuser.password = createHash(password);
         
         delete newuser.registerdate;
         delete newuser.lastseen;
         delete newuser.__v;
         
-        result.save(function (err) { savehandler(res, err); });
+        result.save(function (err) { savehandler(res, err, "Profile edited."); });
     });
 });
 

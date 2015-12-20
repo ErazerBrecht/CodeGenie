@@ -3,7 +3,6 @@ var schemas = require("../mongoose/schemas");
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 var UserModel = schemas.UserModel;
-var savehandler = schemas.savehandler;
 
 module.exports = function (passport) {
     passport.use('login', new LocalStrategy({

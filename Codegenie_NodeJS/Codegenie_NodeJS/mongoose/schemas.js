@@ -5,10 +5,10 @@ var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
 var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
 
-var courseSchema = {
+/*var courseSchema = {
     course: { type: String, required: true, enum: courseEnum },
     motd: String
-};
+};*/
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -72,13 +72,13 @@ exports.UserModel = UserModel;
 exports.ExerciseModel = ExerciseModel;
 exports.AnswerModel = AnswerModel;
 
-exports.savehandler = function (res, err) {
+exports.savehandler = function (res, err, successMessage) {
     if (err) {
         var errmessage = [];
-        for (var field in err.errors) errmessage.push({ "message": err.errors[field].message + " Found " + err.errors[field].value + "." });
+        for (var field in err.errors) errmessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
         return res.status(400).send(errmessage);
     }
-    else return res.sendStatus(201);
+    else return res.status(201).send(successMessage);
 };
 
 exports.questionExists = function (answer, questions) {

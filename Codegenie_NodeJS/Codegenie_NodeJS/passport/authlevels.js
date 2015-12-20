@@ -2,9 +2,9 @@
 var moment = require("moment");
 var UserModel = schemas.UserModel;
 
-var errorNotLoggedIn = "Unauthorized, not logged in.";
-var errorNotAdmin = "Unauthorized, not an admin.";
-var errorNotCorrectUser = "Unauthorized, not the correct user.";
+var errorNotLoggedIn = ["Unauthorized, not logged in."];
+var errorNotAdmin = ["Unauthorized, not an admin."];
+var errorNotCorrectUser = ["Unauthorized, not the correct user."];
 
 var updatelastseen = function (user) {
     UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
@@ -13,7 +13,7 @@ var updatelastseen = function (user) {
 };
 
 exports.isLoggedIn = function (req, res, next) {
-    if (!req.isAuthenticated()) return res.status(401).send(errorNotLoggedIn);
+    if (!req.isAuthenticated()) return res.status(401).json(errorNotLoggedIn);
     return next();
 };
 
@@ -23,13 +23,13 @@ exports.isLoggedInRedirect = function (req, res, next) {
 };
 
 exports.isAdmin = function (req, res, next) {
-    if (!req.isAuthenticated()) return res.status(401).send(errorNotLoggedIn);
-    if (!req.user.admin) return res.status(401).send(errorNotAdmin);
+    if (!req.isAuthenticated()) return res.status(401).json(errorNotLoggedIn);
+    if (!req.user.admin) return res.status(401).json(errorNotAdmin);
     return next();
 };
 
 exports.isCorrectUser = function (req, res, next) {
-    if (!req.isAuthenticated()) res.status(401).send(errorNotLoggedIn);
-    if (!req.user.admin && req.user._id != req.params.userID) return res.status(401).send(errorNotCorrectUser);
+    if (!req.isAuthenticated()) res.status(401).json(errorNotLoggedIn);
+    if (!req.user.admin && req.user._id != req.params.userID) return res.status(401).json(errorNotCorrectUser);
     return next();
 };

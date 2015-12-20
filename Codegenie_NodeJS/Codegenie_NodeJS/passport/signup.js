@@ -10,7 +10,7 @@ module.exports = function (passport) {
     },
         function (req, username, password, done) {
 
-            findOrCreateUser = function () {
+            var findOrCreateUser = function () {
                 var email = req.body.email;
                 UserModel.findOne({ 'email': email }, function (err, user) {
                     if (err) {

@@ -1,5 +1,4 @@
 ﻿var express = require('express');
-var bodyParser = require('body-parser');
 var auth = require('../passport/authlevels');
 var router = express.Router();
 
@@ -8,14 +7,14 @@ var isLoggedInRedirect = auth.isLoggedInRedirect;
 module.exports = function (passport) {
     
     /* GET login page. */
-    router.get('/', function (req, res, next) {
+    router.get('/', function (req, res) {
         if (req.isAuthenticated())
             res.redirect('/home');
         else
-            res.render('login', { message: req.flash('message') });
+            res.render('login');
     });
 
-    router.get('/signout', isLoggedInRedirect, function (req, res, next) {
+    router.get('/signout', isLoggedInRedirect, function (req, res) {
         req.logout();
         res.redirect('/');
     });

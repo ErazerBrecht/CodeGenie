@@ -1,12 +1,12 @@
 ﻿<div id="messagebox" role="alert" ng-show="error != null || message != null">
     <div style="padding: 10px;">
-        <div ng-repeat="error in error" ng-show="error != null" id="inner-message" class="alert alert-danger">
+        <div ng-repeat="value in error" ng-show="error != null" id="inner-message" class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{error.message}}
+            {{value}}&nbsp;&nbsp;&nbsp;
         </div>
-        <div id="inner-message" ng-show="message != null" class="alert alert-success">
-            <button type="button" class="close" ng-click="dismissMessage()">&times;</button>
-            {{message}}
+        <div id="inner-message" ng-if="message" class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" ng-click="dismissMessage()">&times;</button>
+            {{message}}&nbsp;&nbsp;&nbsp;
         </div>
     </div>
 </div>

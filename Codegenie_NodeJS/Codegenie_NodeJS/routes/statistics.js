@@ -1,5 +1,4 @@
 ﻿var schemas = require('../mongoose/schemas');
-var bodyParser = require('body-parser');
 var express = require('express');
 var mongoose = require('mongoose');
 var auth = require('../passport/authlevels');
@@ -9,8 +8,6 @@ var moment = require('moment');
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
-
-var savehandler = schemas.savehandler;
 
 var isLoggedIn = auth.isLoggedIn;
 
@@ -159,7 +156,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                         "year": { $year: "$created" },
                         "week": { $week: "$created" },
                         "revised": { $cond: [{ $eq: ['$revised', true] }, 1, 0] },
-                        "unrevised": { $cond: [{ $eq: ['$revised', false] }, 1, 0] },
+                        "unrevised": { $cond: [{ $eq: ['$revised', false] }, 1, 0] }
                     },
                     "revised": { $push: "$revised" }
                 }
@@ -334,7 +331,7 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
 function countcourses(arr) {
     var a = [], b = [];
     
-    for (i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
         var obj = arr[i].course;
         if (a.indexOf(obj) == -1) {
             a.push(obj);
@@ -349,7 +346,7 @@ function countcourses(arr) {
 function countclasses(arr) {
     var a = [], b = [];
     
-    for (i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
         var obj = arr[i].class;
         if (a.indexOf(obj) == -1) {
             a.push(obj);

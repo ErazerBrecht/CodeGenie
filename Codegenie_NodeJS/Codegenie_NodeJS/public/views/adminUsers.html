@@ -1,3 +1,16 @@
+<div id="messagebox" role="alert" ng-show="error != null || message != null">
+    <div style="padding: 10px;">
+        <div ng-repeat="value in error" ng-show="error != null" id="inner-message" class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{value}}&nbsp;&nbsp;&nbsp;
+        </div>
+        <div id="inner-message" ng-if="message" class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" ng-click="dismissMessage()">&times;</button>
+            {{message}}&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+
 <div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -8,14 +21,6 @@
                 <i class="fa fa-users"></i> Users
             </li>
         </ol>
-        <div class="alert alert-danger fade in" ng-show="error != null">
-            <a href="" class="close" data-dismiss="alert">&times;</a>
-            <strong>Error!</strong> <span style="margin-left: 50px">{{error}}</span>
-        </div>
-        <div class="alert alert-success fade in" ng-show="message != null">
-            <a href="" class="close" data-dismiss="alert">&times;</a>
-            <strong>Success!</strong> <span style="margin-left: 50px">{{message}}</span>
-        </div>
     </div>
 </div>
 
