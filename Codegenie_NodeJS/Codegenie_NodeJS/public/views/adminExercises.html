@@ -2,11 +2,11 @@
     <div style="padding: 10px;">
         <div ng-repeat="error in error" ng-show="error != null" id="inner-message" class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{error.message}}
+            {{error.message}}&nbsp;&nbsp;
         </div>
         <div id="inner-message" ng-show="message != null" class="alert alert-success">
             <button type="button" class="close" ng-click="dismissMessage()">&times;</button>
-            {{message}}
+            {{message}}&nbsp;&nbsp;
         </div>
     </div>
 </div>
