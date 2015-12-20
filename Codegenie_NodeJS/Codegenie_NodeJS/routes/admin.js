@@ -37,7 +37,7 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
         
         AnswerModel.find({ userid: userID }).remove(function (err, affected) {
             if (err) return console.error(err);
-            res.send(200).send("Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
+            res.status(200).send("Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
         });
     });
 });
@@ -173,7 +173,7 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     
     ExerciseModel.find({ _id: exerciseID }).remove(function (err, affected) {
         if (err) return res.status(400).json(["Exercise doesn't exist."]);
-        res.send(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
+        res.status(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
     });
 });
 
@@ -253,7 +253,7 @@ router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
     AnswerModel.find({ _id: answerID }).remove(function (err, affected) {
         if (err) return console.error(err);
         
-        res.send(200).send("Succesfully deleted " + affected.nModified+ (affected.nModified == 1 ? " answer." : " answers."));
+        res.status(200).send("Succesfully deleted " + affected.nModified+ (affected.nModified == 1 ? " answer." : " answers."));
     });
 });
 
