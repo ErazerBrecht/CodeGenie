@@ -53,7 +53,8 @@
                                     <div ng-switch-when="MultipleChoice">
                                         <h4>{{a.questiontitle}}</h4>
                                         <div ng-repeat="choice in a.choices" class="radio">
-                                            <label><input type="radio" ng-model="answer.result" ng-value="a.result" />{{choice.text}}</label>
+                                            <label ng-if="a.result == choice.text" style="color:green">{{choice.text}}</label>
+                                            <label ng-if="a.result != choice.text">{{choice.text}}</label>
                                         </div>
                                     </div>
                                 </div>
