@@ -66,7 +66,8 @@
                 <div id="collapse{{$index}}" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="col-xs-12">
-                            TODO (Check lastseen, ...)
+                            <span style="width: 100px; display: inline-block">E-mail:</span> {{user.email}}</br>
+                            <span style="width: 100px; display: inline-block">Last seen:</span> {{user.lastseen | date:'dd-MM-yyyy'}}
                         </div>
                         <div class="col-xs-6 col-lg-2 top-10">
                             <button type="button" class="btn btn-danger btn-block" ng-click="remove(user)">DELETE USER</button>

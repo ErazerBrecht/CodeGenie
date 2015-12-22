@@ -15,6 +15,10 @@
         function getData() {
             restData.getAllUsers.query(function (data) {
                 $scope.users = data;
+                angular.forEach($scope.users, function(value, key)
+                {
+                    value.lastseen = new Date(value.lastseen);
+                });
             });
         };
 
