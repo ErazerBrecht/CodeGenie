@@ -24,19 +24,30 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row top-20">
     <div class="col-lg-12">
-        <p class="bg-danger">
-            TODO: Filtering!!! </br>
-            TODO: Autoselect (Select all users from OO)
-        </p>
+        <form class="form-inline">
+            <div class="form-group">
+                <label>Show:</label>
+                <select class="form-control"  ng-model="selectedCourse" ng-init="selectedCourse = 'All'">
+                    <option>All</option>
+                    <option>Programming Principles</option>
+                    <option>OO</option>
+                    <option>Mobile-dev</option>
+                    <option>SO4</option>
+                </select>
+             </div>
+            <button class="btn btn-primary hidden-xs pull-right" ng-click="selectAll()">Select All</button>
+            <button class="btn btn-primary visible-xs col-xs-12" ng-click="selectAll()">Select All</button>
+       </form>
+
     </div>
 </div>
 
-<div class="row">
+<div class="row top-20">
     <div class="col-lg-12">
         <div class="panel-group" id="userGroup">
-            <div class="panel panel-default" ng-repeat="user in users | orderBy: '-registerdate'">
+            <div class="panel panel-default" ng-repeat="user in (filteredUsers = (users | orderBy: '-registerdate' | filter: courseFilter))">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <input type="checkbox" ng-model="user.checkbox" ng-click="checkboxUser(user)"/>
@@ -71,14 +82,14 @@
     <form id="assignForm" class="top-20" ng-submit="processForm()">
             <label class="col-xs-12 col-lg-2 top-10">Move selected users to:</label>
             <div class="col-xs-12 col-lg-6">
-            <select class="form-control top-10" name="course" ng-model="assign.course" required="required">
-                <option value="" disabled selected hidden>Select the course!</option>
-                <option>Programming Principles</option>
-                <option>OO</option>
-                <option>Mobile-dev</option>
-                <option>SO4</option>
-            </select>
-                </div>
+                <select class="form-control top-10" name="course" ng-model="assign.course" required="required">
+                    <option value="" disabled selected hidden>Select the course!</option>
+                    <option>Programming Principles</option>
+                    <option>OO</option>
+                    <option>Mobile-dev</option>
+                    <option>SO4</option>
+                </select>
+            </div>
             <div class="col-xs-6 col-lg-2 top-10">
                 <button type="submit" class="btn btn-primary btn-block">Save</button>
             </div>
@@ -92,5 +103,7 @@
 <div class="row top-30">
     <div class="col-lg-12">
         {{assign}}
+        <br/><br/>
+        {{filteredUsers}}
     </div>
 </div>

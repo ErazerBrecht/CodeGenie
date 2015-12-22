@@ -34,6 +34,33 @@
             }
         };
 
+        $scope.selectAll = function(user)
+        {
+            angular.forEach($scope.filteredUsers, function(value, key)
+            {
+                if(!value.checkbox) {
+                    value.checkbox = true;
+                    $scope.assign.users.push(value._id);
+                }
+            });
+        };
+
+        $scope.courseFilter = function (data) {
+            if (data.course === $scope.selectedCourse) {
+                return true;
+            } else if ($scope.selectedCourse === 'All') {
+                return true;
+            } else {
+                data.checkbox = false;
+                var index = $scope.assign.users.indexOf(data._id);
+                if (index > -1)
+                {
+                    $scope.assign.users.splice(index, 1);
+                }
+                return false;
+            }
+        };
+
         $scope.processForm = function () {
             //Clear error and message
             $scope.error = null;
