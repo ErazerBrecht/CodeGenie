@@ -63,7 +63,7 @@ body {
 .top-nav .dropdown-messages,
 .top-nav .dropdown-tasks,
 .top-nav .dropdown-alerts {
-    width: 310px;
+    width: 400px;
     min-width: 0;
 }
 
