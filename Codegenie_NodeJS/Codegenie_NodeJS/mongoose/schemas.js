@@ -24,9 +24,9 @@ var userSchema = mongoose.Schema({
 
 var userSeenSchema = mongoose.Schema({
     userid: { type: mongoose.Schema.ObjectId, required: true },
-    seenexercise: [{
+    seenexercises: [{
         exerciseid: { type: mongoose.Schema.ObjectId, required: true },
-        daeseen: { type: Date, default: new Date().toISOString() }
+        dateseen: { type: Date, default: new Date().toISOString() }
     }]
 });
 

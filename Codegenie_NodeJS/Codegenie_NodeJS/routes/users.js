@@ -7,6 +7,7 @@ var moment = require('moment');
 var router = express.Router();
 
 var UserModel = schemas.UserModel;
+var UserSeenModel = schemas.UserSeenModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
@@ -132,6 +133,38 @@ router.get('/exercises/:exerciseID/answers', isLoggedIn, function (req, res) {
     AnswerModel.findOne({ exerciseid: exerciseID, userid: req.user._id }).lean().exec(function (err, result) {
         if (err) return console.error(err);
         
+        res.status(200).json(result);
+    });
+});
+
+//TODO: Change url of this REST Endpoint
+router.get('/seen/', isLoggedIn, function (req, res) {
+    console.log(req.user._id);
+
+    UserSeenModel.findOne({ userid: req.user._id}).lean().exec(function (err, result) {
+        if (err) return console.error(err);
+
+        res.status(200).json(result);
+    });
+});
+
+router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
+    console.log(req.user._id);
+
+    UserSeenModel.findOne({ userid: req.user._id}).lean().exec(function (err, result) {
+        if (err) return console.error(err);
+        if(!result) {
+            //CREATE
+            var newUserSeen = new UserSeenModel();
+            newUserSeen.userid = req.user._id;
+            newUserSeen.seenexercises = [];
+            var newSeenExercise = {};
+            newSeenExercise.exerciseid = req.params.exerciseID;
+            newUserSeen.seenexercises.push(newSeenExercise);
+        }
+        else{
+            //EDIT
+        }
         res.status(200).json(result);
     });
 });
