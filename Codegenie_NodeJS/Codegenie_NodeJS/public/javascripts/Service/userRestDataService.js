@@ -8,7 +8,8 @@
             getExercises: $resource("/users/exercises"),
             getAnswer: $resource("users/exercises/:exerciseid/answers", { exerciseid: '@exerciseid' }),
             postAnswer: $resource("/users/answer"),
-            getStatisticsAnswers: $resource("/statistics/answers")
+            getStatisticsAnswers: $resource("/statistics/answers"),
+            getStatsticsAnswersGraph: $resource("statistics/graph"),
         };
     };
     
