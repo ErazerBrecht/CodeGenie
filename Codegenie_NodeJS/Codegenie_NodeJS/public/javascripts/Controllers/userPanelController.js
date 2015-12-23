@@ -7,6 +7,11 @@
         userRestData.getUser.get(function (data) {
             $scope.user = data;
         });
+
+        userRestData.getNewExercises.get(function (data)
+        {
+            $scope.newExercises = data;
+        });
     };
     
     app.controller("userPanelController", userPanelController);
