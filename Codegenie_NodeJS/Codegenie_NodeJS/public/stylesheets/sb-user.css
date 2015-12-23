@@ -60,6 +60,14 @@ body {
     background-color: rgba(0,0,0,.15) !important;
 }
 
+.top-nav .dropdown-messages,
+.top-nav .dropdown-tasks,
+.top-nav .dropdown-alerts {
+    width: 310px;
+    min-width: 0;
+}
+
+
 /*Sidebar*/
 
 .sidebar .sidebar-nav.navbar-collapse {
