@@ -139,8 +139,6 @@ router.get('/exercises/:exerciseID/answers', isLoggedIn, function (req, res) {
 
 //TODO: Change url of this REST Endpoint
 router.get('/seen/', isLoggedIn, function (req, res) {
-    console.log(req.user._id);
-
     UserSeenModel.findOne({ userid: req.user._id}).lean().exec(function (err, result) {
         if (err) return console.error(err);
 
@@ -149,7 +147,7 @@ router.get('/seen/', isLoggedIn, function (req, res) {
 });
 
 router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
-    console.log(req.user._id);
+    console.log("Updating seen exercises");
 
     UserSeenModel.findOne({ userid: req.user._id}).lean().exec(function (err, result) {
         if (err) return console.error(err);
@@ -161,9 +159,25 @@ router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
             var newSeenExercise = {};
             newSeenExercise.exerciseid = req.params.exerciseID;
             newUserSeen.seenexercises.push(newSeenExercise);
+            newUserSeen.save(function (err) { savehandler(res, err); });
         }
         else{
-            //EDIT
+            //EDITING => Adding new answer
+            UserSeenModel.findOne({ userid: req.user._id}, function (err, r) {
+                if (err) return console.error(err);
+
+                //TODO, Matthew!
+                //If the exercise is already added, update dateseen
+                //And don't re add the exercise!
+
+                var newSeenExercise = {};
+                newSeenExercise.exerciseid = req.params.exerciseID;
+                r.seenexercises.push(newSeenExercise);
+
+                r.save(function (err) {
+                    savehandler(res, err);
+                });
+            });
         }
         res.status(200).json(result);
     });
