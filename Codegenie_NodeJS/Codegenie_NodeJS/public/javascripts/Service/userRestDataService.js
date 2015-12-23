@@ -10,6 +10,7 @@
             postAnswer: $resource("/users/answer"),
             getStatisticsAnswers: $resource("/statistics/answers"),
             getStatsticsAnswersGraph: $resource("statistics/graph"),
+            addLastSeen: $resource("users/seen/:exerciseid", { exerciseid: '@exerciseid'})
         };
     };
     
