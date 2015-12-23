@@ -288,12 +288,16 @@ router.get('/answers', isLoggedIn, function (req, res) {
     
     AnswerModel.count(function (err, c) {
         response.count = c;
-        
-        AnswerModel.find({}, { course: 1 }).lean().exec(function (err, result) {
-            var ar = countcourses(result);
-            for (var index in ar[0]) response.courses.push({ course: ar[0][index], count: ar[1][index] });
-            
-            res.status(200).json(response);
+
+        AnswerModel.find({ userid: req.user._id }).lean().exec(function (err, myAnswers) {
+            response.myself = myAnswers.length;
+
+            AnswerModel.find({}, {course: 1}).lean().exec(function (err, result) {
+                var ar = countcourses(result);
+                for (var index in ar[0]) response.courses.push({course: ar[0][index], count: ar[1][index]});
+
+                res.status(200).json(response);
+            });
         });
     });
 });
