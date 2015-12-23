@@ -11,14 +11,12 @@
 </div>
 
 <div class="row" ng-show="selected == undefined || selected._id != undefined">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="answer in answers | orderBy: '-created'" ng-click="select($index)">
-        <div class="tile" ng-drag="true" ng-drag-data="answer" ng-class="getTileClass($index)">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="answer in answers | unique: 'exerciseid'" ng-click="select($index)">
+        <div class="tile blue" ng-drag="true" ng-drag-data="answer">
             <div class="triangle" ng-if="answer.extra"></div>
             <div class="title">
-                <h3>{{answer.title}} {{answer.name}}</h3>
+                <h3>{{answer.title}}</h3>
             </div>
-            Created:
-            <time am-time-ago="answer.created"></time>
         </div>
     </div>
 </div>

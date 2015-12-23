@@ -1,8 +1,25 @@
 ﻿(function () {
     
     var app = angular.module("adminApp");
-    
-    
+
+    //Filter for checking if exercise is unique in the answer panel. Didn't want to use an other dependentie
+    app.filter('unique', function() {
+        return function(collection, keyname) {
+            var output = [],
+                keys = [];
+
+            angular.forEach(collection, function(item) {
+                var key = item[keyname];
+                if(keys.indexOf(key) === -1) {
+                    keys.push(key);
+                    output.push(item);
+                }
+            });
+            return output;
+        };
+    });
+
+
     var answersController = function ($scope, restData, $routeParams, $http) {
         restData.getAllAnswers.query(function (data) {
             $scope.answers = data;
