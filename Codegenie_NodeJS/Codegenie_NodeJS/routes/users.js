@@ -84,6 +84,23 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     switch (exerciseID) {
+        case 'new':
+            UserSeenModel.findOne({ userid: req.user._id }, function (err, seenresult) {
+                if (err) return console.error(err);
+
+                var exerciseIDs = [];
+
+                for (var index in seenresult.seenexercises) exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
+
+                ExerciseModel.find({ _id: { $nin: exerciseIDs }, course: req.user.course }, function (err, exresult) {
+                    if (err) return console.error(err);
+                    var send = {}
+                    send.exercises = exresult;
+                    send.count = exresult.length;
+                    res.status(200).json(send);
+                })
+            });
+            break;
         case 'solved':
             AnswerModel.find({ userid: req.user._id }, { exerciseid: 1 }, function (err, anresult) {
                 if (err) return console.error(err);
