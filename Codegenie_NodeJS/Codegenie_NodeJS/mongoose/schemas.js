@@ -22,6 +22,14 @@ var userSchema = mongoose.Schema({
     lastseen: { type: Date, default: new Date().toISOString() }
 });
 
+var userSeenSchema = mongoose.Schema({
+    userid: { type: mongoose.Schema.ObjectId, required: true },
+    seenexercise: [{
+        exerciseid: { type: mongoose.Schema.ObjectId, required: true },
+        daeseen: { type: Date, default: new Date().toISOString() }
+    }]
+});
+
 var exerciseSchema = mongoose.Schema({
     title: { type: String, required: true },
     classification: { type: String, required: true },
@@ -65,10 +73,12 @@ var answerSchema = mongoose.Schema({
 });
 
 var UserModel = mongoose.model('User', userSchema);
+var UserSeenModel = mongoose.model('UserSeen', userSeenSchema);
 var ExerciseModel = mongoose.model('Exercise', exerciseSchema);
 var AnswerModel = mongoose.model('Answer', answerSchema);
 
 exports.UserModel = UserModel;
+exports.UserSeenModel = UserSeenModel;
 exports.ExerciseModel = ExerciseModel;
 exports.AnswerModel = AnswerModel;
 
