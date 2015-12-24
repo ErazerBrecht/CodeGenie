@@ -11,7 +11,9 @@
             removedUserById: $resource('/admin/users/:userid/delete', { userid: '@userid' }),
             getExercises : $resource("/admin/exercises"),
             getNewAnswers: $resource("/statistics/answers/unrevised"),
-            getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'})
+            getAnswersStatistics: $resource("/statistics/answers"),
+            getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'}),
+            getStatisticsAnswersGraph: $resource("statistics/graph")
             //postExercise: $resource("/admin/exercises/post"),
             //postUpdateExercise: $resource("/admin/exercises/edit/:id", {id: '@id'})
         };             
