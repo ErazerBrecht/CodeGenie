@@ -32,6 +32,7 @@ body {
 /*Padding for the glyphicons*/
 .fa {
     padding-right: 5px;
+    line-height: inherit;
 }
 
 /*Top - navigation*/
