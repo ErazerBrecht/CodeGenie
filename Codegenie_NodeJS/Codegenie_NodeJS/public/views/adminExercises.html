@@ -58,7 +58,7 @@
 </div>
 
 <div class="row" ng-show="selected == undefined || selected._id != undefined">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises" ng-hide="(filterCourse != 'Every course' && exercise.course != filterCourse) || (showExpired == false && exercise.deadline < today)" ng-click="select($index)">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy : '-created'" ng-hide="(filterCourse != 'Every course' && exercise.course != filterCourse) || (showExpired == false && exercise.deadline < today)" ng-click="select($index)">
         <div class="tile" ng-drag="true" ng-drag-data="exercise" ng-class="getTileClass($index)">
             <div class="triangle" ng-if="exercise.extra"></div>
             <div class="title">
