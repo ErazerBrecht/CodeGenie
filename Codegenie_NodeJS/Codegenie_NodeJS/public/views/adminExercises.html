@@ -121,15 +121,15 @@
 
                     <tr>
                         <td colspan="3">
-                            <input type="text" class="form-control" placeholder="Title" ng-model="question.questiontitle"/>
+                            <input type="text" class="form-control" placeholder="Title" required="required" ng-model="question.questiontitle"/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input class="form-control" ng-model="question.weight" placeholder="Weight" type="number"/>
+                            <input class="form-control" ng-model="question.weight" placeholder="Weight" required="required" type="number" min="0"/>
                         </td>
                         <td>
-                            <select class="form-control" ng-model="question.type" ng-change="typeChanged($index)">
+                            <select class="form-control" ng-model="question.type" required="required" ng-change="typeChanged($index)">
                                 <option value="" disabled selected hidden>Select the type</option>
                                 <option value="Checkbox">Checkbox</option>
                                 <option value="Question">Question</option>
