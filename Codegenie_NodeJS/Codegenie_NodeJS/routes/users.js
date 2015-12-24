@@ -90,7 +90,8 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 
                 var exerciseIDs = [];
 
-                for (var index in seenresult.seenexercises) exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
+                if(seenresult)
+                    for (var index in seenresult.seenexercises) exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
 
                 ExerciseModel.find({ _id: { $nin: exerciseIDs }, course: req.user.course }, function (err, exresult) {
                     if (err) return console.error(err);
