@@ -303,7 +303,9 @@ router.post("/edit", isLoggedIn, function (req, res) {
         if (err) return console.error(err);
         
         var newuser = new UserModel(result);
-        
+
+        if (isValidPassword(newuser, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
+
         for (var field in req.body) newuser[field] = req.body[field];
         
         delete newuser._id;
@@ -323,6 +325,10 @@ router.post("/edit", isLoggedIn, function (req, res) {
 
 var createHash = function (password) {
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+};
+
+var isValidPassword = function (user, password) {
+    return bCrypt.compareSync(password, user.password);
 };
 
 module.exports = router;
