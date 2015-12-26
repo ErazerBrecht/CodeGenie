@@ -102,16 +102,17 @@
 
         $scope.remove = function(user)
         {
-            //THIS REMOVES EVERY USER!?
-            //It sends the id twice maybe this is the problem
-            restData.removedUserById.get({ userid: user._id }, function (data) {
-                //RESPONSE!!!
-            });
-
             //Clear error and message
-            /*$scope.error = null;
+            $scope.error = null;
             $scope.message = null;
 
+            restData.removedUserById.get({ userid: user._id }, function (data) {
+                //TODO: RESPONSE!!!
+                //Issue #30
+                //Arne Schoonvliet
+            });
+
+            /*
             $http({
                 method  : 'GET',
                 url     : '/admin/users/'+ user._id +'/delete/',
