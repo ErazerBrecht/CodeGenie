@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var exercisesController = function ($scope, $http, restData, $anchorScroll, $routeParams) {
+    var adminExercisesController = function ($scope, $http, restData, $anchorScroll, $routeParams) {
         loadData();
 
         function loadData() {
@@ -185,6 +185,6 @@
         };
     };
 
-    app.controller("exercisesController", exercisesController);
+    app.controller("adminExercisesController", adminExercisesController);
 })
 ();

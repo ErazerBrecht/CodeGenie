@@ -47,12 +47,12 @@ $(function () {
             // route to watch and edit all exercises + add exercises
             .when('/exercises', {
                 templateUrl: 'views/adminExercises.html',
-                controller: 'exercisesController'
+                controller: 'adminExercisesController'
             })
             
             .when('/answers', {
                 templateUrl: 'views/adminAnswers.html',
-                controller: 'answersController'
+                controller: 'adminAnswersController'
             })
 
            .when('/profile', {

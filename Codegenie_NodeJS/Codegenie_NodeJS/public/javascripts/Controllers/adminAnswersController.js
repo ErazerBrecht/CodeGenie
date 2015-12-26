@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var answersController = function ($scope, restData, $routeParams, $http) {
+    var adminAnswersController = function ($scope, restData, $routeParams, $http) {
         restData.getExercises.query(function (data) {
             $scope.exercises = data;
 
@@ -51,5 +51,5 @@
 
 
     }
-    app.controller("answersController", answersController);
+    app.controller("adminAnswersController", adminAnswersController);
 }());
