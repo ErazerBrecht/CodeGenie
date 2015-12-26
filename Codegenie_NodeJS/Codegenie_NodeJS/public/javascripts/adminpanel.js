@@ -57,7 +57,7 @@ $(function () {
 
            .when('/profile', {
                 templateUrl: 'views/adminProfileEdit.html',
-                controller: 'editAdminProfileController'
+                controller: 'adminProfileEditController'
             })
 			
             .otherwise({ redirectTo: "/" });

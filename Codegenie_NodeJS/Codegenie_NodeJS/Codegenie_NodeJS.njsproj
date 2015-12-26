@@ -44,7 +44,7 @@
     <Compile Include="passport\signup.js" />
     <Compile Include="public\javascripts\adminpanel.js" />
     <Compile Include="public\javascripts\Controllers\adminUsersController.js" />
-    <Compile Include="public\javascripts\Controllers\editUserProfileController.js" />
+    <Compile Include="public\javascripts\Controllers\userProfileEditController.js" />
     <Compile Include="public\javascripts\Controllers\adminExercisesController.js" />
     <Compile Include="public\javascripts\Controllers\adminPanelController.js" />
     <Compile Include="public\javascripts\Beautify\beautify.js" />
