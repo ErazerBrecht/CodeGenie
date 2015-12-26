@@ -39,7 +39,7 @@ $(function () {
             })
 
             .when('/profile', {
-                templateUrl: 'views/profile.html',
+                templateUrl: 'views/userProfileEdit.html',
                 controller: 'editUserProfileController'
             })
 

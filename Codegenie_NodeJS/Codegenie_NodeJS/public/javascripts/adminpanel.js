@@ -56,7 +56,7 @@ $(function () {
             })
 
            .when('/profile', {
-                templateUrl: 'views/profile.html',
+                templateUrl: 'views/adminProfileEdit.html',
                 controller: 'editAdminProfileController'
             })
 			
