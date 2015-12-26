@@ -301,25 +301,29 @@ router.post('/answer', isLoggedIn, function (req, res) {
 router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
-        
-        var newuser = new UserModel(result);
 
-        if (isValidPassword(newuser, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
+        if (!isValidPassword(result, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
 
-        for (var field in req.body) newuser[field] = req.body[field];
+        if(req.body.password == '') delete req.body.password;
+
+        for (var field in req.body) result[field] = req.body[field];
         
-        delete newuser._id;
-        delete newuser.admin; //prevent user from editing random/protected information, everything else is allowed.
-        delete newuser.status;
-        delete newuser.class;
+        delete result._id;
+        delete result.admin; //prevent user from editing random/protected information, everything else is allowed.
+        delete result.status;
+        delete result.class;
+        delete result.course;
+
+        if(req.body.password != undefined)  //otherwise we will hash or hashed password...
+            result.password = createHash(result.password);
         
-        newuser.password = createHash(password);
-        
-        delete newuser.registerdate;
-        delete newuser.lastseen;
-        delete newuser.__v;
-        
-        result.save(function (err) { savehandler(res, err, "Profile edited."); });
+        delete result.registerdate;
+        delete result.lastseen;
+        delete result.__v;
+
+        console.log(result);
+
+        result.save(function (err) {savehandler(res, err, "Profile edited."); });
     });
 });
 

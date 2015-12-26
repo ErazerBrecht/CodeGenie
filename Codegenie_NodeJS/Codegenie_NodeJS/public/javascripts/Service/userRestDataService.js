@@ -5,6 +5,7 @@
             
             //userPanel services
             getUser: $resource("/users/mine"),
+            editUser: $resource("/users/edit"),
             getExercises: $resource("/users/exercises"),
             getAnswer: $resource("users/exercises/:exerciseid/answers", { exerciseid: '@exerciseid' }),
             postAnswer: $resource("/users/answer"),

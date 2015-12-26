@@ -6,20 +6,20 @@
     </div>
 </div>
 
-<form action="/todo" method="POST" class="form-signin top-30">
+<form name="profilePassword" ng-submit="editProfile()" class="form-signin top-30">
     <ol class="breadcrumb">
         <li class="active">
             <i class="fa fa-user-secret"></i> Edit Password
         </li>
     </ol>
     <div class="form-group">
-        <input type="password" name="password" placeholder="Old Password" required="required" class="form-control nomargin"/>
+        <input type="password" name="password" ng-model="user.oldpassword" placeholder="Current Password" required="required" class="form-control nomargin"/>
     </div>
     <div class="form-group">
-        <input type="password" name="newPassword0" placeholder="New Password" required="required" class="form-control nomargin"/>
+        <input type="password" name="newPassword" ng-model="user.password" placeholder="New Password" class="form-control nomargin"/>
     </div>
     <div class="form-group">
-        <input type="password" name="newPassword1" placeholder="Confirm New Password" required="required" class="form-control nomargin"/>
+        <input type="password" name="newPasswordConfirm" ng-model="newPasswordConfirm" placeholder="Confirm New Password" wj-validation-error="(user.password != newPasswordConfirm && user.password != '') ? 'Passwords don\'t match' : ''" class="form-control nomargin"/>
     </div>
     <ol class="breadcrumb">
         <li class="active">
@@ -27,12 +27,14 @@
         </li>
     </ol>
     <div class="form-group">
-        <input type="email" name="email" placeholder="Email" ng-model="email" required="required" class="form-control"/>
+        <input type="email" name="email" placeholder="Email" ng-model="user.email" required="required" class="form-control"/>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-lg btn-primary btn-block">Save</button>
     </div>
     <div class="form-group">
-        <button type="button" class="btn btn-lg btn-primary btn-block">Cancel</button>
+        <button type="button" class="btn btn-lg btn-primary btn-block">Cancel (TODO)</button>
     </div>
 </form>
+
+{{user}}
