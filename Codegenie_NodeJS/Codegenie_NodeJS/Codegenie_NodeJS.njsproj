@@ -50,7 +50,7 @@
     <Compile Include="public\javascripts\Beautify\beautify.js" />
     <Compile Include="public\javascripts\Bootstrap\bootstrap.js" />
     <Compile Include="public\javascripts\Bootstrap\bootstrap.min.js" />
-    <Compile Include="public\javascripts\Controllers\answersController.js" />
+    <Compile Include="public\javascripts\Controllers\adminAnswersController.js" />
     <Compile Include="public\javascripts\Controllers\adminDashBoardController.js" />
     <Compile Include="public\javascripts\Controllers\userDashboardController.js" />
     <Compile Include="public\javascripts\Controllers\userExercisesController.js" />
