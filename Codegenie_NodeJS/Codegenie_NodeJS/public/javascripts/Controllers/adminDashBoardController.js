@@ -11,7 +11,17 @@
         restData.getNewAnswers.get(function (data)
         {
             $scope.new = data.count;
+            addUserNames();
         });
+
+
+        function addUserNames() {
+            angular.forEach($scope.allAnswers, function (answer) {
+                restData.getUserById.get({userid: answer.userid}, function (data) {
+                    answer.name = data.name;
+                });
+            });
+        };
 
         restData.getAnswersStatistics.get(function (data)
         {
