@@ -8,7 +8,7 @@
 
         });
 
-        $scope.addUserNamesToSelected = function () {
+        addUserNamesToSelected = function () {
             angular.forEach($scope.selected, function (answer) {
                 restData.getUserById.get({userid: answer.userid}, function (data) {
                     answer.name = data.name;
@@ -18,38 +18,38 @@
         };
 
         $scope.select = function (answer) {
-            restData.getAnswersByExerciseid.query({id: answer._id}, function(data){
+            restData.getAnswersByExerciseid.query({id: answer._id}, function (data) {
                 $scope.selected = data;
-                $scope.addUserNamesToSelected();
+                addUserNamesToSelected();
             });
         };
 
-        /*$scope.processForm = function () {
-         //Clear error and message
-         $scope.error = null;
-         $scope.message = null;
 
-         $scope.selected.exerciseid = $scope.selected._id;
-
-         $http({
-         method  : 'POST',
-         url     : '/users/answer/',
-         data    : $scope.selected,
-         responseType: 'text'
-         }).then(
-         //SUCCESS
-         function (response) {
-         $scope.message = response.data;
-         },
-         //ERROR
-         function (error) {
-         $scope.error = error.data;
-         }
-         );
-
-         };*/
-
-
+        $scope.processForm = function (answer) {
+            //Clear error and message
+            $scope.error = null;
+            $scope.message = null;
+            $http({
+                method: 'POST',
+                url: '/admin/answers/edit/' + answer._id,
+                data: answer,
+                responseType: 'text'
+            }).then(
+                //SUCCESS
+                function (response) {
+                    $scope.message = response.data;
+                },
+                //ERROR
+                function (error) {
+                    $scope.error = error.data;
+                }
+            );
+            var index = $scope.selected.indexOf(answer);
+            if (index > -1)
+            {
+                $scope.selected.splice(index, 1);
+            }
+        }
     }
     app.controller("adminAnswersController", adminAnswersController);
 }());

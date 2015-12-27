@@ -264,13 +264,18 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     
     AnswerModel.findOne({ _id: answerID }, function (err, result) {
         if (err) return console.error(err);
-        
-        if (result.deadline) if (new Date().toISOString() < result.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
-        //TODO remove this? not sure if user should still be able to edit his answers after deadline
-        
-        for (var field in req.body) result[field] = req.body[field];
-        
-        result.save(function (err) { savehandler(res, err, "Answer edited."); });
+
+        console.log(result);
+        ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
+            if(exError) return console.error(exError);
+
+            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
+            //TODO remove this? not sure if user should still be able to edit his answers after deadline
+
+            for (var field in req.body) result[field] = req.body[field];
+
+            result.save(function (err) { savehandler(res, err, "Answer edited."); });
+        });
     });
 });
 
