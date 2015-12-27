@@ -28,8 +28,8 @@
             $scope.message = null;
         };
 
-        $scope.select = function (id) {
-            $scope.selected = $scope.exercises[id];
+        $scope.select = function (exercise) {
+            $scope.selected = exercise;
             //$scope.selected.deadline = new Date($scope.selected.deadline);
             $scope.error = null;
             $scope.message = null;
@@ -172,10 +172,8 @@
             );
         };
 
-        $scope.getTileClass = function (id) {
-            var tempExercise = $scope.exercises[id];
-
-            if (tempExercise.deadline < new Date()) {
+        $scope.getTileClass = function (exercise) {
+            if (exercise.deadline < new Date()) {
                 return "red";
             }
 
