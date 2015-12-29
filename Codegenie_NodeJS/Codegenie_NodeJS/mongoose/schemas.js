@@ -80,7 +80,7 @@ exports.savehandler = function (res, err, successMessage) {
     }
     else {
         var succesResponse =  {};
-        succesResponse.message = successMessage;
+        succesResponse.data = successMessage;
         return res.status(201).send(succesResponse);
     }
 };
