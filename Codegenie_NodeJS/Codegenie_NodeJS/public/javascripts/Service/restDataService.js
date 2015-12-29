@@ -5,6 +5,7 @@
             
             //adminPanel
             getUser: $resource("/users/mine"),
+            editUser: $resource("/users/edit"),
             getAllUsers: $resource("/users"),
             getAllAnswers: $resource("/admin/answers"),
             getUserById: $resource('/admin/users/:userid', { userid: '@userid' }),
