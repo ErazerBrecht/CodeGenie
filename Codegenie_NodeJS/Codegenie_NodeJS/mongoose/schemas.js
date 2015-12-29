@@ -25,6 +25,7 @@ var userSchema = mongoose.Schema({
 var userSeenSchema = mongoose.Schema({
     userid: { type: mongoose.Schema.ObjectId, required: true },
     seenexercises: [{
+        _id: false,
         exerciseid: { type: mongoose.Schema.ObjectId, required: true },
         dateseen: { type: Date, default: new Date().toISOString() }
     }]
@@ -44,6 +45,7 @@ var exerciseSchema = mongoose.Schema({
             extra: { type: Boolean, default: false },
             type: { type: String, required: true, enum: typeEnum },
             choices: [{
+                    _id: false,
                     text: { type: String, required: true },
                     correct: { type: Boolean, default: false }
                 }]
