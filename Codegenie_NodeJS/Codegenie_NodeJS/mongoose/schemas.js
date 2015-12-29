@@ -78,7 +78,11 @@ exports.savehandler = function (res, err, successMessage) {
         for (var field in err.errors) errmessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
         return res.status(400).send(errmessage);
     }
-    else return res.status(201).send(successMessage);
+    else {
+        var succesResponse =  {};
+        succesResponse.message = successMessage;
+        return res.status(201).send(succesResponse);
+    }
 };
 
 exports.questionExists = function (answer, questions) {
