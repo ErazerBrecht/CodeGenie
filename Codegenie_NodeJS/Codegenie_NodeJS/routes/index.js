@@ -11,7 +11,7 @@ module.exports = function (passport) {
         if (req.isAuthenticated())
             res.redirect('/home');
         else
-            res.render('login');
+            res.render('login', { message: req.flash('message') });
     });
 
     router.get('/signout', isLoggedInRedirect, function (req, res) {
