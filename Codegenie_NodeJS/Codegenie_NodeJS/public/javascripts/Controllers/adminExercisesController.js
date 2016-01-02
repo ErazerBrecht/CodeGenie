@@ -104,47 +104,30 @@
             $scope.error = null;
 
             if ($scope.selected._id === undefined) {
-                $http({
-                    method: 'POST',
-                    url: '/admin/exercises/post/',
-                    data: $scope.selected
-                    //responseType: 'text'
-                }).then(
-                    //SUCCESS
-                    function (response) {
-                        loadData();     //Reload all exercises, this is done to add new exercise with id from the server... => Otherwise this exercise can't be updated till the page is refreshed
+
+                restData.postExercise.save($scope.selected,
+                    function(response){
+                        loadData(); //Reload all exercises, this is done to add new exercise with id from the server... => Otherwise this exercise can't be updated till the page is refreshed
                         $scope.selected = null;
                         $scope.message = response.data;
                     },
-                    //ERROR
-                    function (error) {
-                        //Scroll to top to show error
-                        $anchorScroll();
+                    function(error){
                         $scope.error = error.data;
                     }
                 );
             }
 
             else {
-                $http({
-                    method: 'POST',
-                    url: '/admin/exercises/edit/' + $scope.selected._id,
-                    data: $scope.selected,
-                    responseType: 'text'
-                }).then(
-                    //SUCCESS
-                    function (response) {
-                        //Scroll to top to show message
-                        $anchorScroll();
+
+                restData.postUpdateExercise.save({id: $scope.selected._id},$scope.selected,
+                    function(response){
                         $scope.message = response.data;
                     },
-                    //ERROR
-                    function (error) {
-                        //Scroll to top to show error
-                        $anchorScroll();
+                    function(error){
                         $scope.error = error.data;
                     }
                 );
+
             }
         };
 
@@ -153,7 +136,16 @@
             $scope.message = null;
             $scope.error = null;
 
-            $http({
+            restData.deleteExercise.get({id: deletedExercise._id}, deletedExercise,
+                function(response){
+                    $scope.message = response.data;
+                },
+                function(error){
+                    $scope.error = error.data;
+                }
+            );
+
+            /*$http({
                 method: 'GET',
                 url: '/admin/exercises/delete/' + deletedExercise._id,
                 data: deletedExercise,
@@ -169,7 +161,7 @@
                     $anchorScroll();
                     $scope.error = error.data;
                 }
-            );
+            );*/
         };
 
         $scope.getTileClass = function (exercise) {

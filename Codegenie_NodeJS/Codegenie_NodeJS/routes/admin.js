@@ -173,7 +173,7 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     
     ExerciseModel.find({ _id: exerciseID }).remove(function (err, affected) {
         if (err) return res.status(400).json(["Exercise doesn't exist."]);
-        res.status(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
+        res.status(200).json("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
     });
 });
 
@@ -269,7 +269,7 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
             if(exError) return console.error(exError);
 
-            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
+            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
             //TODO remove this? not sure if user should still be able to edit his answers after deadline
 
             for (var field in req.body) result[field] = req.body[field];

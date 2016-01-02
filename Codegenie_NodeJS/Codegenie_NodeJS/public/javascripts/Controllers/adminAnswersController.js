@@ -29,21 +29,16 @@
             //Clear error and message
             $scope.error = null;
             $scope.message = null;
-            $http({
-                method: 'POST',
-                url: '/admin/answers/edit/' + answer._id,
-                data: answer,
-                responseType: 'text'
-            }).then(
-                //SUCCESS
-                function (response) {
+
+            restData.updateAnswerById.save({id: answer._id},answer,
+                function(response){
                     $scope.message = response.data;
                 },
-                //ERROR
-                function (error) {
+                function(error){
                     $scope.error = error.data;
                 }
-            );
+            )
+
             var index = $scope.selected.indexOf(answer);
             if (index > -1)
             {
