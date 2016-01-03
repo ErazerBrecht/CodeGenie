@@ -18,7 +18,8 @@
             updateAnswerById: $resource("/admin/answers/edit/:id", {id: '@id'}),
             postExercise: $resource("/admin/exercises/post"),
             postUpdateExercise: $resource("/admin/exercises/edit/:id", {id: '@id'}),
-            deleteExercise: $resource("/admin/exercises/delete/:id", {id: '@id'})
+            deleteExercise: $resource("/admin/exercises/delete/:id", {id: '@id'}),
+            postAssignUser: $resource("/admin/users/assign")
         };             
     };
 

@@ -70,7 +70,17 @@
             $scope.error = null;
             $scope.message = null;
 
-            $http({
+            restData.postAssignUser.save($scope.assign,
+                function(response){
+                    $scope.message = response.data;
+                    getData();
+                },
+                function(err){
+                    $scope.error = err.data;
+                }
+            );
+
+            /*$http({
                 method  : 'POST',
                 url     : '/admin/users/assign/',
                 data    : $scope.assign,
@@ -87,7 +97,7 @@
                 function (error) {
                     $scope.error = error.data;
                 }
-            );
+            );*/
 
         };
 

@@ -127,11 +127,14 @@ router.post("/users/assign", isAdmin, function (req, res) {
                 if (err) return reject(err);
                 totalaffected += affected.nModified;
                 resolve();
+
             });
         });
     });
     
-    Promise.all(promises).then(function () { res.status(200).send("Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users.")); }).catch(console.error);
+    //Promise.all(promises).then(function () { res.status(200).json(["Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users.")]); }).catch(console.error);
+    Promise.all(promises).then(function () { savehandler(res, undefined, "Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users."))});
+
 });
 
 
