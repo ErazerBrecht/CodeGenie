@@ -37,7 +37,7 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
         
         AnswerModel.find({ userid: userID }).remove(function (err, affected) {
             if (err) return console.error(err);
-            res.status(200).send("Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
+            savehandler(res, err, "Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
         });
     });
 });
