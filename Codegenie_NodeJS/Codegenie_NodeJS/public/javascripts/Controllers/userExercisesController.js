@@ -84,26 +84,9 @@
                     $scope.message = response.data;
                 },
                 function(err){
-                    $scope.error = error.data;
+                    $scope.error = err.data;
                 }
             );
-
-            /*$http({
-                method  : 'POST',
-                url     : '/users/answer/',
-                data    : $scope.selected,
-                responseType: 'text'
-            }).then(
-                //SUCCESS
-                function (response) {
-                    $scope.message = response.data;
-                },
-                //ERROR
-                function (error) {
-                    $scope.error = error.data;
-                }
-            );*/
-            
         };
     };
     
