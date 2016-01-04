@@ -71,8 +71,8 @@
 </div>
 
 
-<div class="row" ng-show="selected">
-    <form id="exerciseForm" class="col-lg-12" ng-submit="processForm()">
+<div class="row" id="exerciseRow">
+    <form id="exerciseForm" class="col-lg-12" ng-show="selected" ng-submit="processForm()">
         <div class="form-group">
             <label>Title</label>
             <input type="text" class="form-control" name="title" placeholder="Titel" required="required" ng-model="selected.title">

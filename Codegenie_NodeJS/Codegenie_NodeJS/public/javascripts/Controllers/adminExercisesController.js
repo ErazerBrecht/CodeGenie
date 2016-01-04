@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, $anchorScroll, $routeParams) {
+    var adminExercisesController = function ($scope, $http, restData, $location, $anchorScroll, $timeout, $routeParams) {
         loadData();
 
         function loadData() {
@@ -26,6 +26,12 @@
             $scope.selected.deadline = new Date();
             $scope.error = null;
             $scope.message = null;
+
+            //Needs delay, because the view needs to change
+            //The form is visible when selected is not null
+            //When we wait, the view is already updated
+            //Now we can scroll to the form
+            $timeout(scrollToExercise,10);
         };
 
         $scope.select = function (exercise) {
@@ -33,6 +39,12 @@
             //$scope.selected.deadline = new Date($scope.selected.deadline);
             $scope.error = null;
             $scope.message = null;
+
+            //Needs delay, because the view needs to change
+            //The form is visible when selected is not null
+            //When we wait, the view is already updated
+            //Now we can scroll to the form
+            $timeout(scrollToExercise,10);
         };
 
         //THIS IS TO SLOWWW!
@@ -80,11 +92,12 @@
                 delete $scope.selected.questions[questionId].choices;
         };
 
-        //Drag and drop
         $scope.centerAnchor = true;
         $scope.toggleCenterAnchor = function () {
             $scope.centerAnchor = !$scope.centerAnchor
-        }
+        };
+
+        //Drag and drop
         $scope.onDropComplete = function (data) {
             var id = $scope.exercises.indexOf(data);
             $scope.DeleteExercise($scope.exercises[id]);
@@ -118,7 +131,6 @@
             }
 
             else {
-
                 restData.postUpdateExercise.save({id: $scope.selected._id},$scope.selected,
                     function(response){
                         $scope.message = response.data;
@@ -144,24 +156,6 @@
                     $scope.error = error.data;
                 }
             );
-
-            /*$http({
-                method: 'GET',
-                url: '/admin/exercises/delete/' + deletedExercise._id,
-                data: deletedExercise,
-                responseType: 'text'
-            }).then(
-                //SUCCESS
-                function (response) {
-                    $scope.message = response.data;
-                },
-                //ERROR
-                function (error) {
-                    //Scroll to top to show error
-                    $anchorScroll();
-                    $scope.error = error.data;
-                }
-            );*/
         };
 
         $scope.getTileClass = function (exercise) {
@@ -172,6 +166,11 @@
             return "blue";
 
             //TODO Add gray for invisible exercises
+        };
+
+        function scrollToExercise() {
+            $location.hash('exerciseRow');
+            $anchorScroll();
         };
     };
 
