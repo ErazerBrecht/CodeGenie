@@ -161,13 +161,11 @@
         };
 
         $scope.getTileClass = function (exercise) {
-            if (exercise.deadline < new Date()) {
+            if(exercise.revealed === false)
+                return "grey";
+            else if (exercise.deadline < new Date())
                 return "red";
-            }
-
             return "blue";
-
-            //TODO Add gray for invisible exercises
         };
 
         function scrollToExercise() {
