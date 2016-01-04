@@ -11,6 +11,8 @@
 
                 angular.forEach($scope.exercises, function (value, key) {
                     value.deadline = new Date(value.deadline);
+                    if(value.revealdate != undefined)
+                        value.revealdate = new Date(value.revealdate);
                 });
             });
         };
@@ -159,13 +161,11 @@
         };
 
         $scope.getTileClass = function (exercise) {
-            if (exercise.deadline < new Date()) {
+            if(exercise.revealed === false)
+                return "grey";
+            else if (exercise.deadline < new Date())
                 return "red";
-            }
-
             return "blue";
-
-            //TODO Add gray for invisible exercises
         };
 
         function scrollToExercise() {
