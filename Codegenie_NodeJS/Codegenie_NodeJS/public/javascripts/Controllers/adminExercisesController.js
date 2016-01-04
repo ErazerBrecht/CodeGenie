@@ -11,6 +11,8 @@
 
                 angular.forEach($scope.exercises, function (value, key) {
                     value.deadline = new Date(value.deadline);
+                    if(value.revealdate != undefined)
+                        value.revealdate = new Date(value.revealdate);
                 });
             });
         };
