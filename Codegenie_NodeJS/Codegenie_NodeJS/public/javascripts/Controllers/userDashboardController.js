@@ -11,6 +11,18 @@
             $scope.graphAnswers = data.activity;
         });
 
+        userRestData.getStatisticsMyAnswersGraphHour.get(function (data)
+        {
+            //ES6 code, prob not supported in old browsers....
+            $scope.punchCardData = [
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            ];
+
+            angular.forEach(data.activity, function (value, key) {
+                $scope.punchCardData[0][value.filter] = value.total;
+            });
+        });
+
         $scope.ykeys = ["total"];
         $scope.labels = ["Answers"];
 

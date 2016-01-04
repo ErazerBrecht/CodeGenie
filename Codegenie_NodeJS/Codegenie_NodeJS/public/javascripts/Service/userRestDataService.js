@@ -12,6 +12,7 @@
             getStatisticsAnswers: $resource("/statistics/answers"),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
             getStatisticsMyAnswersGraphWeek: $resource("statistics/users/mine?filter=week"),
+            getStatisticsMyAnswersGraphHour: $resource("statistics/users/mine?filter=hour"),
             getNewExercises: $resource("/users/exercises/new"),
             addLastSeen: $resource("users/seen/:exerciseid", { exerciseid: '@exerciseid'})
         };
