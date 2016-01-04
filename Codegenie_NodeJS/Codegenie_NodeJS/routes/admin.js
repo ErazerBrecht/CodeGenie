@@ -209,6 +209,13 @@ router.post("/exercises/post", isAdmin, function (req, res) {
     newexercise.deadline.setMinutes(59);
     newexercise.deadline.setSeconds(59);
 
+    if(newexercise.revealdate != undefined)
+    {
+        newexercise.revealdate.setHours(0);
+        newexercise.revealdate.setMinutes(0);
+        newexercise.revealdate.setSeconds(0);
+    }
+
     newexercise.save(function (err) {
         savehandler(res, err, "Exercise created.");
     });
