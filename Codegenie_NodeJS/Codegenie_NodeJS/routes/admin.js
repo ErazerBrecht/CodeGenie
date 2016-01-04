@@ -133,7 +133,7 @@ router.post("/users/assign", isAdmin, function (req, res) {
         return new Promise(function (resolve, reject) {
             UserModel.update({_id: usobj.id}, {$set: {status: 1, course: usobj.course}}, function (err, affected) {
                 if (err) return reject(err);
-                totalaffected += affected.nModified;
+                totalaffected += affected.result.n;
                 resolve();
             });
         });
@@ -183,19 +183,23 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     ExerciseModel.find({_id: exerciseID}).remove(function (err, affected) {
         if (err) return res.status(400).json(["Exercise doesn't exist."]);
 
-        UserSeenModel.find({}, function (err, r) {
-            if (err) return console.error(err); // MAYBE move this so we don't have to go through ALL the exercises,
-                                                // remove when the user gets /users/exercises and the corresponding exercise cant be found?
-                                                // would also work when the user switches courses
-            if (!r) return res.status(200).json(["Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises.")]);
+        AnswerModel.find({exerciseid: exerciseID}).remove(function (err, affectedanswers) {
+            if (err) return res.status(400).json(["Error removing the answers."]);
 
-            for (var x = 0; x < r.length; x++) {
-                r[x].seenexercises.remove({exerciseid: req.params.exerciseID});
-            }
-
-            r.save(function (err) {
-                savehandler(res, err, "Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
-            });
+            // Maybe move this so we don't have to go through all the seenmodels,
+            // only remove when the user gets /users/exercises and the corresponding exercise cant be found?
+            // would also work when the user switches courses
+            UserSeenModel.find({}).stream()
+                .on('data', function (doc) {
+                    doc.seenexercises.remove({exerciseid: req.params.exerciseID});
+                    doc.save();
+                })
+                .on('error', function (err) {
+                    console.error(err);
+                })
+                .on('end', function () {
+                    savehandler(res, undefined, "Succesfully deleted " + affected.result.n + (affected.result.n == 1 ? " exercise." : " exercises.") + " and " + affectedanswers.result.n + (affectedanswers.result.n == 1 ? " answer." : " answers."));
+                });
         });
     });
 });
@@ -279,7 +283,7 @@ router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
     AnswerModel.find({_id: answerID}).remove(function (err, affected) {
         if (err) return console.error(err);
 
-        res.status(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " answer." : " answers."));
+        res.status(200).send("Succesfully deleted " + affected.result.n + (affected.result.n == 1 ? " answer." : " answers."));
     });
 });
 

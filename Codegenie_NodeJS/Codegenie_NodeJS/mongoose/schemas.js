@@ -3,12 +3,7 @@ var moment = require('moment');
 
 var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
-var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
-
-/*var courseSchema = {
-    course: { type: String, required: true, enum: courseEnum },
-    motd: String
-};*/
+var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4', 'Admin'];
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -17,7 +12,6 @@ var userSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum, default: "None" },
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
-    admin: { type: Boolean, default: false },
     registerdate: { type: Date, default: new Date().toISOString() },
     lastseen: { type: Date, default: new Date().toISOString() }
 });

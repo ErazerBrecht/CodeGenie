@@ -180,7 +180,7 @@ router.get('/seen/', isLoggedIn, function (req, res) {
 router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
     console.log("Updating seen exercises");
 
-    UserSeenModel.findOne({userid: req.user._id}).lean().exec(function (err, result) {
+    UserSeenModel.findOne({userid: req.user._id}, function (err, result) {
         if (err) return console.error(err);
         if (!result) {
             //CREATE
@@ -196,28 +196,22 @@ router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
             });
         }
         else {
-            //EDITING => Adding new seen
-            UserSeenModel.findOne({userid: req.user._id}, function (err, r) {
-                if (err) return console.error(err);
+            if (!result.seenexercises.some(function (seenobj) {
+                    return seenobj.exerciseid == req.params.exerciseID;
+                })) {
+                newSeenExercise.exerciseid = req.params.exerciseID;
+                result.seenexercises.push(newSeenExercise);
+            }
+            else {
+                for (var x = 0; x < result.seenexercises.length; x++)
+                    if (result.seenexercises[x].exerciseid == req.params.exerciseID) result.seenexercises.set(x, {
+                        exerciseid: result.seenexercises[x].exerciseid,
+                        dateseen: new Date().toISOString()
+                    });
+            }
 
-                if (!r.seenexercises.some(function (seenobj) {
-                        return seenobj.exerciseid == req.params.exerciseID;
-                    })) {
-                    var newSeenExercise = {};
-                    newSeenExercise.exerciseid = req.params.exerciseID;
-                    r.seenexercises.push(newSeenExercise);
-                }
-                else {
-                    for (var x = 0; x < r.seenexercises.length; x++)
-                        if (r.seenexercises[x].exerciseid == req.params.exerciseID) r.seenexercises.set(x, {
-                            exerciseid: r.seenexercises[x].exerciseid,
-                            dateseen: new Date().toISOString()
-                        });
-                }
-
-                r.save(function (err) {
-                    savehandler(res, err);
-                });
+            result.save(function (err) {
+                savehandler(res, err);
             });
         }
     });
@@ -397,9 +391,8 @@ router.post("/edit", isLoggedIn, function (req, res) {
         for (var field in req.body) newuser[field] = req.body[field];
 
         delete newuser._id;
-        delete newuser.admin; //prevent user from editing random/protected information, everything else is allowed.
         delete newuser.status;
-        delete newuser.class;
+        delete newuser.course;
 
         newuser.password = createHash(password);
 
