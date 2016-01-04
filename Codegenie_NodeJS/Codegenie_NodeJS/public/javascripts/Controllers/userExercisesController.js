@@ -40,6 +40,12 @@
                     //Convert question object to answer object
                     var questions = $scope.selected.questions;
 
+                    //Update your exercises seen array with this exercise
+                    userRestData.addLastSeen.save({ exerciseid: $scope.selected._id }, function (data) {
+
+                    });
+
+
                     //Rename _id field to questionid
                     angular.forEach(questions, function (value, key) {
                         value.questionid = value._id;

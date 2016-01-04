@@ -187,41 +187,59 @@ There are currently 3 portals, the /admin/ portal, /users/ portal and the /stati
 The user portal has 8 gets and 2 posts.
 
 
-####GET: /users/
+**GET**: /users/
 
 This gives all current users, currently only accessible for admin.
 
-####GET: /users/mine
+**GET**: /users/mine
 
 This gives the current user's information.
 
-####GET: /users/exercises
+
+**GET**: /users/exercises
 
 This gives all current exercises that the user is allowed to solve.
 
-####GET: /users/exercises/solved
+**GET**: /users/exercises/new
+
+This gives all the exercises that haven't been viewed by the user.
+
+**GET**: /users/exercises/solved
 
 This gives all the current exercises that the user has solved.
 
-####GET: /users/exercises/unsolved
+**GET**: /users/exercises/unsolved
 
 This gives all the current exercises that the user has yet to solve.
 
-####GET: /users/exercises/{ID} 
+**GET**: /users/exercises/{ID} 
 
 This gives a specific exercise that the user is allowed to solve.
 
-####GET: /users/answers
+**GET**: /users/exercises/{ID}/answers
+
+This gives the answer corresponding with the exercise ID.
+
+
+**GET**: /users/seen/
+
+This gives the list of exercises that have been seen by the user.
+
+**POST**: /users/seen/{ID}
+
+This is for posting when the user has opened a new exercise.
+
+
+**GET**: /users/answers
 
 This gives all the answers that the user has submitted.<br/>
 ?display=summary can be added to this statement to get a summary instead of the whole thing.
 
-####GET: /users/answers/{ID} 
+**GET**: /users/answers/{ID} 
 
 This gives a specific answer that the user has submitted.
 
-
-####POST: /users/answer
+**POST**: /users/answer
 
 Users can post/edit solved exercises here.
 
@@ -229,7 +247,8 @@ Users can post/edit solved exercises here.
 Original exercise ID in a field named 'exerciseid'<br/>
 Array of [answer objects](#answerobject) with the field 'questionid' and 'text' filled in<br/>
 
-####POST: /users/edit
+
+**POST**: /users/edit
 
 Users can edit their profiles here.
 
@@ -240,71 +259,79 @@ Users can edit their profiles here.
 The admin portal has 12 gets and 4 posts.
 
 
-####GET: /admin/
+**GET**: /admin/
 
 HTML page for the admin panel.
 
 
-####POST: /admin/users
+**POST**: /admin/users
 
 Admins can create new users by posting here.
 
-####GET: /admin/users/{ID}
+**POST**: /admin/users/assign
+
+The admin can assign users by posting here.
+
+**GET**: /admin/users/{ID}
 
 Gives the userdata of userid {ID}
 
-####GET: /admin/users/{ID}/answers
+**GET**: /admin/users/{ID}/delete
+
+Deletes the user with this ID.
+
+**GET**: /admin/users/{ID}/answers
 
 Gives all answers of userid {ID}<br/>
 ?display=summary can be added to this statement to get a summary instead of the whole thing.
 
 
-####GET: /admin/exercises
+**GET**: /admin/exercises
 
 This gives all the exercises.
 
-####GET: /admin/exercises/{ID}
+**GET**: /admin/exercises/{ID}
 
 This gives a specific exercise.
 
-####GET: /admin/exercises/{ID}/answers
+**GET**: /admin/exercises/{ID}/answers
 
 This gives all the answers of the exercise with ID: {ID}
 
-####GET: /admin/exercises/delete/{ID}
+**GET**: /admin/exercises/delete/{ID}
 
 This deletes the exercise with ID: {ID}
 
-####POST: /admin/exercises/post
+**POST**: /admin/exercises/post
 
 The admin can create exercises by posting here.
 
-####POST: /admin/exercises/edit/{ID}
+**POST**: /admin/exercises/edit/{ID}
 
 The admin can edit exercises by posting here.
 
 
-####GET: /admin/answers 
+**GET**: /admin/answers 
 
 This gives all answers.
 
-####GET: /admin/answers/revised
+**GET**: /admin/answers/revised
 
 This gives all unrevised answers.
 
-####GET: /admin/answers/unrevised
+**GET**: /admin/answers/unrevised
 
 This gives all revised answers.
 
-####GET: /admin/answers/{ID}
+**GET**: /admin/answers/{ID}
 
 This gives a specific answer.
 
-####GET: /admin/answers/delete/{ID}
+**GET**: /admin/answers/delete/{ID}
 
 This deletes the answer with ID: {ID}
 
-####POST: /admin/answers/edit/{ID}
+**POST**: /admin/answers/edit/{ID}
 
 The admin can edit answers by posting here.
 
@@ -313,41 +340,41 @@ The admin can edit answers by posting here.
 ###Statistics portal
 The statistics has 8 gets.
 
-####GET: /statistics/
+**GET**: /statistics/
 
 Gives various numbers on the amount of users, admins, exercises, answers and users per class.
 
-####GET: /statistics/users/{ID}
-
-Gives summary about all this users answers.
-
-####GET: /statistics/graph
+**GET**: /statistics/graph
 
 Gives the week information about all answers.<br/>
 ?filter=year or ?filter=week to filter the exercises by year or week.
 
-####GET: /statistics/exercises
+**GET**: /statistics/users/{ID}
+
+Gives summary about all this users answers.
+
+**GET**: /statistics/exercises
 
 Gives the amount of exercises and amount of exercises per class.
 
-####GET: /statistics/exercises/graph/{ID}
+**GET**: /statistics/exercises/graph/{ID}
 
 Gives summaries about when users solved this exercise that can be used in a fancy graph.<br/>
 ?filter=year or ?filter=week to filter the exercises by year or week.
 
-####GET: /statistics/exercises/average/{ID}
+**GET**: /statistics/exercises/average/{ID}
 
 Gives summary about the average score from this exercise that can be used in a fancy graph. (excludes unrevised answers)
 
-####GET: /statistics/answers
+**GET**: /statistics/answers
 
 Gives the amount of answers and the amount of answers solved per class.
 
-####GET: /statistics/answers/revised
+**GET**: /statistics/answers/revised
 
 Gives the amount of answers that have been revised and amount of revised answers per class.
 
-####GET: /statistics/answers/unrevised
+**GET**: /statistics/answers/unrevised
 
 Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
 
@@ -359,4 +386,3 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 - Fix lastseen update
 - Make fancy graphs
 - Finish profile manager
-- Implement courses (e.g. OO, Programeren) instead of classes

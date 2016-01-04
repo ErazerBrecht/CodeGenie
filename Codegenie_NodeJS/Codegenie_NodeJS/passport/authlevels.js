@@ -24,7 +24,7 @@ exports.isLoggedInRedirect = function (req, res, next) {
 
 exports.isAdmin = function (req, res, next) {
     if (!req.isAuthenticated()) return res.status(401).json(errorNotLoggedIn);
-    if (!req.user.admin) return res.status(401).json(errorNotAdmin);
+    if (!req.user.course == 'Admin') return res.status(401).json(errorNotAdmin);
     return next();
 };
 

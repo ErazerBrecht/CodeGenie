@@ -3,12 +3,7 @@ var moment = require('moment');
 
 var typeEnum = ['Checkbox', 'Question', 'Code', 'MultipleChoice'];
 
-var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4'];
-
-/*var courseSchema = {
-    course: { type: String, required: true, enum: courseEnum },
-    motd: String
-};*/
+var courseEnum = ['None', 'Programming Principles', 'OO', 'Mobile-dev', 'SO4', 'Admin'];
 
 var userSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
@@ -17,9 +12,17 @@ var userSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum, default: "None" },
     email: { type: String, unique: true, sparse: true },
     status: { type: Number, default: "0" },
-    admin: { type: Boolean, default: false },
     registerdate: { type: Date, default: new Date().toISOString() },
     lastseen: { type: Date, default: new Date().toISOString() }
+});
+
+var userSeenSchema = mongoose.Schema({
+    userid: { type: mongoose.Schema.ObjectId, required: true },
+    seenexercises: [{
+        _id: false,
+        exerciseid: { type: mongoose.Schema.ObjectId, required: true },
+        dateseen: { type: Date, default: new Date().toISOString() }
+    }]
 });
 
 var exerciseSchema = mongoose.Schema({
@@ -36,6 +39,7 @@ var exerciseSchema = mongoose.Schema({
             extra: { type: Boolean, default: false },
             type: { type: String, required: true, enum: typeEnum },
             choices: [{
+                    _id: false,
                     text: { type: String, required: true },
                     correct: { type: Boolean, default: false }
                 }]
@@ -65,10 +69,12 @@ var answerSchema = mongoose.Schema({
 });
 
 var UserModel = mongoose.model('User', userSchema);
+var UserSeenModel = mongoose.model('UserSeen', userSeenSchema);
 var ExerciseModel = mongoose.model('Exercise', exerciseSchema);
 var AnswerModel = mongoose.model('Answer', answerSchema);
 
 exports.UserModel = UserModel;
+exports.UserSeenModel = UserSeenModel;
 exports.ExerciseModel = ExerciseModel;
 exports.AnswerModel = AnswerModel;
 

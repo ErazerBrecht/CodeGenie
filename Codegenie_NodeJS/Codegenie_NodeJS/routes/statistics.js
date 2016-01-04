@@ -204,27 +204,28 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                 weight: 0,
                 extra: false,
                 type: "",
-                average: 0
+                average: 0,
+                feedback: 0
             }]
     };
     
-    AnswerModel.findOne({ exerciseid: exerciseID, revised: true }).lean().exec(function (err, result) {
-        if (!result) return res.status(200).json([]);
+    AnswerModel.find({ exerciseid: exerciseID, revised: true }).lean().exec(function (err, result) {
+        if (!result.length) return res.status(200).json([]);
         response.count = result.length;
         
-        response.title = result.title;
-        response.classification = result.classification;
-        response.course = result.course;
-        response.weight = result.weight;
-        response.received = result.received;
-        response.extra = result.extra;
-        
+        response.title = result[0].title;
+        response.classification = result[0].classification;
+        response.course = result[0].course;
+        response.weight = result[0].weight;
+        response.received = result[0].received;
+        response.extra = result[0].extra;
+
         var final = [];
-        var questiontemplate = result.answers;
+        var questiontemplate = result[0].answers;
         for (var i = 0; i < questiontemplate.length; i++) {
             var obj = questiontemplate[i];
             if (!final.hasOwnProperty(obj)) {
-                var filtered = { questiontitle: "", extra: false, type: "", weight: 0, average: 0 };
+                var filtered = { questiontitle: "", extra: false, type: "", weight: 0, average: 0, feedback: 0 };
                 
                 filtered.questiontitle = obj.questiontitle;
                 filtered.extra = obj.extra;
@@ -256,7 +257,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                 {
                     $group: {
                         "_id": "$_id",
-                        "received": { $avg: "$received" },
+                        "average": { $avg: "$received" },
                         "feedback": { $avg: "$feedback" }
                     }
                 }
@@ -268,7 +269,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                         for (var x = 0; x < final.length; x++) {
                             var aggobj = aggresult[i];
                             if (aggobj._id == final[x].questiontitle) {
-                                final[x].received = aggobj.received;
+                                final[x].average = aggobj.average;
                                 final[x].feedback = aggobj.feedback;
                             }
                         }

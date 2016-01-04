@@ -32,6 +32,7 @@ body {
 /*Padding for the glyphicons*/
 .fa {
     padding-right: 5px;
+    line-height: inherit;
 }
 
 /*Top - navigation*/
@@ -59,6 +60,14 @@ body {
     color: #333;
     background-color: rgba(0,0,0,.15) !important;
 }
+
+.top-nav .dropdown-messages,
+.top-nav .dropdown-tasks,
+.top-nav .dropdown-alerts {
+    width: 400px;
+    min-width: 0;
+}
+
 
 /*Sidebar*/
 
