@@ -23,28 +23,23 @@
             });
         });
 
-
-
-        //Testing ace editor
-        $scope.aceLoaded = function(_editor){
-
-        };
-        $scope.aceChanged = function(e) {
-
-        };
-
-        $scope.beautify = function() {
-            $scope.test = "hallo";
-            alert($scope.test);
-            var val = $scope.test;
-            var array = val.split(/\n/);
+        $scope.beautify = function(ans) {
+            var array = ans.result.split(/\n/);
             array[0] = array[0].trim();
-            val = array.join("\n");
+            ans.result = array.join("\n");
             var options =
             {
                 "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
             }
-            $scope.test = js_beautify(val, options);
+            ans.result = js_beautify(ans.result, options);
+
+            angular.forEach($scope.selected.answers, function (value, key) {
+                if(value.questionid == ans.questionid){
+                    $scope.selected.answers.result = ans.result;
+                }
+
+            });
+
         }
 
         $scope.dismissMessage = function () {
@@ -68,7 +63,6 @@
                     userRestData.addLastSeen.save({ exerciseid: $scope.selected._id }, function (data) {
 
                     });
-
 
                     //Rename _id field to questionid
                     angular.forEach(questions, function (value, key) {
