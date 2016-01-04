@@ -15,7 +15,7 @@
       },
       template: punchCardTemplate,
       link: function($scope, element) {
-        $scope.days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        $scope.days = ["Activity"];
         $scope.hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
         $scope.description = function(n) {
           if (n === 1) {
