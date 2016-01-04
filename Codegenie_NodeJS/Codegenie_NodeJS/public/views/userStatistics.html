@@ -1,11 +1,11 @@
 ﻿<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Dashboard
+            Statistics
         </h1>
         <ol class="breadcrumb">
             <li class="active">
-                <i class="fa fa-dashboard"></i> Dashboard
+                <i class="fa fa-bar-chart"></i> Statistics
             </li>
         </ol>
     </div>
@@ -17,11 +17,11 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-tasks fa-5x"></i>
+                        <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{{newExercises.count}}</div>
-                        <div>New exercises!</div>
+                        <div class="huge">{{totalAnswers}}</div>
+                        <div>Total answers!</div>
                     </div>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{{myAnswers}}</div>
-                        <div>Your total answers!</div>
+                        <div class="huge">{{totalAnswersCourse}}</div>
+                        <div>All answers of your course!</div>
                     </div>
                 </div>
             </div>
@@ -50,11 +50,8 @@
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">
-                            <span ng-if="logins > loginsAverage">More</span>
-                            <span ng-if="logins =< loginsAverage">Less</span>
-                        </div>
-                        <div>logins than the average!</div>
+                        <div class="huge">{{myAnswers}}</div>
+                        <div>Your total answers!</div>
                     </div>
                 </div>
             </div>
