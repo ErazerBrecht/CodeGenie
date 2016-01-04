@@ -72,15 +72,16 @@
                                 Check / Uncheck <input ng-model="a.result" type="checkbox" ng-true-value="'true'" ng-false-value="'false'"/>
                             </div>
 
+
                             <div ng-switch-when="Code">
-                                <div ng-model="a.result" style="height: 200px" ui-ace="{
+                                <button type="button" ng-click="beautify(a)" class="btn btn-default"><i class="fa fa-pencil" style="padding-right: 0px; !important;"></i></button>
+                                <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
                                   firstLineNumber: 1
                                 }">
                                 </div>
-                                <input type="button" value="Beautify ME" ng-click="beautify(a)" />
                             </div>
 
                             <div ng-switch-when="Question">
