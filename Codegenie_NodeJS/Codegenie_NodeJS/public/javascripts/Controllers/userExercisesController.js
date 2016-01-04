@@ -90,8 +90,9 @@
                 {
                     return "red";
                 }
-                //TODO Check if the reveal date is newer than the user lastseen date
-                //return "blue";
+                else if(!tempExercise.seen)
+                    return "blue";
+
                 return "purple";
             }
         };
