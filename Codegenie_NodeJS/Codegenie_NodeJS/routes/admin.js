@@ -130,7 +130,6 @@ router.post("/users/assign", isAdmin, function (req, res) {
                 if (err) return reject(err);
                 totalaffected += affected.result.n;
                 resolve();
-
             });
         });
     });

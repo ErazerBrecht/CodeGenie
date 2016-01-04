@@ -199,6 +199,7 @@ router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
             if (!result.seenexercises.some(function (seenobj) {
                     return seenobj.exerciseid == req.params.exerciseID;
                 })) {
+                newSeenExercise = {};
                 newSeenExercise.exerciseid = req.params.exerciseID;
                 result.seenexercises.push(newSeenExercise);
             }
