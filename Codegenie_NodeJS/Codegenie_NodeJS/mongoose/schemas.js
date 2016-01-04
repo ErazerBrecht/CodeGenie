@@ -11,6 +11,7 @@ var userSchema = mongoose.Schema({
     class: { type: String, required: true, default: "None" },
     course: { type: String, required: true, enum: courseEnum, default: "None" },
     email: { type: String, unique: true, sparse: true },
+    logins: Number,
     status: { type: Number, default: "0" },
     registerdate: { type: Date, default: new Date().toISOString() },
     lastseen: { type: Date, default: new Date().toISOString() }

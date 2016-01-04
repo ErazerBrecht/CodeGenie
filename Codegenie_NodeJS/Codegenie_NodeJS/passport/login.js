@@ -23,7 +23,7 @@ module.exports = function (passport) {
                 return done(null, false, req.flash('message', 'Incorrect password.'));
             }
             
-            UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() } }, { runValidators: true }, function (err) {
+            UserModel.update({ _id: user._id }, { $set: { 'lastseen': new Date().toISOString() }, $inc: { 'logins': 1 } }, { runValidators: true }, function (err) {
                 if (err) {
                     console.error(err);
                     done(null, false, req.flash('message', "Error in updating lastseen"));

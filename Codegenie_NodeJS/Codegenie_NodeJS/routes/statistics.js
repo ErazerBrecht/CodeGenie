@@ -453,7 +453,43 @@ function SendUserStatistic(userID, res, filter) {
                     function (err, aggresultActivity) {
                         if (err) console.error(err);
                         else {
-                            res.status(200).json({"received": aggresultReceived, "activity": aggresultActivity});
+                            UserModel.aggregate(
+                                [
+                                    {
+                                        $group: {
+                                            "_id": "$_id",
+                                            "logins": {$avg: "$logins"}
+                                        }
+                                    },
+                                    {
+                                        $group: {
+                                            "_id": 0,
+                                            "logins": {$avg: "$logins"}
+                                        }
+                                    },
+                                    {
+                                        $project: {
+                                            "_id": 0,
+                                            "logins": "$logins"
+                                        }
+                                    }
+                                ],
+                                function (err, aggresultLogins) {
+                                    if (err) console.error(err);
+                                    else {
+                                        UserModel.findById(userID, function (err, result) {
+                                            if (err) return console.error(err);
+                                            res.status(200).json({
+                                                "received": aggresultReceived,
+                                                "activity": aggresultActivity,
+                                                "logins": {
+                                                    "average": aggresultLogins[0].logins,
+                                                    "mylogins": result.logins
+                                                }
+                                            });
+                                        });
+                                    }
+                                });
                         }
                     });
             }
