@@ -102,6 +102,13 @@
             $scope.error = null;
             $scope.message = null;
 
+            angular.forEach($scope.selected.answers, function (value, key) {
+                if(value.type == "Code"){
+                    $scope.beautify(value);
+                }
+
+            });
+
             $scope.selected.exerciseid = $scope.selected._id;
 
             userRestData.postAnswer.save($scope.selected,
