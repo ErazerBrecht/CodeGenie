@@ -13,6 +13,10 @@
 
         $scope.ykeys = ["total"];
         $scope.labels = ["Answers"];
+
+        $scope.punchCardData = [
+            [12, 17, 10, 20, 0, 12, 12, 12, 12, 20, 12, 10]
+        ];
     };
 
     app.controller("userDashboardController", userDashboardController);
