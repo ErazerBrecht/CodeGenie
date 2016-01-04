@@ -63,6 +63,7 @@ var answerSchema = mongoose.Schema({
             extra: { type: Boolean, required: true },
             type: { type: String, required: true, enum: typeEnum },
             result: String,
+            comment: String,
             feedback: Number,
             choices: [{ text: String }]
         }]
