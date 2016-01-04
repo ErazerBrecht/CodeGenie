@@ -23,6 +23,30 @@
             });
         });
 
+
+
+        //Testing ace editor
+        $scope.aceLoaded = function(_editor){
+
+        };
+        $scope.aceChanged = function(e) {
+
+        };
+
+        $scope.beautify = function() {
+            $scope.test = "hallo";
+            alert($scope.test);
+            var val = $scope.test;
+            var array = val.split(/\n/);
+            array[0] = array[0].trim();
+            val = array.join("\n");
+            var options =
+            {
+                "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
+            }
+            $scope.test = js_beautify(val, options);
+        }
+
         $scope.dismissMessage = function () {
             $scope.message = null;
         };

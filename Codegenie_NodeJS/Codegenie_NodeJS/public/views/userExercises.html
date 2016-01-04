@@ -72,13 +72,16 @@
                             </div>
 
                             <div ng-switch-when="Code">
-                                <div ng-model="a.result" style="height: 200px" ui-ace="{
+                                <div ng-model="test" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
                                   firstLineNumber: 1,
+                                  onLoad: aceLoaded,
+                                  onChange: aceChanged
                                 }">
                                 </div>
+                                <input type="button" value="Beautify ME" ng-click="beautify()" />
                             </div>
 
                             <div ng-switch-when="Question">
@@ -105,6 +108,8 @@
         <div>
             <h1>Answer</h1>
             {{selected.answers}}
+            </br>
+            {{test}}
         </div>
     </form>
 </div>
