@@ -50,7 +50,6 @@
                 <div class="top-10">
                     <span style="width: 200px; display: inline-block">Show disabled exercises:</span>
                     <checkbox ng-model="showDisabled" class="btn-gray"/>
-                    TODO
                 </div>
             </div>
         </div>
@@ -58,7 +57,7 @@
 </div>
 
 <div class="row" ng-show="selected == undefined || selected._id != undefined">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy : '-created'" ng-hide="(filterCourse != 'Every course' && exercise.course != filterCourse) || (showExpired == false && exercise.deadline < today)" ng-click="select(exercise)">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy : '-created'" ng-hide="(filterCourse != 'Every course' && exercise.course != filterCourse) || (showExpired == false && exercise.deadline < today) || (showDisabled == false && exercise.revealdate > today)" ng-click="select(exercise)">
         <div class="tile" ng-drag="true" ng-drag-data="exercise" ng-class="getTileClass(exercise)">
             <div class="triangle" ng-if="exercise.extra"></div>
             <div class="title">
