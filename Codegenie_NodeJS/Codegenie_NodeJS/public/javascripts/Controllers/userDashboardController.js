@@ -3,31 +3,13 @@
     var app = angular.module("userApp");
     
     var userDashboardController = function ($scope, userRestData, $routeParams) {
-        //Arne routeParams maybe...
-        userRestData.getUser.get(function (data) {
-            $scope.user = data;
-            userRestData.getStatisticsAnswers.get(function (data) {
-                $scope.totalAnswersCourse = 0;
-                $scope.totalAnswers = 0;
-                $scope.myAnswers = 0;
-
-                $scope.totalAnswers = data.count;
-                $scope.myAnswers = data.myself;
-                angular.forEach(data.courses, function(value, key)
-                {
-                    if(value.course === $scope.user.course)
-                        $scope.totalAnswersCourse = value.count;
-
-                });
-            });
-        });
-
-        userRestData.getStatsticsAnswersGraph.query(function (data)
+        userRestData.getStatisticsMyAnswersGraphWeek.get(function (data)
         {
-           $scope.graphAnswers = data;
+            $scope.myAnswers = data.received.length;
+            $scope.graphAnswers = data.activity;
         });
 
-        $scope.ykeys = ["count"];
+        $scope.ykeys = ["total"];
         $scope.labels = ["Answers"];
     };
 

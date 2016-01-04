@@ -10,7 +10,8 @@
             getAnswer: $resource("users/exercises/:exerciseid/answers", { exerciseid: '@exerciseid' }),
             postAnswer: $resource("/users/answer"),
             getStatisticsAnswers: $resource("/statistics/answers"),
-            getStatsticsAnswersGraph: $resource("statistics/graph"),
+            getStatisticsAnswersGraph: $resource("statistics/graph"),
+            getStatisticsMyAnswersGraphWeek: $resource("statistics/users/mine?filter=week"),
             getNewExercises: $resource("/users/exercises/new"),
             addLastSeen: $resource("users/seen/:exerciseid", { exerciseid: '@exerciseid'})
         };

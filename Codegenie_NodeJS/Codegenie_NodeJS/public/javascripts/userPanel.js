@@ -33,6 +33,12 @@ $(function () {
                 controller: 'userDashboardController'
             })
 
+            .when('/statistics', {
+                templateUrl: 'views/userStatistics.html',
+                controller: 'userStatisticsController'
+            })
+
+
             .when('/exercises', {
                 templateUrl: 'views/userExercises.html',
                 controller: 'userExercisesController'
