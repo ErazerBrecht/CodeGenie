@@ -37,7 +37,7 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
         
         AnswerModel.find({ userid: userID }).remove(function (err, affected) {
             if (err) return console.error(err);
-            res.status(200).send("Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
+            savehandler(res, err, "Succesfully deleted " + affected + (affected == 1 ? " user." : " users."));
         });
     });
 });
@@ -127,11 +127,14 @@ router.post("/users/assign", isAdmin, function (req, res) {
                 if (err) return reject(err);
                 totalaffected += affected.nModified;
                 resolve();
+
             });
         });
     });
     
-    Promise.all(promises).then(function () { res.status(200).send("Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users.")); }).catch(console.error);
+    //Promise.all(promises).then(function () { res.status(200).json(["Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users.")]); }).catch(console.error);
+    Promise.all(promises).then(function () { savehandler(res, undefined, "Succesfully assigned " + totalaffected + (totalaffected == 1 ? " user." : " users."))});
+
 });
 
 
@@ -173,7 +176,7 @@ router.get("/exercises/delete/:exerciseID", isAdmin, function (req, res) {
     
     ExerciseModel.find({ _id: exerciseID }).remove(function (err, affected) {
         if (err) return res.status(400).json(["Exercise doesn't exist."]);
-        res.status(200).send("Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
+        savehandler(res, err, "Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " exercise." : " exercises."));
     });
 });
 
@@ -252,8 +255,7 @@ router.get("/answers/delete/:answerID", isAdmin, function (req, res) {
     
     AnswerModel.find({ _id: answerID }).remove(function (err, affected) {
         if (err) return console.error(err);
-        
-        res.status(200).send("Succesfully deleted " + affected.nModified+ (affected.nModified == 1 ? " answer." : " answers."));
+        savehandler(res, err, "Succesfully deleted " + affected.nModified + (affected.nModified == 1 ? " answer." : " answers."));
     });
 });
 
@@ -269,8 +271,9 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
         ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
             if(exError) return console.error(exError);
 
-            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(200).send("Deadline not over yet. Users could still make changes.");
+            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
             //TODO remove this? not sure if user should still be able to edit his answers after deadline
+            //Brecht: Keep this :)
 
             for (var field in req.body) result[field] = req.body[field];
 

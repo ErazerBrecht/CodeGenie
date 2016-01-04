@@ -79,22 +79,14 @@
 
             $scope.selected.exerciseid = $scope.selected._id;
 
-            $http({
-                method  : 'POST',
-                url     : '/users/answer/',
-                data    : $scope.selected,
-                responseType: 'text'
-            }).then(
-                //SUCCESS
-                function (response) {
+            userRestData.postAnswer.save($scope.selected,
+                function(response){
                     $scope.message = response.data;
                 },
-                //ERROR
-                function (error) {
-                    $scope.error = error.data;
+                function(err){
+                    $scope.error = err.data;
                 }
             );
-            
         };
     };
     
