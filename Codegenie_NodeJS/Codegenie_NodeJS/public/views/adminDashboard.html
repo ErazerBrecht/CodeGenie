@@ -124,7 +124,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'Programming Principles'} | limitTo:10 | orderBy:'-created'" class="list-group-item">
+                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'Programming Principles'} | orderBy:'-created' | limitTo:10 " class="list-group-item">
                         <time am-time-ago="answer.created" class="badge"></time>
                         <i class="fa fa-fw fa-check"></i>{{answer.name}} has answered {{answer.title}}
                     </a>
@@ -144,7 +144,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'OO'} | limitTo:10 | orderBy:'-created'"  class="list-group-item">
+                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'OO'} | orderBy:'-created' | limitTo:10 "  class="list-group-item">
                         <time am-time-ago="answer.created" class="badge"></time>
                         <i class="fa fa-fw fa-check"></i>{{answer.name}} has answered {{answer.title}}
                     </a>
@@ -164,7 +164,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'Mobile-dev'} | limitTo:10 | orderBy:'-created'"  class="list-group-item">
+                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'Mobile-dev'} | orderBy:'-created' | limitTo:10 "  class="list-group-item">
                         <time am-time-ago="answer.created" class="badge"></time>
                         <i class="fa fa-fw fa-check"></i>{{answer.name}} has answered {{answer.title}}
                     </a>
@@ -184,7 +184,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'SO4'} | limitTo:10 | orderBy:'-created'"  class="list-group-item">
+                    <a href="" ng-repeat="answer in allAnswers | filter: { course: 'SO4'} | orderBy:'-created' | limitTo:10 "  class="list-group-item">
                         <time am-time-ago="answer.created" class="badge"></time>
                         <i class="fa fa-fw fa-check"></i>{{answer.name}} has answered {{answer.title}}
                     </a>
