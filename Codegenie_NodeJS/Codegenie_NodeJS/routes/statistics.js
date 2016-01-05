@@ -93,7 +93,7 @@ router.get('/graph', isLoggedIn, function (req, res) {
                         if (!found) response.push({"x": first, "y": 0});
 
                         filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ?  last + 1 :(last + 1) % 52));
+                    } while (first != (filter == "year" ?  last + 1 : (last % 52) + 1));
                 }
                 res.status(200).json(response);
             }
@@ -200,7 +200,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                         }
 
                         filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ?  last + 1 :(last + 1) % 52));
+                    } while (first != (filter == "year" ?  last + 1 : (last % 52) + 1));
                 }
 
                 res.status(200).json({
