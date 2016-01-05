@@ -454,6 +454,8 @@ function SendUserStatistic(userID, res, filter) {
                         {
                             $group: {
                                 "_id": {
+                                    "exerciseid": "$exerciseid",
+                                    "created": "$created",
                                     "week": {$week: "$created"},
                                     "hour": {$hour: "$created"},
                                 }
