@@ -31,11 +31,56 @@
 
         restData.getStatisticsAnswersGraph.query(function (data)
         {
-            $scope.graphAnswers = data;
+            $scope.graphData = [
+                {
+                    values: data,      //values - represents the array of {x,y} data points
+                    key: 'Total answers', //key  - the name of the series.
+                    color: '#337ab7',  //color - optional: choose your own line color.
+                }
+            ];
         });
 
-        $scope.ykeys = ["count"];
-        $scope.labels = ["Answers"];
+        $scope.options = {
+            "chart": {
+                "type": "multiBarChart",
+                "height": 450,
+                "margin": {
+                    "top": 20,
+                    "right": 20,
+                    "bottom": 40,
+                    "left": 55
+                },
+                "useInteractiveGuideline": true,
+                "dispatch": {},
+                "xAxis": {
+                    "axisLabel": "Week"
+                },
+                "yAxis": {
+                    "axisLabel": "Exercises",
+                    "axisLabelDistance": -10
+                }
+            },
+            "title": {
+                "enable": false,
+                "text": null
+            },
+            "subtitle": {
+                "enable": false,
+                "text": null,
+                "css": {
+                    "text-align": "center",
+                    "margin": "10px 13px 0px 7px"
+                }
+            },
+            "caption": {
+                "enable": false,
+                "html": null,
+                "css": {
+                    "text-align": "justify",
+                    "margin": "10px 13px 0px 7px"
+                }
+            }
+        };
 
         $scope.getClass = function(statistic)
         {

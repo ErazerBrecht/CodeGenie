@@ -7,6 +7,7 @@ block header
     link(rel='stylesheet', href='/stylesheets/messagebox.css')
     link(rel='stylesheet', href='/stylesheets/sb-admin.css')
     link(rel='stylesheet', href='/stylesheets/dragdrop.css')
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css")
 
 block content
     #wrapper(ng-app = 'adminApp' ng-controller='adminPanelController')
@@ -68,6 +69,8 @@ block content
      script(src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.2.0/metisMenu.min.js")
      script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js")
      script(src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js")
+     script(src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js")
+     script(src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js")
      script(src='/javascripts/adminpanel.js')
      script(src='/javascripts/messagebox.js')
      script(src='/javascripts/Controllers/adminPanelController.js')
@@ -81,6 +84,4 @@ block content
      script(src='/javascripts/src-min/ace.js')
      script(src='/javascripts/angular-ui-ace/ui-ace.js')
      script(src='/javascripts/angular-bootstrap-checkbox.js')
-     script(src='/javascripts/angular-morris-chart/raphael.min.js')
-     script(src='/javascripts/angular-morris-chart/morris.min.js')
-     script(src='/javascripts/angular-morris-chart/angular-morris-chart.min.js')
+     script(src="https://rawgit.com/krispo/angular-nvd3/v1.0.4/dist/angular-nvd3.js")
