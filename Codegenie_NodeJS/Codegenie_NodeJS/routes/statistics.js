@@ -95,6 +95,7 @@ router.get('/graph', isLoggedIn, function (req, res) {
                         filter == "year" ? first += 1 : first = (first % 52) + 1;
                     } while (first != (filter == "year" ?  last + 1 : (last % 52) + 1));
                 }
+
                 res.status(200).json(response);
             }
         });
@@ -501,16 +502,19 @@ function SendUserStatistic(userID, res, filter) {
                             }
                         },
                         {
+                            $sort: {"_id.created": -1}
+                        },
+                        {
                             $group: {
                                 "_id": {$cond: [{$eq: [filter, "week"]}, "$_id.week", "$_id.hour"]},
-                                "total": {$sum: 1}
+                                "count": {$sum: 1}
                             }
                         },
                         {
                             $project: {
                                 "_id": 0,
                                 "filter": "$_id",
-                                "total": "$total"
+                                "count": "$count"
                             }
                         }
                     ],
@@ -543,9 +547,29 @@ function SendUserStatistic(userID, res, filter) {
                                     else {
                                         UserModel.findById(userID, function (err, result) {
                                             if (err) return console.error(err);
+                                            var activityArray = [];
+                                            if (aggresultActivity.length != 0) {
+
+                                                var first = aggresultActivity[0].filter;
+                                                var last = aggresultActivity[aggresultActivity.length - 1].filter;
+
+                                                do {
+                                                    var found = false;
+                                                    for (var x = 0; x < aggresultActivity.length; x++) {
+                                                        if (aggresultActivity[x].filter == first) {
+                                                            activityArray.push({"x": first, "y": aggresultActivity[x].count});
+                                                            found = true;
+                                                        }
+                                                    }
+                                                    if (!found) activityArray.push({"x": first, "y": 0});
+
+                                                    filter == "hour" ? first = (first + 1) % 24 : first = (first % 52) + 1;
+                                                } while (first != (filter == "hour" ?  (last + 1) % 24 : (last % 52) + 1));
+                                            }
+
                                             res.status(200).json({
                                                 "received": aggresultReceived,
-                                                "activity": aggresultActivity,
+                                                "activity": activityArray,
                                                 "logins": {
                                                     "average": aggresultLogins[0].logins,
                                                     "mylogins": result.logins
