@@ -87,12 +87,12 @@
             $scope.graphData = [
                 {
                     values: data,      //values - represents the array of {x,y} data points
-                    key: 'Total', //key  - the name of the series.
+                    key: 'Total answers', //key  - the name of the series.
                     color: '#337ab7',  //color - optional: choose your own line color.
                 },
                 {
                     values: Hardcoded,      //values - represents the array of {x,y} data points
-                    key: 'Hardcoded ', //key  - the name of the series.
+                    key: 'Hardcoded answers', //key  - the name of the series.
                     color: '#f0ad4e',  //color - optional: choose your own line color.
                 }
             ];
