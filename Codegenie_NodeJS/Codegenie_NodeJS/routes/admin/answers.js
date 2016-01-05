@@ -1,7 +1,7 @@
-var schemas = require('../mongoose/schemas');
+var schemas = require('../../mongoose/schemas');
 var express = require('express');
 var mongoose = require('mongoose');
-var auth = require('../passport/authlevels');
+var auth = require('../../passport/authlevels');
 var router = express.Router();
 
 var ExerciseModel = schemas.ExerciseModel;

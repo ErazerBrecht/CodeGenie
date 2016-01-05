@@ -1,7 +1,7 @@
-var schemas = require('../mongoose/schemas');
+var schemas = require('../../mongoose/schemas');
 var express = require('express');
 var mongoose = require('mongoose');
-var auth = require('../passport/authlevels');
+var auth = require('../../passport/authlevels');
 var router = express.Router();
 
 var UserModel = schemas.UserModel;
@@ -14,6 +14,14 @@ var isAdmin = auth.isAdmin;
 //ADMIN USERS
 
 //GET
+
+router.get('/users/', isAdmin, function (req, res) {
+    UserModel.find({}, {password: 0}).lean().exec(function (err, result) {
+        if (err) return console.error(err);
+
+        res.status(200).json(result);
+    })
+});
 
 router.get('/users/:userID', isAdmin, function (req, res) {
     var userID = req.params.userID;
