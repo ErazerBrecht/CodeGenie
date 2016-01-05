@@ -93,10 +93,73 @@ router.get('/graph', isLoggedIn, function (req, res) {
                         if (!found) response.push({"x": first, "y": 0});
 
                         filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ?  last + 1 : (last % 52) + 1));
+                    } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
                 }
 
                 res.status(200).json(response);
+            }
+        });
+});
+
+router.get('/course/:course', isLoggedIn, function (req, res) {
+    var course = req.params.course;
+
+    AnswerModel.aggregate(
+        [
+            {"$match": {"course": course, "revised": true}},
+            {
+                $group: {
+                    "_id": "$userid",
+                    "answers": {$push: "$answers"},
+                }
+            },
+            {$unwind: "$answers"},
+            {$unwind: "$answers"},
+            {
+                $group: {
+                    "_id": "$_id",
+                    "received": {$sum: "$answers.received"}
+                }
+            },
+            {
+                $project: {
+                    "_id": 0,
+                    "userid": "$_id",
+                    "received": "$received"
+                }
+            },
+            {
+                $sort: {"received": -1}
+            },
+            {
+                $limit: 3
+            }
+        ],
+        function (err, aggresult) {
+            if (err) console.error(err);
+            else {
+                response = [];
+
+                for (var x = 0; x < aggresult.length; x++)
+                    response.push({
+                        "userid": aggresult[x].userid,
+                        "received": aggresult[x].received,
+                        "index": x
+                    })
+
+                var promises = response.map(function (obj) {
+                    return new Promise(function (resolve, reject) {
+                        UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                            if (err) return reject(err);
+                            if (usresult) aggresult[obj.index].name = usresult.name;
+                            resolve();
+                        });
+                    });
+                });
+
+                Promise.all(promises).then(function () {
+                    res.status(200).json(aggresult);
+                }).catch(console.error);
             }
         });
 });
@@ -201,7 +264,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                         }
 
                         filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ?  last + 1 : (last % 52) + 1));
+                    } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
                 }
 
                 res.status(200).json({
@@ -414,36 +477,6 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     });
 });
 
-function countcourses(arr) {
-    var a = [], b = [];
-
-    for (var i = 0; i < arr.length; i++) {
-        var obj = arr[i].course;
-        if (a.indexOf(obj) == -1) {
-            a.push(obj);
-            b.push(1);
-        }
-        else b[a.indexOf(obj)] += 1;
-    }
-
-    return [a, b];
-}
-
-function countclasses(arr) {
-    var a = [], b = [];
-
-    for (var i = 0; i < arr.length; i++) {
-        var obj = arr[i].class;
-        if (a.indexOf(obj) == -1) {
-            a.push(obj);
-            b.push(1);
-        }
-        else b[a.indexOf(obj)] += 1;
-    }
-
-    return [a, b];
-}
-
 function SendUserStatistic(userID, res, filter) {
     AnswerModel.aggregate(
         [
@@ -557,14 +590,17 @@ function SendUserStatistic(userID, res, filter) {
                                                     var found = false;
                                                     for (var x = 0; x < aggresultActivity.length; x++) {
                                                         if (aggresultActivity[x].filter == first) {
-                                                            activityArray.push({"x": first, "y": aggresultActivity[x].count});
+                                                            activityArray.push({
+                                                                "x": first,
+                                                                "y": aggresultActivity[x].count
+                                                            });
                                                             found = true;
                                                         }
                                                     }
                                                     if (!found) activityArray.push({"x": first, "y": 0});
 
-                                                    filter == "hour" ? first = (first + 1) % 24 : first = (first % 52) + 1;
-                                                } while (first != (filter == "hour" ?  (last + 1) % 24 : (last % 52) + 1));
+                                                    filter == "week" ? first = (first % 52) + 1 : first = (first + 1) % 24;
+                                                } while (first != (filter == "week" ? (last % 52) + 1 : (last + 1) % 24));
                                             }
 
                                             res.status(200).json({
@@ -585,9 +621,34 @@ function SendUserStatistic(userID, res, filter) {
     );
 }
 
-function FixWeekArrayIn(obj) {
+function countcourses(arr) {
+    var a = [], b = [];
 
+    for (var i = 0; i < arr.length; i++) {
+        var obj = arr[i].course;
+        if (a.indexOf(obj) == -1) {
+            a.push(obj);
+            b.push(1);
+        }
+        else b[a.indexOf(obj)] += 1;
+    }
 
+    return [a, b];
+}
+
+function countclasses(arr) {
+    var a = [], b = [];
+
+    for (var i = 0; i < arr.length; i++) {
+        var obj = arr[i].class;
+        if (a.indexOf(obj) == -1) {
+            a.push(obj);
+            b.push(1);
+        }
+        else b[a.indexOf(obj)] += 1;
+    }
+
+    return [a, b];
 }
 
 module.exports = router;
