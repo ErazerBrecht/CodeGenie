@@ -280,6 +280,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
 
 router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
+    var limit = parseInt(req.query.limit ? req.query.limit : 3);
     var response = {
         count: 0,
         title: "",
@@ -391,7 +392,7 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                                 $sort: {"received": -1}
                             },
                             {
-                                $limit: 3
+                                $limit: limit
                             }
                         ],
                         function (err, aggresultTop) {
