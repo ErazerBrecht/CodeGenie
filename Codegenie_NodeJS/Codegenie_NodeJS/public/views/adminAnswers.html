@@ -48,7 +48,6 @@
 
                     <div ng-repeat="a in answer.answers">
                         <div class="panel-body" ng-switch on="a.type">
-                            <form id="assignForm" class="top-20" ng-submit="processForm(answer)">
                                 <div ng-switch-when="Checkbox">
                                     <h4>{{a.questiontitle}} <span
                                             style="float: right;">{{a.weight}}</span></h4>
@@ -88,19 +87,15 @@
 
                                 <div class="form-group top-30">
                                     <div>
-                                        <textarea placeholder="Comment" style="resize: vertical; width: 100%" ng-model="comment" cols="100" rows="1"></textarea>
+                                        <textarea class="animate msd-elastic: \n;" placeholder="Comment" style="resize: vertical; width: 100%" ng-model="comment" cols="100" rows="1"></textarea>
                                     </div>
-                                    <div style="float: right; margin: 5px; display: inline-block; width: 100px">
-                                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                                    </div>
-
                                 </div>
-                            </form>
                         </div>
-
                     </div>
-
                 </div>
+            </div>
+            <div style="float: right; margin: 5px; display: inline-block; width: 100px">
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </div>
         </div>
         {{selected}}
