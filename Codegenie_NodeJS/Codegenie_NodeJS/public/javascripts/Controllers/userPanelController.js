@@ -8,7 +8,7 @@
             $scope.user = data;
         });
 
-        userRestData.getNewExercises.get(function (data)
+        userRestData.getNewExercises.query(function (data)
         {
             $scope.newExercises = data;
         });
