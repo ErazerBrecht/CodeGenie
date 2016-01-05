@@ -51,7 +51,10 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 var exerciselist = [];
                 for (var index in exresult) {
                     var obj = exresult[index];
-                    if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
+                    if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) {
+                        console.log(obj._id);
+                        continue;
+                    }
 
                     exerciselist.push({
                         "id": obj._id,
@@ -104,12 +107,25 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
 
                 var exerciseIDs = [];
 
-                if (seenresult) for (var index in seenresult.seenexercises) exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
+                if (seenresult)
+                    for (var index in seenresult.seenexercises)
+                        exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
 
-                ExerciseModel.find({_id: {$nin: exerciseIDs}, course: req.user.course}, function (err, exresult) {
+                ExerciseModel.find({
+                    _id: {$nin: exerciseIDs},
+                    course: req.user.course
+                }).lean().exec(function (err, exresult) {
+
                     if (err) return console.error(err);
                     var send = {};
-                    send.exercises = exresult;
+                    var newexarray = [];
+                    for (var x in exresult) {
+                        var obj = exresult[x];
+                        if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
+                        newexarray.push(obj);
+                    }
+
+                    send.exercises = newexarray;
                     send.count = exresult.length;
                     res.status(200).json(send);
                 })
@@ -389,26 +405,28 @@ router.post("/edit", isLoggedIn, function (req, res) {
 
         if (!isValidPassword(result, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
 
-        if(req.body.password == '') delete req.body.password;
+        if (req.body.password == '') delete req.body.password;
 
         for (var field in req.body) result[field] = req.body[field];
-        
+
         delete result._id;
         delete result.admin; //prevent user from editing random/protected information, everything else is allowed.
         delete result.status;
         delete result.class;
         delete result.course;
 
-        if(req.body.password != undefined)  //otherwise we will hash or hashed password...
+        if (req.body.password != undefined)  //otherwise we will hash or hashed password...
             result.password = createHash(result.password);
-        
+
         delete result.registerdate;
         delete result.lastseen;
         delete result.__v;
 
         console.log(result);
 
-        result.save(function (err) {savehandler(res, err, "Profile edited."); });
+        result.save(function (err) {
+            savehandler(res, err, "Profile edited.");
+        });
     });
 });
 
