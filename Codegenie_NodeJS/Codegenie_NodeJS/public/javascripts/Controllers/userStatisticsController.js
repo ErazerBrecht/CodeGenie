@@ -68,65 +68,42 @@
         }
         };
 
-        $scope.data = GetGraphData();
+            userRestData.getStatisticsAnswersGraph.query(function (data)
+            {
+                var Hardcoded = [
+                    {
+                        x: 50,
+                        y: 9
+                    },
+                    {
+                        x: 51,
+                        y: 10
+                    },
+                    {
+                        x: 52,
+                        y: 5
+                    },
+                    {
+                        x: 1,
+                        y: 2
+                    }
+                ]
 
-        function GetGraphData() {
-
-            //$scope.graphAnswers = data;
-
-            var data = [
-                {
-                    x: 50,
-                    y: 4
-                },
-                {
-                    x: 51,
-                    y: 7
-                },
-                {
-                    x: 52,
-                    y: 0
-                },
-                {
-                    x: 1,
-                    y: 12
-                }
-            ]
-
-            var Hardcoded = [
-                {
-                    x: 50,
-                    y: 9
-                },
-                {
-                    x: 51,
-                    y: 10
-                },
-                {
-                    x: 52,
-                    y: 5
-                },
-                {
-                    x: 1,
-                    y: 2
-                }
-            ]
-
-            //Line chart data should be sent as an array of series objects.
-            return [
-                {
-                    values: data,      //values - represents the array of {x,y} data points
-                    key: 'Total', //key  - the name of the series.
-                    color: '#337ab7',  //color - optional: choose your own line color.
-                },
-                {
-                    values: Hardcoded,      //values - represents the array of {x,y} data points
-                    key: 'Hardcoded ', //key  - the name of the series.
-                    color: '#f0ad4e',  //color - optional: choose your own line color.
-                }
-            ];
-        }
-    };
+                //Line chart data should be sent as an array of series objects.
+                $scope.graphData = [
+                    {
+                        values: data,      //values - represents the array of {x,y} data points
+                        key: 'Total', //key  - the name of the series.
+                        color: '#337ab7',  //color - optional: choose your own line color.
+                    },
+                    {
+                        values: Hardcoded,      //values - represents the array of {x,y} data points
+                        key: 'Hardcoded ', //key  - the name of the series.
+                        color: '#f0ad4e',  //color - optional: choose your own line color.
+                    }
+                ];
+            });
+        };
 
     app.controller("userStatisticsController", userStatisticsController);
 }());
