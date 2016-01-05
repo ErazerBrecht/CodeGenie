@@ -47,6 +47,7 @@ router.get('/graph', isLoggedIn, function (req, res) {
             {
                 $group: {
                     "_id": {
+                        "exerciseid": "$exerciseid",
                         "created": "$created",
                         "year": {$year: "$created"},
                         "week": {$week: "$created"}
@@ -55,12 +56,12 @@ router.get('/graph', isLoggedIn, function (req, res) {
                 }
             },
             {
-                $sort: { "_id.created": -1 }
+                $sort: {"_id.created": -1}
             },
             {$unwind: "$revised"},
             {
                 $group: {
-                    "_id": { "filter": {$cond: [{$eq: [filter, "year"]}, "$_id.year", "$_id.week"]} },
+                    "_id": {"filter": {$cond: [{$eq: [filter, "year"]}, "$_id.year", "$_id.week"]}},
                     "count": {$sum: 1}
                 }
             },
@@ -76,24 +77,24 @@ router.get('/graph', isLoggedIn, function (req, res) {
             if (err) console.error(err);
             else {
                 var response = [];
-                if (aggresult.length != 0)
+                if (aggresult.length != 0) {
 
-                var first = aggresult[0].filter;
-                var last = aggresult[aggresult.length - 1].filter;
+                    var first = aggresult[0].filter;
+                    var last = aggresult[aggresult.length - 1].filter;
 
-                do {
-                    var found = false;
-                    for (var x = 0; x < aggresult.length; x++) {
-                        if (aggresult[x].filter == first) {
-                            response.push({"x": first, "y": aggresult[x].count});
-                            found = true;
+                    do {
+                        var found = false;
+                        for (var x = 0; x < aggresult.length; x++) {
+                            if (aggresult[x].filter == first) {
+                                response.push({"x": first, "y": aggresult[x].count});
+                                found = true;
+                            }
                         }
-                    }
-                    if (!found) response.push({"x": first, "y": 0});
+                        if (!found) response.push({"x": first, "y": 0});
 
-                    first = (first + 1) % 52;
-                } while(first != (last +1) % 52)
-
+                        filter == "year" ? first += 1 : first = (first + 1) % 52;
+                    } while (first != (filter == "year" ?  last + 1 :(last + 1) % 52));
+                }
                 res.status(200).json(response);
             }
         });
@@ -138,6 +139,8 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
             {
                 $group: {
                     "_id": {
+                        "exerciseid": "$exerciseid",
+                        "created": "$created",
                         "year": {$year: "$created"},
                         "week": {$week: "$created"},
                         "revised": {$cond: [{$eq: ['$revised', true]}, 1, 0]},
@@ -145,6 +148,9 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
                     },
                     "revised": {$push: "$revised"}
                 }
+            },
+            {
+                $sort: {"_id.created": -1}
             },
             {$unwind: "$revised"},
             {
@@ -168,7 +174,40 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
         function (err, aggresult) {
             if (err) console.error(err);
             else {
-                res.status(200).json(aggresult);
+                var responseCount = [];
+                var responseRevised = [];
+                var responseUnrevised = [];
+
+                if (aggresult.length != 0) {
+
+                    var first = aggresult[0].filter;
+                    var last = aggresult[aggresult.length - 1].filter;
+
+                    do {
+                        var found = false;
+                        for (var x = 0; x < aggresult.length; x++) {
+                            if (aggresult[x].filter == first) {
+                                responseCount.push({"x": first, "y": aggresult[x].count});
+                                responseRevised.push({"x": first, "y": aggresult[x].revised});
+                                responseUnrevised.push({"x": first, "y": aggresult[x].unrevised});
+                                found = true;
+                            }
+                        }
+                        if (!found) {
+                            responseCount.push({"x": first, "y": 0});
+                            responseRevised.push({"x": first, "y": 0});
+                            responseUnrevised.push({"x": first, "y": 0});
+                        }
+
+                        filter == "year" ? first += 1 : first = (first + 1) % 52;
+                    } while (first != (filter == "year" ?  last + 1 :(last + 1) % 52));
+                }
+
+                res.status(200).json({
+                    "total": responseCount,
+                    "revised": responseRevised,
+                    "unrevised": responseUnrevised
+                });
             }
         }
     );
