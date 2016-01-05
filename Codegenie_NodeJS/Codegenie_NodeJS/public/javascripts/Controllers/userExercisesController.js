@@ -1,8 +1,8 @@
 ﻿(function () {
-    
+
     var app = angular.module("userApp");
     var newAnswer = {};
-    
+
     var userExercisesController = function ($scope, userRestData, $routeParams, $http) {
         $scope.today = new Date();
 
@@ -13,9 +13,8 @@
             angular.forEach($scope.exercises, function (value, key) {
                 value.deadline = new Date(value.deadline);
 
-                if(value.solved)
-                {
-                    userRestData.getAnswer.get({ exerciseid: value._id }, function (data) {
+                if (value.solved) {
+                    userRestData.getAnswer.get({exerciseid: value._id}, function (data) {
                         value.answers = data.answers;
                         value.answerDate = new Date(data.created);
                     });
@@ -23,7 +22,7 @@
             });
         });
 
-        $scope.beautify = function(ans) {
+        $scope.beautify = function (ans) {
             var array = ans.result.split(/\n/);
             array[0] = array[0].trim();
             ans.result = array.join("\n");
@@ -34,13 +33,20 @@
             ans.result = js_beautify(ans.result, options);
 
             angular.forEach($scope.selected.answers, function (value, key) {
-                if(value.questionid == ans.questionid){
+                if (value.questionid == ans.questionid) {
                     $scope.selected.answers.result = ans.result;
                 }
 
             });
 
-        }
+        };
+
+
+        //for making textarea automatic bigger and smaller
+        function textAreaAdjust(o) {
+            o.style.height = "1px";
+            o.style.height = (25 + o.scrollHeight) + "px";
+        };
 
         $scope.dismissMessage = function () {
             $scope.message = null;
@@ -48,7 +54,7 @@
 
         $scope.select = function (exercise) {
             //Prevent double click
-            if($scope.selected === undefined || $scope.selected._id != exercise._id) {
+            if ($scope.selected === undefined || $scope.selected._id != exercise._id) {
                 $scope.selected = exercise;
 
                 //Clear error and message
@@ -60,7 +66,7 @@
                     var questions = $scope.selected.questions;
 
                     //Update your exercises seen array with this exercise
-                    userRestData.addLastSeen.save({ exerciseid: $scope.selected._id }, function (data) {
+                    userRestData.addLastSeen.save({exerciseid: $scope.selected._id}, function (data) {
 
                     });
 
@@ -78,32 +84,29 @@
         $scope.getTileClass = function (selected) {
             var tempExercise = selected
 
-            if(tempExercise.solved)
-            {
-                if(tempExercise.answerDate > tempExercise.deadline)
+            if (tempExercise.solved) {
+                if (tempExercise.answerDate > tempExercise.deadline)
                     return "orange";
                 return "green";
             }
-            else
-            {
-                if(tempExercise.deadline < new Date())
-                {
+            else {
+                if (tempExercise.deadline < new Date()) {
                     return "red";
                 }
-                else if(!tempExercise.seen)
+                else if (!tempExercise.seen)
                     return "blue";
 
                 return "purple";
             }
         };
-        
+
         $scope.processForm = function () {
             //Clear error and message
             $scope.error = null;
             $scope.message = null;
 
             angular.forEach($scope.selected.answers, function (value, key) {
-                if(value.type == "Code"){
+                if (value.type == "Code") {
                     $scope.beautify(value);
                 }
 
@@ -112,15 +115,15 @@
             $scope.selected.exerciseid = $scope.selected._id;
 
             userRestData.postAnswer.save($scope.selected,
-                function(response){
+                function (response) {
                     $scope.message = response.data;
                 },
-                function(err){
+                function (err) {
                     $scope.error = err.data;
                 }
             );
         };
     };
-    
+
     app.controller("userExercisesController", userExercisesController);
 }());
