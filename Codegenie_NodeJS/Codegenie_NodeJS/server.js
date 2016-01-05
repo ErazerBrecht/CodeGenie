@@ -30,7 +30,7 @@ configPassport(passport);
 var indexRoutes = require('./routes/index')(passport);
 var signupRoutes = require('./routes/signup.js')(passport);
 var userRoutes = require('./routes/users');
-var adminRoutes = require('./routes/admin');
+var adminRoutes = require('./routes/admin/admin');
 var statisticRoutes = require('./routes/statistics');
 var homeRoutes = require('./routes/home');
 

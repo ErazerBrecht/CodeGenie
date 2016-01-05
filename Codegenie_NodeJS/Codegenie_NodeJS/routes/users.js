@@ -20,13 +20,6 @@ var isAdmin = auth.isAdmin;
 
 //GET
 
-router.get('/', isAdmin, function (req, res) {
-    UserModel.find({}, {password: 0}).lean().exec(function (err, result) {
-        if (err) return console.error(err);
-
-        res.status(200).json(result);
-    })
-});
 
 router.get('/mine', isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, {password: 0}).lean().exec(function (err, result) {
@@ -179,6 +172,7 @@ router.get('/exercises/:exerciseID/answers', isLoggedIn, function (req, res) {
     });
 });
 
+
 //TODO: Change url of this REST Endpoint
 router.get('/seen/', isLoggedIn, function (req, res) {
     UserSeenModel.findOne({userid: req.user._id}).lean().exec(function (err, result) {
@@ -226,6 +220,8 @@ router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
         }
     });
 });
+
+
 
 router.get('/answers', isLoggedIn, function (req, res) {
     if (req.query.display == "summary") {

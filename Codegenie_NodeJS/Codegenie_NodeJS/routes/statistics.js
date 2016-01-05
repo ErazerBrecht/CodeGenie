@@ -194,7 +194,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
     });
 });
 
-router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/:exerciseID/graph', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var filter = req.query.filter;
 
@@ -278,7 +278,7 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
     );
 });
 
-router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/:exerciseID/average', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var limit = parseInt(req.query.limit ? req.query.limit : 3);
     var response = {

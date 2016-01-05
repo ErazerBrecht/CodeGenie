@@ -6,7 +6,7 @@ var isLoggedInRedirect = auth.isLoggedInRedirect;
 
 router.get('/', isLoggedInRedirect, function (req, res) {
     if (req.user.course == 'Admin')
-        res.redirect('/admin');
+        res.render('adminpanel', {title: 'CodeGenie'});
     else
         res.render('userpanel', { title: 'CodeGenie' });
 });
