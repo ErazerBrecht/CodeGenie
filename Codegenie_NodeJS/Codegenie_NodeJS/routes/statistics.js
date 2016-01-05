@@ -47,16 +47,20 @@ router.get('/graph', isLoggedIn, function (req, res) {
             {
                 $group: {
                     "_id": {
+                        "created": "$created",
                         "year": {$year: "$created"},
                         "week": {$week: "$created"}
                     },
                     "revised": {$push: "$revised"}
                 }
             },
+            {
+                $sort: { "_id.created": -1 }
+            },
             {$unwind: "$revised"},
             {
                 $group: {
-                    "_id": {$cond: [{$eq: [filter, "year"]}, "$_id.year", "$_id.week"]},
+                    "_id": { "filter": {$cond: [{$eq: [filter, "year"]}, "$_id.year", "$_id.week"]} },
                     "count": {$sum: 1}
                 }
             },
@@ -64,14 +68,33 @@ router.get('/graph', isLoggedIn, function (req, res) {
                 $project: {
                     "_id": 0,
                     "count": "$count",
-                    "filter": "$_id"
+                    "filter": "$_id.filter"
                 }
             }
         ],
         function (err, aggresult) {
             if (err) console.error(err);
             else {
-                res.status(200).json(aggresult);
+                var response = [];
+                if (aggresult.length != 0)
+
+                var first = aggresult[0].filter;
+                var last = aggresult[aggresult.length - 1].filter;
+
+                do {
+                    var found = false;
+                    for (var x = 0; x < aggresult.length; x++) {
+                        if (aggresult[x].filter == first) {
+                            response.push({"x": first, "y": aggresult[x].count});
+                            found = true;
+                        }
+                    }
+                    if (!found) response.push({"x": first, "y": 0});
+
+                    first = (first + 1) % 52;
+                } while(first != (last +1) % 52)
+
+                res.status(200).json(response);
             }
         });
 });
@@ -495,6 +518,11 @@ function SendUserStatistic(userID, res, filter) {
             }
         }
     );
+}
+
+function FixWeekArrayIn(obj) {
+
+
 }
 
 module.exports = router;
