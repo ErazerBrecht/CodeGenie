@@ -11,6 +11,17 @@
             $scope.graphAnswers = data.activity;
         });
 
+        userRestData.getStatisticsMyAnswersGraphHour.get(function (data)
+        {
+            $scope.punchCardData = [
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            ];
+
+            angular.forEach(data.activity, function (value, key) {
+                $scope.punchCardData[0][value.filter] = value.total;
+            });
+        });
+
         $scope.ykeys = ["total"];
         $scope.labels = ["Answers"];
     };
