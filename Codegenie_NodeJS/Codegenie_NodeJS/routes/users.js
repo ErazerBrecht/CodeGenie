@@ -112,8 +112,8 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                     _id: {$nin: exerciseIDs},
                     course: req.user.course
                 }).lean().exec(function (err, exresult) {
-
                     if (err) return console.error(err);
+
                     var send = {};
                     var newexarray = [];
                     for (var x in exresult) {
@@ -122,9 +122,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                         newexarray.push(obj);
                     }
 
-                    send.exercises = newexarray;
-                    send.count = exresult.length;
-                    res.status(200).json(send);
+                    res.status(200).json(newexarray);
                 })
             });
             break;

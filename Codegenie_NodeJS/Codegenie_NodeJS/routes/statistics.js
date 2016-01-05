@@ -104,7 +104,7 @@ router.get('/graph', isLoggedIn, function (req, res) {
 router.get('/course/:course', isLoggedIn, function (req, res) {
     var course = req.params.course;
     var limit = parseInt(req.query.limit ? req.query.limit : 3);
-    
+
     AnswerModel.aggregate(
         [
             {"$match": {"course": course, "revised": true}},
