@@ -18,7 +18,7 @@
             ];
 
             angular.forEach(data.activity, function (value, key) {
-                $scope.punchCardData[0][value.filter] = value.total;
+                $scope.punchCardData[0][value.x] = value.y;
             });
         });
 
