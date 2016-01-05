@@ -93,12 +93,36 @@
                 }
             ]
 
+            var Hardcoded = [
+                {
+                    x: 50,
+                    y: 9
+                },
+                {
+                    x: 51,
+                    y: 10
+                },
+                {
+                    x: 52,
+                    y: 5
+                },
+                {
+                    x: 1,
+                    y: 2
+                }
+            ]
+
             //Line chart data should be sent as an array of series objects.
             return [
                 {
                     values: data,      //values - represents the array of {x,y} data points
                     key: 'Total', //key  - the name of the series.
                     color: '#337ab7',  //color - optional: choose your own line color.
+                },
+                {
+                    values: Hardcoded,      //values - represents the array of {x,y} data points
+                    key: 'Hardcoded ', //key  - the name of the series.
+                    color: '#f0ad4e',  //color - optional: choose your own line color.
                 }
             ];
         }
