@@ -51,10 +51,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 var exerciselist = [];
                 for (var index in exresult) {
                     var obj = exresult[index];
-                    if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) {
-                        console.log(obj._id);
-                        continue;
-                    }
+                    if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
 
                     exerciselist.push({
                         "id": obj._id,
@@ -194,8 +191,6 @@ router.get('/seen/', isLoggedIn, function (req, res) {
 });
 
 router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
-    console.log("Updating seen exercises");
-
     UserSeenModel.findOne({userid: req.user._id}, function (err, result) {
         if (err) return console.error(err);
         if (!result) {
@@ -421,8 +416,6 @@ router.post("/edit", isLoggedIn, function (req, res) {
         delete result.registerdate;
         delete result.lastseen;
         delete result.__v;
-
-        console.log(result);
 
         result.save(function (err) {
             savehandler(res, err, "Profile edited.");

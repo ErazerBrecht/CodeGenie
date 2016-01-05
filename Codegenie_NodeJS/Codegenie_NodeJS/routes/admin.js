@@ -295,7 +295,6 @@ router.post("/answers/edit/:answerID", isAdmin, function (req, res) {
     AnswerModel.findOne({_id: answerID}, function (err, result) {
         if (err) return console.error(err);
 
-        console.log(result);
         ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
             if(exError) return console.error(exError);
 
