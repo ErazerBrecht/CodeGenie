@@ -2,7 +2,7 @@
 
     var userApp = angular.module("userApp");
 
-    var userProfileEditController = function ($scope, userRestData, $routeParams) {
+    var userProfileEditController = function ($scope, userRestData) {
         $scope.editProfile = function () {
             $scope.message = null;
             $scope.error = null;

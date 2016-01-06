@@ -2,7 +2,7 @@
     
     var app = angular.module("userApp");
     
-    var userPanelController = function ($scope, userRestData, $routeParams) {
+    var userPanelController = function ($scope, userRestData) {
         
         userRestData.getUser.get(function (data) {
             $scope.user = data;

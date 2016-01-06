@@ -4,7 +4,7 @@
 
 
 
-    var adminAnswersController = function ($scope, restData, $routeParams, $http) {
+    var adminAnswersController = function ($scope, restData) {
 
         $scope.totalPoints = 0;
         restData.getExercises.query(function (data) {

@@ -3,7 +3,7 @@
     var app = angular.module("userApp");
     var newAnswer = {};
 
-    var userExercisesController = function ($scope, userRestData, $routeParams, $http) {
+    var userExercisesController = function ($scope, userRestData) {
         $scope.today = new Date();
 
         userRestData.getExercises.query(function (data) {

@@ -2,7 +2,7 @@
 	
 	var app = angular.module("adminApp");
 	
-    var adminDashBoardController = function ($scope, restData, $routeParams) {
+    var adminDashBoardController = function ($scope, restData) {
         
         restData.getAllAnswers.query(function (data) {
             $scope.allAnswers = data;

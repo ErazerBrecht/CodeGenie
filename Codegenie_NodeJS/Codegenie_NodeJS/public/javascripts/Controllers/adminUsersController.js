@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminUsersController = function ($scope, restData, $routeParams, $http) {
+    var adminUsersController = function ($scope, restData) {
 
         ctor();
 

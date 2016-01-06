@@ -2,7 +2,7 @@
 
     var adminApp = angular.module("adminApp");
 
-    var adminProfileEditController = function ($scope, restData, $routeParams) {
+    var adminProfileEditController = function ($scope, restData) {
         $scope.editProfile = function () {
             $scope.message = null;
             $scope.error = null;

@@ -2,7 +2,7 @@
 
     var app = angular.module("userApp");
 
-    var userStatisticsController = function ($scope, userRestData, $routeParams) {
+    var userStatisticsController = function ($scope, userRestData) {
         userRestData.getStatisticsAnswers.get(function (data) {
             $scope.totalAnswersCourse = 0;
             $scope.totalAnswers = 0;

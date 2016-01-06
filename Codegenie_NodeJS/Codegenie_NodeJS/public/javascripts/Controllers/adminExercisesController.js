@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, $location, $anchorScroll, $timeout, $routeParams) {
+    var adminExercisesController = function ($scope, $http, restData, $location, $anchorScroll, $timeout) {
         loadData();
 
         function loadData() {

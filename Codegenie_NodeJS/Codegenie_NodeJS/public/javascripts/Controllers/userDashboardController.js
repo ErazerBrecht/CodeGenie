@@ -2,7 +2,7 @@
     
     var app = angular.module("userApp");
     
-    var userDashboardController = function ($scope, userRestData, $routeParams) {
+    var userDashboardController = function ($scope, userRestData) {
         userRestData.getStatisticsMyAnswersGraphWeek.get(function (data)
         {
             $scope.logins = data.logins.mylogins;
