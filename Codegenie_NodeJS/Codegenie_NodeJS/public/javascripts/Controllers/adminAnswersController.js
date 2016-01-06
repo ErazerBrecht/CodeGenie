@@ -2,7 +2,11 @@
 
     var app = angular.module("adminApp");
 
+
+
     var adminAnswersController = function ($scope, restData, $routeParams, $http) {
+
+        $scope.totalPoints = 0;
         restData.getExercises.query(function (data) {
             $scope.exercises = data;
 
@@ -15,7 +19,18 @@
                 });
 
             });
+            calcTotalPoints();
         };
+
+        calcTotalPoints = function(){
+            angular.forEach($scope.selected, function (answer) {
+                answer.totalPoints = 0;
+                angular.forEach(answer.answers, function (a) {
+                    answer.totalPoints = answer.totalPoints + parseInt(a.weight);
+                });
+            });
+        }
+
 
         $scope.select = function (answer) {
             restData.getAnswersByExerciseid.query({id: answer._id}, function (data) {

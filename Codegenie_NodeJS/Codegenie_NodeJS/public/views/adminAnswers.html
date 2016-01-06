@@ -37,10 +37,14 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
-                                    <span>
+                                    <div style="width: 95%; display: inline-block;">
                                         {{answer.name}}
-                                    </span>
+                                        <div class="pull-right">{{answer.totalPoints}}</div>
+                                    </div>
+
                         </a>
+                        <input class="pull-right" type="checkbox" />
+
                     </h4>
                 </div>
 
