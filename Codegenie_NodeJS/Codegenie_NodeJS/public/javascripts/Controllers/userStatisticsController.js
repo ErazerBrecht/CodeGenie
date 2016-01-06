@@ -3,26 +3,24 @@
     var app = angular.module("userApp");
 
     var userStatisticsController = function ($scope, userRestData, $routeParams) {
-        userRestData.getUser.get(function (data) {
-            $scope.user = data;
-            userRestData.getStatisticsAnswers.get(function (data) {
-                $scope.totalAnswersCourse = 0;
-                $scope.totalAnswers = 0;
-                $scope.myAnswers = 0;
+        userRestData.getStatisticsAnswers.get(function (data) {
+            $scope.totalAnswersCourse = 0;
+            $scope.totalAnswers = 0;
+            $scope.myAnswers = 0;
 
-                $scope.totalAnswers = data.count;
-                $scope.myAnswers = data.myself;
-                angular.forEach(data.courses, function (value, key) {
-                    if (value.course === $scope.user.course)
-                        $scope.totalAnswersCourse = value.count;
+            $scope.totalAnswers = data.count;
+            $scope.myAnswers = data.myself;
+            angular.forEach(data.courses, function (value, key) {
+                if (value.course === $scope.user.course)
+                    $scope.totalAnswersCourse = value.count;
 
-                });
             });
-        });
 
-        userRestData.getRanking.query({course: "Programming Principles"}, function(data)
-        {
-            $scope.ranking = data;
+            //Get ranking
+            //Placed it here because, $scope.user.course is already loaded here!
+            userRestData.getRanking.query({course: $scope.user.course}, function (data) {
+                $scope.ranking = data;
+            });
         });
 
         $scope.options = {
