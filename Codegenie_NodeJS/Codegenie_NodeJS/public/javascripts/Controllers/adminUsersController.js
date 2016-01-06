@@ -73,7 +73,7 @@
             restData.postAssignUser.save($scope.assign,
                 function(response){
                     $scope.message = response.data;
-                    getData();
+                    ctor();
                 },
                 function(err){
                     $scope.error = err.data;
