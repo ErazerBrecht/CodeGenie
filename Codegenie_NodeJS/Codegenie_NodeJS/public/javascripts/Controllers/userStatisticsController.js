@@ -20,6 +20,11 @@
             });
         });
 
+        userRestData.getRanking.query({course: "Programming Principles"}, function(data)
+        {
+            $scope.ranking = data;
+        });
+
         $scope.options = {
             "chart": {
                 "type": "multiBarChart",
