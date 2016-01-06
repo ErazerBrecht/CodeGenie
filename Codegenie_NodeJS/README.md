@@ -1,9 +1,6 @@
 #NodeJS REST / MONGO
 
-NodeJS project by Brecht Carlier, Arne Schoonvliet and Matthew Berkvens.
-
-This is the NodeJS server for the Codegenie project made by Brecht, Arne and Matthew.
-This project also contains our views. These are written in JADE.
+This is our code for the Codegenie project made by Brecht, Arne and Matthew. It contains every thing, backend and frontend!
 
 ##At the moment
 #####Backend:
@@ -13,22 +10,53 @@ The authentication of users is also working. We're working to generate some stat
 Nevertheless this part is as good as done. Al the needed basic functionality works, and now we're just adding extra features.
 
 #####Frontend:
-There are currently 3 pages: a login page, signup page, adminpanel and a userpanel.
+There are currently 4 pages: a login page, signup page, adminpanel and a userpanel.
 
 * Login and signup pages: Self-explanatory
 * Adminpanel: The "home" page for the admin (Tim Dams)
-  * Dashboard with some basic statistics 
-  * Adding questions
-  * Editing and removing questions
-  * Able to get a list of answers
+  * Has the following views:  
+    * Dashboard with some statistics 
+      * Total answers, Unrevised answers
+      * Answers of all courses seperatly
+      * Amount of total answers per week
+      * The lastest answers splitted by course
+    * Excercises
+      * Adding new exercises
+      * Filter existing exercises
+      * Editing existing exercises
+      * Removing exercises with drag and drop
+    * Users
+      * Manage the users => Change their course!
+      * Delete users
+      * Check some information of the user (e-mail, lastseen)
+    * Able to get a list of answers
+      * ARNE 
 * Userpanel: The page for the students
-  * Will be used to post answers (Work in progress)
+  * Has the following views: 
+    * Dashboard: Home page
+      * Shows some trivial inforamtion about yourself.
+        * Amount of new exercises
+        * Amount of total exercises solved
+        * Is your activity lower of higher than average?
+        * Graph of total answers per week
+        * Punch card, shows acitity per day
+    * Staticstics
+      * Shows statistics not specific to user
+        * Total answers (every user)
+        * Total answers of the users in the same course
+        * Your total amount of answers
+        * Show graph of total answers by week (every user)
+        * Show top 5 within the same course (best average)
+        * Show top 5 with most exercises within the same course
+    * Exercises
+      * Can filter the exercises 
+      * Will be used to post answers.
+      * Also to view the solution and grades
+    * Profile
+      * Change your settings (email / password) 
 
 What are we doing now?
-First the Userpanel is the highest priority because it needs to most work.
-
-The deleting questions in the Adminpanel needs to be finished (drag & drop). Filtering of those questions is also needed! </br>
-Viewing the answers is far from done and will be our next top priority after the userpanel!
+Finishing the project...
 
 ##Dependencies
 
