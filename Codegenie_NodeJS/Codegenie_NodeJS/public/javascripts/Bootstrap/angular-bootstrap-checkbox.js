@@ -15,7 +15,7 @@ angular.module("ui.checkbox", []).directive("checkbox", function() {
 			scope.stylebtn = {};
 			// Default Checkmark Styling
 			scope.styleicon = {"width": "10px", "left": "-1px"};
-			// If size is undefined, Checkbox has normal size (Bootstrap 'xs')
+			// If size is undefined, Checkbox has normal size (bootstrap 'xs')
 			if(attrs.large !== undefined) {
 				scope.size = "large";
 				scope.stylebtn = {"padding-top": "2px", "padding-bottom": "2px", "height": "30px"};
