@@ -39,17 +39,20 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy: 'deadline'" ng-hide="(showSolved == false && exercise.solved == true) || (showExpired == false && exercise.deadline < today)" ng-click="select(exercise)">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy: 'deadline'"
+         ng-hide="(showSolved == false && exercise.solved == true) || (showExpired == false && exercise.deadline < today)"
+         ng-click="select(exercise)">
 
         <div class="tile" ng-class="getTileClass(exercise)">
             <div class="triangle" ng-if="exercise.extra"></div>
-            <div class="title" >
+            <div class="title">
                 <h3>{{exercise.title}}</h3>
                 <div ng-if="exercise.revised == true">{{exercise.totalpoints}}/{{exercise.totalAvailablePoints}}</div>
             </div>
-            <div ng-if="exercise.revised == false || exercise.revised == undefined">Deadline: <time am-time-ago="exercise.deadline"></time></div>
+            <div ng-if="exercise.revised == false || exercise.revised == undefined">Deadline:
+                <time am-time-ago="exercise.deadline"></time>
+            </div>
         </div>
-
 
 
     </div>
@@ -62,8 +65,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title" ng-if="a.extra == true">
-                            <a data-toggle="collapse" href="/#collapse{{$index}}"><span style="color:red; font-weight:bolder">EXTRA: </span>{{a.questiontitle}}
-                                <span class="pull-right"> Points: <span ng-if="selected.revised == true" >{{a.received}}/</span>{{a.weight}} </span>
+                            <a data-toggle="collapse" href="/#collapse{{$index}}"><span
+                                    style="color:red; font-weight:bolder">EXTRA: </span>{{a.questiontitle}}
+                                <span class="pull-right"> Points: <span
+                                        ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span>
 
 
                             </a>
@@ -71,38 +76,70 @@
 
                         <h4 class="panel-title" ng-if="a.extra == false">
 
-                            <a data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span class="pull-right"> Points: <span ng-if="selected.revised == true" >{{a.received}}/</span>{{a.weight}} </span></a>
+                            <a data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span
+                                    class="pull-right"> Points: <span
+                                    ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span></a>
                         </h4>
                     </div>
 
                     <div id="collapse{{$index}}" class="panel-collapse collapse">
                         <div class="panel-body" ng-switch on="a.type">
                             <div ng-switch-when="Checkbox">
-                                Check / Uncheck <input ng-model="a.result" type="checkbox" ng-true-value="'true'" ng-false-value="'false'"/>
+                                Check / Uncheck <input
+                                    ng-if="selected.revised == false || selected.revised == undefined"
+                                    ng-model="a.result" type="checkbox" ng-true-value="'true'"
+                                    ng-false-value="'false'"/>
+                                <input ng-if="selected.revised == true" ng-model="a.result"
+                                       onclick="return false" type="checkbox" ng-true-value="'true'"
+                                       ng-false-value="'false'"/>
                             </div>
 
 
                             <div ng-switch-when="Code">
-                                <button type="button" ng-click="beautify(a)" class="btn btn-default"><i class="fa fa-pencil" style="padding-right: 0px; !important;"></i></button>
-                                <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
+                                <div ng-if="selected.revised == false || selected.revised == undefined">
+                                    <button type="button" ng-click="beautify(a)" class="btn btn-default"><i
+                                            class="fa fa-pencil" style="padding-right: 0px; !important;"></i></button>
+                                    <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
                                   firstLineNumber: 1
                                 }">
+                                    </div>
+                                </div>
+
+                                <div ng-if="selected.revised == true">
+                                    <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
+                                  useWrapMode : false,
+                                  theme:'sqlserver',
+                                  mode: 'csharp',
+                                  firstLineNumber: 1
+                                }" ng-readonly="true">
+                                    </div>
                                 </div>
                             </div>
 
                             <div ng-switch-when="Question">
-                                <textarea class="animate msd-elastic: \n;" style="resize: vertical; width: 100%" ng-model="a.result" cols="100" rows="10"></textarea>
+                                <textarea ng-if="selected.revised == false || selected.revised == undefined" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
+                                          ng-model="a.result" cols="100" rows="10"></textarea>
+
+                                <textarea readonly ng-if="selected.revised == true" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
+                                          ng-model="a.result" cols="100" rows="10"></textarea>
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
-                                <div ng-repeat="choice in a.choices" class="radio">
-                                    <label><input type="radio" ng-model="a.result" ng-value="choice.text" />{{choice.text}}</label>
+                                <div ng-if="selected.revised == false || selected.revised == undefined" ng-repeat="choice in a.choices" class="radio">
+                                    <label><input type="radio" ng-model="a.result" ng-value="choice.text"/>{{choice.text}}</label>
+                                </div>
+
+                                <div ng-if="selected.revised == true" ng-repeat="choice in a.choices" class="radio">
+                                    <label ng-if="a.result == choice.text" style="color:dodgerblue">{{choice.text}}</label>
+                                    <label ng-if="a.result != choice.text">{{choice.text}}</label>
                                 </div>
                             </div>
-                            <div class="alert alert-info" ng-if="selected.revised == true && a.comment != ''">{{a.comment}}</div>
+                            <div class="alert alert-info" ng-if="selected.revised == true && a.comment != ''">
+                                {{a.comment}}
+                            </div>
 
                         </div>
                     </div>
@@ -112,7 +149,9 @@
 
 
         <div class="form-group top-30">
-            <button ng-if="selected.revised == false || selected.revised == undefined" type="submit" class="btn btn-default">Submit</button>
+            <button ng-if="selected.revised == false || selected.revised == undefined" type="submit"
+                    class="btn btn-default">Submit
+            </button>
         </div>
 
 
