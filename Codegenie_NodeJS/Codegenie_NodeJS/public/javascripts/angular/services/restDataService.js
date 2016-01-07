@@ -19,7 +19,8 @@
             postExercise: $resource("/admin/exercises"),
             postUpdateExercise: $resource("/admin/exercises/:id/edit/", {id: '@id'}),
             deleteExercise: $resource("/admin/exercises/:id/delete/", {id: '@id'}),
-            postAssignUser: $resource("/admin/users/assign")
+            postAssignUser: $resource("/admin/users/assign"),
+            postCorrectedAnswers: $resource("/admin/answers/edit")
         };             
     };
 

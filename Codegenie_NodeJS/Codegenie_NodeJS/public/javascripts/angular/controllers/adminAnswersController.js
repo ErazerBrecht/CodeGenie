@@ -66,7 +66,7 @@
             $scope.error = null;
             $scope.message = null;
 
-            restData.updateAnswerById.save({id: $scope.selected[0]._id},$scope.selected[0],
+            restData.postCorrectedAnswers.save($scope.selected,
                 function(response){
                     $scope.message = response.data;
                 },
@@ -75,11 +75,7 @@
                 }
             )
 
-            var index = $scope.selected.indexOf($scope.selected[0]);
-            if (index > -1)
-            {
-                $scope.selected.splice(index, 1);
-            }
+            $scope.selected = undefined;
         }
     }
     app.controller("adminAnswersController", adminAnswersController);
