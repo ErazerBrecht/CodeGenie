@@ -114,8 +114,8 @@ router.post('/answers', isLoggedIn, function (req, res) {
                 if (!answer.answers) return res.status(400).json(["There were no answers given."]);
 
                 //User needs to be able to post after deadline.
-                //if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).json(["Deadline is already over."]);
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).json(["Not an eligible exercise ID"]);
+                //if (result.deadline) if (new Date() > result.deadline) return res.status(400).json(["Deadline is already over."]);
+                if (result.revealdate) if (new Date() < result.revealdate) return res.status(400).json(["Not an eligible exercise ID"]);
 
                 newanswer.userid = req.user._id;
                 newanswer.exerciseid = exerciseID;
@@ -123,7 +123,7 @@ router.post('/answers', isLoggedIn, function (req, res) {
                 newanswer.extra = result.extra;
                 newanswer.classification = result.classification;
                 newanswer.course = result.course;
-                newanswer.created = new Date().toISOString();
+                newanswer.created = new Date();
                 for (var answerIndex in answer.answers) {
                     if (!questionExists(answer.answers[answerIndex], result.questions)) {
                         return res.status(400).json(["There was a problem processing answer with questionid: " + answer.answers[answerIndex].questionid]);
@@ -157,8 +157,8 @@ router.post('/answers', isLoggedIn, function (req, res) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).json(["Not an eligible exercise ID"]);
 
-                if (result.deadline) if (new Date().toISOString() > result.deadline.toISOString()) return res.status(400).json(["Deadline is already over."]);
-                if (result.revealdate) if (new Date().toISOString() < result.revealdate.toISOString()) return res.status(400).json(["Not an eligible exercise ID"]);
+                if (result.deadline) if (new Date() > result.deadline) return res.status(400).json(["Deadline is already over."]);
+                if (result.revealdate) if (new Date() < result.revealdate) return res.status(400).json(["Not an eligible exercise ID"]);
 
                 var newanswerlist = req.body.answers;
 
