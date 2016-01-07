@@ -1,6 +1,6 @@
 ﻿var LocalStrategy = require('passport-local').Strategy;
 var schemas = require("../mongoose/schemas");
-var bCrypt = require('bcrypt-nodejs');
+var passwordhandler = require('./passwordhandler');
 var moment = require('moment');
 var UserModel = schemas.UserModel;
 
@@ -31,7 +31,7 @@ module.exports = function (passport) {
                             } else {
                                 var newUser = new UserModel({
                                     name: username,
-                                    password: createHash(password),
+                                    password: passwordhandler.createHash(password),
                                     email: email,
                                     status: 0,
                                     admin: false,
@@ -56,8 +56,4 @@ module.exports = function (passport) {
             process.nextTick(findOrCreateUser);
         })
     );
-
-    var createHash = function (password) {
-        return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-    }
 };

@@ -1,7 +1,7 @@
 ﻿var LocalStrategy = require('passport-local').Strategy;
 var schemas = require("../mongoose/schemas");
-var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
+var passwordhandler = require('./passwordhandler');
 var UserModel = schemas.UserModel;
 
 module.exports = function (passport) {
@@ -18,7 +18,7 @@ module.exports = function (passport) {
                 console.log('User not found with username ' + username);
                 return done(null, false, req.flash('message', 'Incorrect username.'));
             }
-            if (!isValidPassword(user, password)) {
+            if (!passwordhandler.isValidPassword(user, password)) {
                 console.log('Invalid password for user: ' + username);
                 return done(null, false, req.flash('message', 'Incorrect password.'));
             }
@@ -33,8 +33,4 @@ module.exports = function (passport) {
             return done(null, user);
         });
     }));
-    
-    var isValidPassword = function (user, password) {
-        return bCrypt.compareSync(password, user.password);
-    }
 };
