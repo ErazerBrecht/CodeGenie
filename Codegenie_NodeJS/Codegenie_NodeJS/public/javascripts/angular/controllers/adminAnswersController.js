@@ -6,11 +6,20 @@
 
     var adminAnswersController = function ($scope, restData) {
 
-        $scope.totalPoints = 0;
         restData.getExercises.query(function (data) {
             $scope.exercises = data;
 
         });
+
+        $scope.change = function(answer) {
+            if(answer.checkTotalpoints == 0){
+                answer.checkTotalpoints = answer.totalPoints;
+            }
+            else{
+                answer.checkTotalpoints = 0;
+            }
+        };
+
 
         addUserNamesToSelected = function () {
             angular.forEach($scope.selected, function (answer) {
@@ -25,10 +34,12 @@
         calcTotalPoints = function(){
             angular.forEach($scope.selected, function (answer) {
                 answer.totalPoints = 0;
+                answer.checkTotalpoints = 0;
                 angular.forEach(answer.answers, function (a) {
                     answer.totalPoints = answer.totalPoints + parseInt(a.weight);
                 });
             });
+
         }
 
 
