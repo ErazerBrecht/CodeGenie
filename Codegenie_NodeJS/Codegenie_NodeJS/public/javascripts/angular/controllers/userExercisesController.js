@@ -17,6 +17,15 @@
                     userRestData.getAnswer.get({exerciseid: value._id}, function (data) {
                         value.answers = data.answers;
                         value.answerDate = new Date(data.created);
+                        value.revised = data.revised;
+                        value.totalpoints = 0;
+                        value.totalAvailablePoints = 0;
+                        if(value.revised) {
+                            angular.forEach(value.answers, function (d, key) {
+                                value.totalpoints += d.received;
+                                value.totalAvailablePoints += d.weight;
+                            });
+                        }
                     });
                 }
             });
