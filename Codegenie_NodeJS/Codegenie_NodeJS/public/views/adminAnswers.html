@@ -37,7 +37,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
-                            <div style="width: 95%; display: inline-block;">
+                            <div style="width: 98%; display: inline-block;">
                                 {{answer.name}}
                                 <div class="pull-right">{{answer.checkTotalpoints}}/{{answer.totalPoints}}</div>
                             </div>
@@ -101,8 +101,9 @@
                     </div>
                 </div>
             </div>
-            <div style="float: right; margin: 5px; display: inline-block; width: 100px">
-                <button type="button" class="btn btn-primary btn-block" ng-click="processForm()">Submit</button>
+            <div class="form-group top-20 pull-right" >
+                <button type="button" class="btn btn-primary" ng-click="processForm()">Submit</button>
+                <button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>
             </div>
         </div>
         {{selected}}

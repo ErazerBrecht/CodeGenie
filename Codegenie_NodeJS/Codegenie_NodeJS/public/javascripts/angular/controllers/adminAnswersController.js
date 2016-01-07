@@ -85,6 +85,11 @@
             });
         };
 
+        $scope.cancel = function () {
+            $scope.selected = null;
+            $scope.error = null;
+            $scope.message = null;
+        };
 
         $scope.processForm = function () {
             //Clear error and message
