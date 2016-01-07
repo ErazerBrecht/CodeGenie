@@ -136,31 +136,83 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
                 $limit: limit
             }
         ],
-        function (err, aggresult) {
+        function (err, aggresultTopReceived) {
             if (err) console.error(err);
             else {
-                response = [];
+                AnswerModel.aggregate(
+                    [
+                        {"$match": {"course": course}},
+                        {
+                            $group: {
+                                "_id": { "userid": "$userid", "exerciseid": "$exerciseid" }
+                            }
+                        },
+                        {
+                            $group: {
+                                "_id": "$_id.userid",
+                                "count": {$sum: 1}
+                            }
+                        },
+                        {
+                            $project: {
+                                "_id": 0,
+                                "userid": "$_id",
+                                "count": "$count"
+                            }
+                        },
+                        {
+                            $sort: {"count": -1}
+                        },
+                        {
+                            $limit: limit
+                        }
+                    ],
+                    function (err, aggresultTopAmount) {
+                        if (err) console.error(err);
+                        else {
+                            console.log(aggresultTopAmount)
+                            topReceived = [];
+                            topAmount = [];
 
-                for (var x = 0; x < aggresult.length; x++)
-                    response.push({
-                        "userid": aggresult[x].userid,
-                        "received": aggresult[x].received,
-                        "index": x
-                    })
+                            for (var x = 0; x <  aggresultTopReceived.length; x++)
+                                topReceived.push({
+                                    "userid":  aggresultTopReceived[x].userid,
+                                    "index": x
+                                })
 
-                var promises = response.map(function (obj) {
-                    return new Promise(function (resolve, reject) {
-                        UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
-                            if (err) return reject(err);
-                            if (usresult) aggresult[obj.index].name = usresult.name;
-                            resolve();
-                        });
+                            for (var x = 0; x <  aggresultTopAmount.length; x++)
+                                topAmount.push({
+                                    "userid":  aggresultTopAmount[x].userid,
+                                    "index": x
+                                })
+
+                            var promisesTopReceived = topReceived.map(function (obj) {
+                                return new Promise(function (resolve, reject) {
+                                    UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                                        if (err) return reject(err);
+                                        if (usresult)  aggresultTopReceived[obj.index].name = usresult.name;
+                                        resolve();
+                                    });
+                                });
+                            });
+
+                            var promisesTopAmount = topAmount.map(function (obj) {
+                                return new Promise(function (resolve, reject) {
+                                    UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                                        if (err) return reject(err);
+                                        if (usresult)  aggresultTopAmount[obj.index].name = usresult.name;
+                                        resolve();
+                                    });
+                                });
+                            });
+
+                            Promise.all(promisesTopReceived).then(function () {
+                                Promise.all(promisesTopAmount).then(function () {
+                                    res.status(200).json({"topReceived": aggresultTopReceived, "topAmount": aggresultTopAmount});
+                                }).catch(console.error);
+                            }).catch(console.error);
+                        }
                     });
-                });
-
-                Promise.all(promises).then(function () {
-                    res.status(200).json(aggresult);
-                }).catch(console.error);
             }
         });
 });
