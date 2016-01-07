@@ -66,7 +66,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
     var answerArray = req.body;
 
-    var totalaffected = 0;
+    var totalAffected = 0;
     var totalWitheld = 0;
 
     var promises = answerArray.map(function (usobj) {
@@ -84,8 +84,9 @@ router.post("/answers/edit", isAdmin, function (req, res) {
                     else {
                         for (var field in req.body) result[field] = req.body[field];
 
-                        result.save(function (saveError) {
+                        result.save(function (saveError, affected) {
                             if (saveError) reject(saveError);
+                            totalAffected++;
                             resolve();
                         });
                     }
@@ -95,7 +96,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
     });
 
     Promise.all(promises).then(function () {
-        savehandler(res, undefined, "Succesfully edited " + totalaffected + (totalaffected == 1 ? " answer," : " answers,") + totalWitheld + (totalWitheld == 1 ? " answer" : " answers") + " were not edited because the deadline is not over yet.");
+        savehandler(res, undefined, "Succesfully edited " + totalAffected + (totalAffected == 1 ? " answer," : " answers,") + totalWitheld + (totalWitheld == 1 ? " answer" : " answers") + " were not edited because the deadline is not over yet.");
     }).catch(console.error);
 });
 
