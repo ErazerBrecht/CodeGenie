@@ -27,6 +27,23 @@
             }
         };
 
+        $scope.changePoints = function(a, answer){
+            if(answer.checkTotalpoints == 0) {
+                answer.checkTotalpoints += a.weight;
+                a.received = a.weight;
+            }
+            else{
+                if(a.received != 0){
+                    a.received = 0;
+                    answer.checkTotalpoints -= a.weight;
+                }
+                else{
+                    a.received = a.weight;
+                    answer.checkTotalpoints += a.weight;
+                }
+            }
+        };
+
 
         addUserNamesToSelected = function () {
             angular.forEach($scope.selected, function (answer) {
