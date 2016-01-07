@@ -29,7 +29,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 var exerciselist = [];
                 for (var index in exresult) {
                     var obj = exresult[index];
-                    if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
+                    if (obj.revealdate && new Date() < obj.revealdate) continue;
 
                     exerciselist.push({
                         "id": obj._id,
@@ -61,7 +61,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 });
 
                 Promise.all(promises).then(function () {
-                    UserModel.update({_id: req.user._id}, {$set: {'lastseen': new Date().toISOString()}}, {runValidators: true}, function (err) {
+                    UserModel.update({_id: req.user._id}, {$set: {'lastseen': new Date()}}, {runValidators: true}, function (err) {
                         if (err) console.log('Error updating lastseen for user: ' + user.name);
                         res.status(200).json(response);
                     });
@@ -95,7 +95,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                     var newexarray = [];
                     for (var x in exresult) {
                         var obj = exresult[x];
-                        if (obj.revealdate && new Date().toISOString() < obj.revealdate.toISOString()) continue;
+                        if (obj.revealdate && new Date() < obj.revealdate) continue;
                         newexarray.push(obj);
                     }
 
@@ -125,7 +125,7 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
                 var exerciseIDs = [];
 
                 for (var index in anresult) {
-                    if (anresult[index].revealdate && new Date().toISOString() < anresult[index].revealdate.toISOString()) continue;
+                    if (anresult[index].revealdate && new Date() < anresult[index].revealdate) continue;
                     exerciseIDs.push(anresult[index].exerciseid);
                 }
 

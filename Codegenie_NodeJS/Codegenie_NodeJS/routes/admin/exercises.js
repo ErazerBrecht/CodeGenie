@@ -20,7 +20,7 @@ router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
 
-        for (var index in result) result[index].revealed = !(result[index].revealdate && new Date().toISOString() < result[index].revealdate.toISOString());
+        for (var index in result) result[index].revealed = !(result[index].revealdate && new Date() < result[index].revealdate);
 
         res.status(200).json(result);
     })

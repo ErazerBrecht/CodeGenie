@@ -13,8 +13,8 @@ var userSchema = mongoose.Schema({
     email: { type: String, unique: true, sparse: true },
     logins: Number,
     status: { type: Number, default: "0" },
-    registerdate: { type: Date, default: new Date().toISOString() },
-    lastseen: { type: Date, default: new Date().toISOString() }
+    registerdate: { type: Date, default: new Date() },
+    lastseen: { type: Date, default: new Date() }
 });
 
 var userSeenSchema = mongoose.Schema({
@@ -22,7 +22,7 @@ var userSeenSchema = mongoose.Schema({
     seenexercises: [{
         _id: false,
         exerciseid: { type: mongoose.Schema.ObjectId, required: true },
-        dateseen: { type: Date, default: new Date().toISOString() }
+        dateseen: { type: Date, default: new Date() }
     }]
 });
 
@@ -32,7 +32,7 @@ var exerciseSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum },
     revealdate: { type: Date },
     deadline: { type: Date },
-    created: { type: Date, default: new Date().toISOString() },
+    created: { type: Date, default: new Date() },
     extra: { type: Boolean, default: false },
     questions: [{
             questiontitle: { type: String, required: true },
@@ -55,7 +55,7 @@ var answerSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum },
     extra: { type: Boolean, required: true },
     revised: { type: Boolean, default: false },
-    created: { type: Date, default: new Date().toISOString() },
+    created: { type: Date, default: new Date() },
     answers: [{
             questionid: { type: mongoose.Schema.ObjectId, required: true },
             questiontitle: { type: String, required: true },
@@ -82,29 +82,17 @@ exports.AnswerModel = AnswerModel;
 
 exports.savehandler = function (res, err, successMessage) {
     if (err) {
-        var errmessage = [];
-        for (var field in err.errors) errmessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
-        return res.status(400).send(errmessage);
+        var errorMessage = [];
+        for (var field in err.errors) errorMessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
+        return res.status(400).json(errorMessage);
     }
-    else {
-        var succesResponse =  {};
-        succesResponse.data = successMessage;
-        return res.status(201).send(succesResponse);
-    }
+    else return res.status(201).json({ "data": successMessage });
 };
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
         if (!answer.hasOwnProperty("questionid")) return false;
         if (questions[index]._id == answer.questionid) return true;
-    }
-    return false;
-};
-
-exports.answerExists = function (answer, answers) {
-    for (var index in answers) {
-        if (!answer.hasOwnProperty("questionid")) return false;
-        if (answers[index].questionid == answer.questionid) return true;
     }
     return false;
 };

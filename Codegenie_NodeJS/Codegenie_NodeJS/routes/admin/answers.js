@@ -72,7 +72,7 @@ router.post("/answers/:answerID/edit", isAdmin, function (req, res) {
         ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
             if(exError) return console.error(exError);
 
-            if (exResult.deadline) if (new Date().toISOString() < exResult.deadline.toISOString()) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
+            if (exResult.deadline) if (new Date() < exResult.deadline) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
             //TODO remove this? not sure if user should still be able to edit his answers after deadline
             //Brecht: Keep this :)
 

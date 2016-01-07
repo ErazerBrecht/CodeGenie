@@ -35,8 +35,8 @@ module.exports = function (passport) {
                                     email: email,
                                     status: 0,
                                     admin: false,
-                                    registerdate: new Date().toISOString(),
-                                    lastseen: new Date().toISOString()
+                                    registerdate: new Date(),
+                                    lastseen: new Date()
                                 });
 
                                 newUser.save(function (err) {

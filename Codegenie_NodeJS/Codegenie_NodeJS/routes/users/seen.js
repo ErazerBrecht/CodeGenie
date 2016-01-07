@@ -48,7 +48,7 @@ router.post('/seen/:exerciseID', isLoggedIn, function (req, res) {
                 for (var x = 0; x < result.seenexercises.length; x++)
                     if (result.seenexercises[x].exerciseid == req.params.exerciseID) result.seenexercises.set(x, {
                         exerciseid: result.seenexercises[x].exerciseid,
-                        dateseen: new Date().toISOString()
+                        dateseen: new Date()
                     });
             }
 
