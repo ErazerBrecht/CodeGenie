@@ -8,7 +8,7 @@ The idea is that the student will be more enthousiast to make extra exercises.
 
 There will be statistics so the admin can follow the activity of the users, the users will also be possible to view their own progression. 
 
-At a later stage I would be nice if we have an autocorrect. If this works, we have made our own capture the flag software.
+At a later stage it would be nice if we have an autocorrect. If this works, we have made our own capture the flag software.
 
 Maintained by
 - Brecht Carlier
