@@ -221,16 +221,14 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
 
 router.get('/users/mine', isLoggedIn, function (req, res) {
     var userID = req.user._id;
-    var filter = req.query.filter;
 
-    SendUserStatistic(userID, res, filter);
+    SendUserStatistic(userID, res);
 });
 
 router.get('/users/:userID', isLoggedIn, function (req, res) {
     var userID = req.params.userID;
-    var filter = req.query.filter;
 
-    SendUserStatistic(userID, res, filter);
+    SendUserStatistic(userID, res);
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
@@ -533,7 +531,7 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     });
 });
 
-function SendUserStatistic(userID, res, filter) {
+function SendUserStatistic(userID, res) {
     //TODO: Add weekly & hourly activity
 
     AnswerModel.aggregate(
@@ -587,8 +585,7 @@ function SendUserStatistic(userID, res, filter) {
                                 "_id": {
                                     "exerciseid": "$exerciseid",
                                     "created": "$created",
-                                    "week": {$week: "$created"},
-                                    "hour": {$hour: "$created"},
+                                    "week": {$week: "$created"}
                                 }
                             }
                         },
@@ -597,7 +594,7 @@ function SendUserStatistic(userID, res, filter) {
                         },
                         {
                             $group: {
-                                "_id": {$cond: [{$eq: [filter, "week"]}, "$_id.week", "$_id.hour"]},
+                                "_id": "$_id.week",
                                 "count": {$sum: 1}
                             }
                         },
@@ -609,69 +606,122 @@ function SendUserStatistic(userID, res, filter) {
                             }
                         }
                     ],
-                    function (err, aggresultActivity) {
+                    function (err, aggresultActivityWeekly) {
                         if (err) console.error(err);
                         else {
-                            UserModel.aggregate(
+                            AnswerModel.aggregate(
                                 [
+                                    {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
                                     {
                                         $group: {
-                                            "_id": "$_id",
-                                            "logins": {$avg: "$logins"}
+                                            "_id": {
+                                                "exerciseid": "$exerciseid",
+                                                "created": "$created",
+                                                "hour": {$hour: "$created"},
+                                            }
                                         }
                                     },
                                     {
                                         $group: {
-                                            "_id": 0,
-                                            "logins": {$avg: "$logins"}
+                                            "_id": "$_id.hour",
+                                            "count": {$sum: 1}
                                         }
                                     },
                                     {
                                         $project: {
                                             "_id": 0,
-                                            "logins": "$logins"
+                                            "filter": "$_id",
+                                            "count": "$count"
                                         }
                                     }
                                 ],
-                                function (err, aggresultLogins) {
+                                function (err, aggresultActivityHourly) {
                                     if (err) console.error(err);
                                     else {
-                                        UserModel.findById(userID, function (err, result) {
-                                            if (err) return console.error(err);
-                                            var activityArray = [];
-                                            if (aggresultActivity.length != 0) {
-
-                                                var first = aggresultActivity[0].filter;
-                                                var last = aggresultActivity[aggresultActivity.length - 1].filter;
-
-                                                do {
-                                                    var found = false;
-                                                    for (var x = 0; x < aggresultActivity.length; x++) {
-                                                        if (aggresultActivity[x].filter == first) {
-                                                            activityArray.push({
-                                                                "x": first,
-                                                                "y": aggresultActivity[x].count
-                                                            });
-                                                            found = true;
-                                                        }
+                                        UserModel.aggregate(
+                                            [
+                                                {
+                                                    $group: {
+                                                        "_id": "$_id",
+                                                        "logins": {$avg: "$logins"}
                                                     }
-                                                    if (!found) activityArray.push({"x": first, "y": 0});
+                                                },
+                                                {
+                                                    $group: {
+                                                        "_id": 0,
+                                                        "logins": {$avg: "$logins"}
+                                                    }
+                                                },
+                                                {
+                                                    $project: {
+                                                        "_id": 0,
+                                                        "logins": "$logins"
+                                                    }
+                                                }
+                                            ],
+                                            function (err, aggresultLogins) {
+                                                if (err) console.error(err);
+                                                else {
+                                                    UserModel.findById(userID, function (err, result) {
+                                                        if (err) return console.error(err);
+                                                        var activityWeeklyArray = [];
+                                                        var activityHourlyArray = [];
+                                                        if (aggresultActivityWeekly.length != 0) {
+                                                            var first = aggresultActivityWeekly[0].filter;
+                                                            var last = aggresultActivityWeekly[aggresultActivityWeekly.length - 1].filter;
 
-                                                    filter == "week" ? first = (first % 52) + 1 : first = (first + 1) % 24;
-                                                } while (first != (filter == "week" ? (last % 52) + 1 : (last + 1) % 24));
-                                            }
+                                                            do {
+                                                                var found = false;
+                                                                for (var x = 0; x < aggresultActivityWeekly.length; x++) {
+                                                                    if (aggresultActivityWeekly[x].filter == first) {
+                                                                        activityWeeklyArray.push({
+                                                                            "x": first,
+                                                                            "y": aggresultActivityWeekly[x].count
+                                                                        });
+                                                                        found = true;
+                                                                    }
+                                                                }
+                                                                if (!found) activityWeeklyArray.push({"x": first, "y": 0});
 
-                                            res.status(200).json({
-                                                "received": aggresultReceived,
-                                                "activity": activityArray,
-                                                "logins": {
-                                                    "average": aggresultLogins[0].logins,
-                                                    "mylogins": result.logins
+                                                                first = (first % 52) + 1;
+                                                            } while (first != ((last % 52) + 1))
+                                                        }
+
+                                                        if (aggresultActivityHourly.length != 0) {
+                                                            for (var i = 0; i < 24; i++) {
+                                                                var found = false;
+                                                                for (var x = 0; x < aggresultActivityHourly.length; x++) {
+                                                                    if (aggresultActivityHourly[x].filter == i) {
+                                                                        activityHourlyArray.push({
+                                                                            "x": i,
+                                                                            "y": aggresultActivityHourly[x].count
+                                                                        });
+                                                                        found = true;
+                                                                    }
+                                                                }
+                                                                if (!found) {
+                                                                    activityHourlyArray.push({
+                                                                        "x": i,
+                                                                        "y": 0
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
+
+                                                        res.status(200).json({
+                                                            "received": aggresultReceived,
+                                                            "activityWeekly": activityWeeklyArray,
+                                                            "activityHourly": activityHourlyArray,
+                                                            "logins": {
+                                                                "average": aggresultLogins[0].logins,
+                                                                "mylogins": result.logins
+                                                            }
+                                                        });
+                                                    });
                                                 }
                                             });
-                                        });
                                     }
-                                });
+                            });
                         }
                     });
             }
