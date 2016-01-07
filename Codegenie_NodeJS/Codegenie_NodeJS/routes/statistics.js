@@ -5,6 +5,8 @@ var auth = require('../passport/authlevels');
 var router = express.Router();
 var moment = require('moment');
 
+//TODO: split this like admin & users
+
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
@@ -74,30 +76,28 @@ router.get('/graph', isLoggedIn, function (req, res) {
             }
         ],
         function (err, aggresult) {
-            if (err) console.error(err);
-            else {
-                var response = [];
-                if (aggresult.length != 0) {
+            if (err) return console.error(err);
+            var response = [];
+            if (aggresult.length != 0) {
 
-                    var first = aggresult[0].filter;
-                    var last = aggresult[aggresult.length - 1].filter;
+                var first = aggresult[0].filter;
+                var last = aggresult[aggresult.length - 1].filter;
 
-                    do {
-                        var found = false;
-                        for (var x = 0; x < aggresult.length; x++) {
-                            if (aggresult[x].filter == first) {
-                                response.push({"x": first, "y": aggresult[x].count});
-                                found = true;
-                            }
+                do {
+                    var found = false;
+                    for (var x = 0; x < aggresult.length; x++) {
+                        if (aggresult[x].filter == first) {
+                            response.push({"x": first, "y": aggresult[x].count});
+                            found = true;
                         }
-                        if (!found) response.push({"x": first, "y": 0});
+                    }
+                    if (!found) response.push({"x": first, "y": 0});
 
-                        filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
-                }
-
-                res.status(200).json(response);
+                    filter == "year" ? first += 1 : first = (first % 52) + 1;
+                } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
             }
+
+            res.status(200).json(response);
         });
 });
 
@@ -136,47 +136,96 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
                 $limit: limit
             }
         ],
-        function (err, aggresult) {
-            if (err) console.error(err);
-            else {
-                response = [];
+        function (err, aggresultTopReceived) {
+            if (err) return console.error(err);
+            AnswerModel.aggregate(
+                [
+                    {"$match": {"course": course}},
+                    {
+                        $group: {
+                            "_id": {"userid": "$userid", "exerciseid": "$exerciseid"}
+                        }
+                    },
+                    {
+                        $group: {
+                            "_id": "$_id.userid",
+                            "count": {$sum: 1}
+                        }
+                    },
+                    {
+                        $project: {
+                            "_id": 0,
+                            "userid": "$_id",
+                            "count": "$count"
+                        }
+                    },
+                    {
+                        $sort: {"count": -1}
+                    },
+                    {
+                        $limit: limit
+                    }
+                ],
+                function (err, aggresultTopAmount) {
+                    if (err) return console.error(err);
+                    console.log(aggresultTopAmount)
+                    topReceived = [];
+                    topAmount = [];
 
-                for (var x = 0; x < aggresult.length; x++)
-                    response.push({
-                        "userid": aggresult[x].userid,
-                        "received": aggresult[x].received,
-                        "index": x
-                    })
+                    for (var x = 0; x < aggresultTopReceived.length; x++)
+                        topReceived.push({
+                            "userid": aggresultTopReceived[x].userid,
+                            "index": x
+                        })
 
-                var promises = response.map(function (obj) {
-                    return new Promise(function (resolve, reject) {
-                        UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
-                            if (err) return reject(err);
-                            if (usresult) aggresult[obj.index].name = usresult.name;
-                            resolve();
+                    for (var x = 0; x < aggresultTopAmount.length; x++)
+                        topAmount.push({
+                            "userid": aggresultTopAmount[x].userid,
+                            "index": x
+                        })
+
+                    var promisesTopReceived = topReceived.map(function (obj) {
+                        return new Promise(function (resolve, reject) {
+                            UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                                if (err) return reject(err);
+                                if (usresult)  aggresultTopReceived[obj.index].name = usresult.name;
+                                resolve();
+                            });
                         });
                     });
-                });
 
-                Promise.all(promises).then(function () {
-                    res.status(200).json(aggresult);
-                }).catch(console.error);
-            }
+                    var promisesTopAmount = topAmount.map(function (obj) {
+                        return new Promise(function (resolve, reject) {
+                            UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                                if (err) return reject(err);
+                                if (usresult)  aggresultTopAmount[obj.index].name = usresult.name;
+                                resolve();
+                            });
+                        });
+                    });
+
+                    Promise.all(promisesTopReceived).then(function () {
+                        Promise.all(promisesTopAmount).then(function () {
+                            res.status(200).json({
+                                "topReceived": aggresultTopReceived,
+                                "topAmount": aggresultTopAmount
+                            });
+                        }).catch(console.error);
+                    }).catch(console.error);
+                });
         });
 });
 
 router.get('/users/mine', isLoggedIn, function (req, res) {
     var userID = req.user._id;
-    var filter = req.query.filter;
 
-    SendUserStatistic(userID, res, filter);
+    SendUserStatistic(userID, res);
 });
 
 router.get('/users/:userID', isLoggedIn, function (req, res) {
     var userID = req.params.userID;
-    var filter = req.query.filter;
 
-    SendUserStatistic(userID, res, filter);
+    SendUserStatistic(userID, res);
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
@@ -194,7 +243,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
     });
 });
 
-router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/:exerciseID/graph', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var filter = req.query.filter;
 
@@ -237,48 +286,45 @@ router.get('/exercises/graph/:exerciseID', isLoggedIn, function (req, res) {
             }
         ],
         function (err, aggresult) {
-            if (err) console.error(err);
-            else {
-                var responseCount = [];
-                var responseRevised = [];
-                var responseUnrevised = [];
+            if (err) return console.error(err);
+            var responseCount = [];
+            var responseRevised = [];
+            var responseUnrevised = [];
 
-                if (aggresult.length != 0) {
+            if (aggresult.length != 0) {
 
-                    var first = aggresult[0].filter;
-                    var last = aggresult[aggresult.length - 1].filter;
+                var first = aggresult[0].filter;
+                var last = aggresult[aggresult.length - 1].filter;
 
-                    do {
-                        var found = false;
-                        for (var x = 0; x < aggresult.length; x++) {
-                            if (aggresult[x].filter == first) {
-                                responseCount.push({"x": first, "y": aggresult[x].count});
-                                responseRevised.push({"x": first, "y": aggresult[x].revised});
-                                responseUnrevised.push({"x": first, "y": aggresult[x].unrevised});
-                                found = true;
-                            }
+                do {
+                    var found = false;
+                    for (var x = 0; x < aggresult.length; x++) {
+                        if (aggresult[x].filter == first) {
+                            responseCount.push({"x": first, "y": aggresult[x].count});
+                            responseRevised.push({"x": first, "y": aggresult[x].revised});
+                            responseUnrevised.push({"x": first, "y": aggresult[x].unrevised});
+                            found = true;
                         }
-                        if (!found) {
-                            responseCount.push({"x": first, "y": 0});
-                            responseRevised.push({"x": first, "y": 0});
-                            responseUnrevised.push({"x": first, "y": 0});
-                        }
+                    }
+                    if (!found) {
+                        responseCount.push({"x": first, "y": 0});
+                        responseRevised.push({"x": first, "y": 0});
+                        responseUnrevised.push({"x": first, "y": 0});
+                    }
 
-                        filter == "year" ? first += 1 : first = (first % 52) + 1;
-                    } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
-                }
-
-                res.status(200).json({
-                    "total": responseCount,
-                    "revised": responseRevised,
-                    "unrevised": responseUnrevised
-                });
+                    filter == "year" ? first += 1 : first = (first % 52) + 1;
+                } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
             }
-        }
-    );
+
+            res.status(200).json({
+                "total": responseCount,
+                "revised": responseRevised,
+                "unrevised": responseUnrevised
+            });
+        });
 });
 
-router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
+router.get('/exercises/:exerciseID/average', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
     var limit = parseInt(req.query.limit ? req.query.limit : 3);
     var response = {
@@ -350,83 +396,78 @@ router.get('/exercises/average/:exerciseID', isLoggedIn, function (req, res) {
                 }
             ],
             function (err, aggresult) {
-                if (err) console.error(err);
-                else {
-                    for (var i = 0; i < aggresult.length; i++) {
-                        for (var x = 0; x < final.length; x++) {
-                            var aggobj = aggresult[i];
-                            if (aggobj._id == final[x].questiontitle) {
-                                final[x].average = aggobj.average;
-                                final[x].feedback = aggobj.feedback;
-                            }
+                if (err) return console.error(err);
+                for (var i = 0; i < aggresult.length; i++) {
+                    for (var x = 0; x < final.length; x++) {
+                        var aggobj = aggresult[i];
+                        if (aggobj._id == final[x].questiontitle) {
+                            final[x].average = aggobj.average;
+                            final[x].feedback = aggobj.feedback;
                         }
                     }
-
-                    response.questions = final;
-
-                    AnswerModel.aggregate(
-                        [
-                            {"$match": {"exerciseid": mongoose.Types.ObjectId(exerciseID), "revised": true}},
-                            {
-                                $group: {
-                                    "_id": "$userid",
-                                    "answers": {$push: "$answers"},
-                                }
-                            },
-                            {$unwind: "$answers"},
-                            {$unwind: "$answers"},
-                            {
-                                $group: {
-                                    "_id": "$_id",
-                                    "received": {$sum: "$answers.received"}
-                                }
-                            },
-                            {
-                                $project: {
-                                    "_id": 0,
-                                    "userid": "$_id",
-                                    "received": "$received"
-                                }
-                            },
-                            {
-                                $sort: {"received": -1}
-                            },
-                            {
-                                $limit: limit
-                            }
-                        ],
-                        function (err, aggresultTop) {
-                            if (err) console.error(err);
-                            else {
-                                topUsers = [];
-
-                                for (var x = 0; x < aggresultTop.length; x++)
-                                    topUsers.push({
-                                        "userid": aggresultTop[x].userid,
-                                        "received": aggresultTop[x].received,
-                                        "index": x
-                                    })
-
-                                var promises = topUsers.map(function (obj) {
-                                    return new Promise(function (resolve, reject) {
-                                        UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
-                                            if (err) return reject(err);
-                                            if (usresult) aggresultTop[obj.index].name = usresult.name;
-                                            resolve();
-                                        });
-                                    });
-                                });
-
-                                Promise.all(promises).then(function () {
-                                    response.top = aggresultTop;
-
-                                    res.status(200).json(response);
-                                }).catch(console.error);
-                            }
-                        });
                 }
-            }
-        );
+
+                response.questions = final;
+
+                AnswerModel.aggregate(
+                    [
+                        {"$match": {"exerciseid": mongoose.Types.ObjectId(exerciseID), "revised": true}},
+                        {
+                            $group: {
+                                "_id": "$userid",
+                                "answers": {$push: "$answers"},
+                            }
+                        },
+                        {$unwind: "$answers"},
+                        {$unwind: "$answers"},
+                        {
+                            $group: {
+                                "_id": "$_id",
+                                "received": {$sum: "$answers.received"}
+                            }
+                        },
+                        {
+                            $project: {
+                                "_id": 0,
+                                "userid": "$_id",
+                                "received": "$received"
+                            }
+                        },
+                        {
+                            $sort: {"received": -1}
+                        },
+                        {
+                            $limit: limit
+                        }
+                    ],
+                    function (err, aggresultTop) {
+                        if (err) return console.error(err);
+                        topUsers = [];
+
+                        for (var x = 0; x < aggresultTop.length; x++)
+                            topUsers.push({
+                                "userid": aggresultTop[x].userid,
+                                "received": aggresultTop[x].received,
+                                "index": x
+                            })
+
+                        var promises = topUsers.map(function (obj) {
+                            return new Promise(function (resolve, reject) {
+                                UserModel.findOne({_id: obj.userid}, {name: 1}, function (err, usresult) {
+                                    if (err) return reject(err);
+                                    if (usresult) aggresultTop[obj.index].name = usresult.name;
+                                    resolve();
+                                });
+                            });
+                        });
+
+                        Promise.all(promises).then(function () {
+                            response.top = aggresultTop;
+
+                            res.status(200).json(response);
+                        }).catch(console.error);
+                    });
+            });
     });
 });
 
@@ -479,7 +520,9 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
     });
 });
 
-function SendUserStatistic(userID, res, filter) {
+function SendUserStatistic(userID, res) {
+    //TODO: Add weekly & hourly activity
+
     AnswerModel.aggregate(
         [
             {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
@@ -521,41 +564,66 @@ function SendUserStatistic(userID, res, filter) {
             }
         ],
         function (err, aggresultReceived) {
-            if (err) console.error(err);
-            else {
-                AnswerModel.aggregate(
-                    [
-                        {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
-                        {
-                            $group: {
-                                "_id": {
-                                    "exerciseid": "$exerciseid",
-                                    "created": "$created",
-                                    "week": {$week: "$created"},
-                                    "hour": {$hour: "$created"},
-                                }
-                            }
-                        },
-                        {
-                            $sort: {"_id.created": -1}
-                        },
-                        {
-                            $group: {
-                                "_id": {$cond: [{$eq: [filter, "week"]}, "$_id.week", "$_id.hour"]},
-                                "count": {$sum: 1}
-                            }
-                        },
-                        {
-                            $project: {
-                                "_id": 0,
-                                "filter": "$_id",
-                                "count": "$count"
+            if (err) return console.error(err);
+            AnswerModel.aggregate(
+                [
+                    {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
+                    {
+                        $group: {
+                            "_id": {
+                                "exerciseid": "$exerciseid",
+                                "created": "$created",
+                                "week": {$week: "$created"}
                             }
                         }
-                    ],
-                    function (err, aggresultActivity) {
-                        if (err) console.error(err);
-                        else {
+                    },
+                    {
+                        $sort: {"_id.created": -1}
+                    },
+                    {
+                        $group: {
+                            "_id": "$_id.week",
+                            "count": {$sum: 1}
+                        }
+                    },
+                    {
+                        $project: {
+                            "_id": 0,
+                            "filter": "$_id",
+                            "count": "$count"
+                        }
+                    }
+                ],
+                function (err, aggresultActivityWeekly) {
+                    if (err) return console.error(err);
+                    AnswerModel.aggregate(
+                        [
+                            {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
+                            {
+                                $group: {
+                                    "_id": {
+                                        "exerciseid": "$exerciseid",
+                                        "created": "$created",
+                                        "hour": {$hour: "$created"},
+                                    }
+                                }
+                            },
+                            {
+                                $group: {
+                                    "_id": "$_id.hour",
+                                    "count": {$sum: 1}
+                                }
+                            },
+                            {
+                                $project: {
+                                    "_id": 0,
+                                    "filter": "$_id",
+                                    "count": "$count"
+                                }
+                            }
+                        ],
+                        function (err, aggresultActivityHourly) {
+                            if (err) return console.error(err);
                             UserModel.aggregate(
                                 [
                                     {
@@ -578,49 +646,67 @@ function SendUserStatistic(userID, res, filter) {
                                     }
                                 ],
                                 function (err, aggresultLogins) {
-                                    if (err) console.error(err);
-                                    else {
-                                        UserModel.findById(userID, function (err, result) {
-                                            if (err) return console.error(err);
-                                            var activityArray = [];
-                                            if (aggresultActivity.length != 0) {
+                                    if (err) return console.error(err);
+                                    UserModel.findById(userID, function (err, result) {
+                                        if (err) return console.error(err);
+                                        var activityWeeklyArray = [];
+                                        var activityHourlyArray = [];
+                                        if (aggresultActivityWeekly.length != 0) {
+                                            var first = aggresultActivityWeekly[0].filter;
+                                            var last = aggresultActivityWeekly[aggresultActivityWeekly.length - 1].filter;
 
-                                                var first = aggresultActivity[0].filter;
-                                                var last = aggresultActivity[aggresultActivity.length - 1].filter;
-
-                                                do {
-                                                    var found = false;
-                                                    for (var x = 0; x < aggresultActivity.length; x++) {
-                                                        if (aggresultActivity[x].filter == first) {
-                                                            activityArray.push({
-                                                                "x": first,
-                                                                "y": aggresultActivity[x].count
-                                                            });
-                                                            found = true;
-                                                        }
+                                            do {
+                                                var found = false;
+                                                for (var x = 0; x < aggresultActivityWeekly.length; x++) {
+                                                    if (aggresultActivityWeekly[x].filter == first) {
+                                                        activityWeeklyArray.push({
+                                                            "x": first,
+                                                            "y": aggresultActivityWeekly[x].count
+                                                        });
+                                                        found = true;
                                                     }
-                                                    if (!found) activityArray.push({"x": first, "y": 0});
-
-                                                    filter == "week" ? first = (first % 52) + 1 : first = (first + 1) % 24;
-                                                } while (first != (filter == "week" ? (last % 52) + 1 : (last + 1) % 24));
-                                            }
-
-                                            res.status(200).json({
-                                                "received": aggresultReceived,
-                                                "activity": activityArray,
-                                                "logins": {
-                                                    "average": aggresultLogins[0].logins,
-                                                    "mylogins": result.logins
                                                 }
-                                            });
+                                                if (!found) activityWeeklyArray.push({"x": first, "y": 0});
+
+                                                first = (first % 52) + 1;
+                                            } while (first != ((last % 52) + 1))
+                                        }
+
+                                        if (aggresultActivityHourly.length != 0) {
+                                            for (var i = 0; i < 24; i++) {
+                                                var found = false;
+                                                for (var x = 0; x < aggresultActivityHourly.length; x++) {
+                                                    if (aggresultActivityHourly[x].filter == i) {
+                                                        activityHourlyArray.push({
+                                                            "x": i,
+                                                            "y": aggresultActivityHourly[x].count
+                                                        });
+                                                        found = true;
+                                                    }
+                                                }
+                                                if (!found) {
+                                                    activityHourlyArray.push({
+                                                        "x": i,
+                                                        "y": 0
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        res.status(200).json({
+                                            "received": aggresultReceived,
+                                            "activityWeekly": activityWeeklyArray,
+                                            "activityHourly": activityHourlyArray,
+                                            "logins": {
+                                                "average": aggresultLogins[0].logins,
+                                                "mylogins": result.logins
+                                            }
                                         });
-                                    }
+                                    });
                                 });
-                        }
-                    });
-            }
-        }
-    );
+                        });
+                });
+        });
 }
 
 function countcourses(arr) {

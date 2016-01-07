@@ -29,8 +29,16 @@ configPassport(passport);
 //Routes
 var indexRoutes = require('./routes/index')(passport);
 var signupRoutes = require('./routes/signup.js')(passport);
-var userRoutes = require('./routes/users');
-var adminRoutes = require('./routes/admin');
+
+var userRoutesMain = require('./routes/users/main');
+var userRoutesExercises = require('./routes/users/exercises');
+var userRoutesAnswers = require('./routes/users/answers');
+var userRoutesSeen = require('./routes/users/seen');
+
+var adminRouteUsers = require('./routes/admin/users');
+var adminRouteExercises = require('./routes/admin/exercises');
+var adminRouteAnswers = require('./routes/admin/answers');
+
 var statisticRoutes = require('./routes/statistics');
 var homeRoutes = require('./routes/home');
 
@@ -60,8 +68,16 @@ app.use(passport.session());
 
 app.use('/', indexRoutes);
 app.use('/signup', signupRoutes);
-app.use('/users', userRoutes);
-app.use('/admin', adminRoutes);
+
+app.use('/users', userRoutesMain);
+app.use('/users', userRoutesExercises);
+app.use('/users', userRoutesAnswers);
+app.use('/users', userRoutesSeen);
+
+app.use('/admin', adminRouteUsers);
+app.use('/admin', adminRouteExercises);
+app.use('/admin', adminRouteAnswers);
+
 app.use('/statistics', statisticRoutes);
 app.use('/home', homeRoutes);
 
