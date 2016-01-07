@@ -44,7 +44,9 @@
                 answer.checkTotalpoints = 0;
                 angular.forEach(answer.answers, function (a) {
                     answer.totalPoints = answer.totalPoints + parseInt(a.weight);
-                    a.comment = "";
+                    if(a.comment == undefined){
+                        a.comment = "";
+                    };
                 });
             });
 
@@ -59,12 +61,12 @@
         };
 
 
-        $scope.processForm = function (answer) {
+        $scope.processForm = function () {
             //Clear error and message
             $scope.error = null;
             $scope.message = null;
 
-            restData.updateAnswerById.save({id: answer._id},$scope.selected,
+            restData.updateAnswerById.save({id: $scope.selected[0]._id},$scope.selected[0],
                 function(response){
                     $scope.message = response.data;
                 },
@@ -73,7 +75,7 @@
                 }
             )
 
-            var index = $scope.selected.indexOf(answer);
+            var index = $scope.selected.indexOf($scope.selected[0]);
             if (index > -1)
             {
                 $scope.selected.splice(index, 1);

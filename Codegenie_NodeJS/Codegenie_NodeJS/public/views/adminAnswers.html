@@ -37,14 +37,15 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
-                                    <div style="width: 95%; display: inline-block;">
-                                        {{answer.name}}
-                                        <div class="pull-right">{{answer.checkTotalpoints}}/{{answer.totalPoints}}</div>
-                                    </div>
+                            <div style="width: 95%; display: inline-block;">
+                                {{answer.name}}
+                                <div class="pull-right">{{answer.checkTotalpoints}}/{{answer.totalPoints}}</div>
+                            </div>
 
 
                         </a>
-                        <input class="pull-right" type="checkbox" ng-model="checkboxTotal" ng-change="change(answer)"/>
+                        <input class="pull-right" type="checkbox" ng-model="checkboxTotal"
+                               ng-change="change(answer)"/>
                     </h4>
                 </div>
 
@@ -52,54 +53,56 @@
 
                     <div ng-repeat="a in answer.answers">
                         <div class="panel-body" ng-switch on="a.type">
-                                <div ng-switch-when="Checkbox">
-                                    <h4>{{a.questiontitle}} <span
-                                            style="float: right;">{{a.weight}}</span></h4>
-                                    Check / Uncheck <input ng-model="a.result" type="checkbox"
-                                                           ng-checked="a.result == 'true'"
-                                                           onclick="return false"/>
-                                </div>
+                            <div ng-switch-when="Checkbox">
+                                <h4>{{a.questiontitle}} <span
+                                        style="float: right;">{{a.weight}} <input style="margin-left: 15px" type="checkbox" /></span></h4>
+                                Check / Uncheck <input ng-model="a.result" type="checkbox"
+                                                       ng-checked="a.result == 'true'"
+                                                       onclick="return false"/>
+                            </div>
 
-                                <div ng-switch-when="Code">
-                                    <h4>{{a.questiontitle}} <span
-                                            style="float: right;">{{a.weight}}</span></h4>
+                            <div ng-switch-when="Code">
+                                <h4>{{a.questiontitle}} <span
+                                        style="float: right;">{{a.weight}} <input style="margin-left: 15px" type="checkbox" /></span></h4>
 
-                                    <div ng-model="a.result" style="height: 200px" ui-ace="{
+                                <div ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
                                   mode: 'csharp',
                                   firstLineNumber: 1,
                                 }">
-                                    </div>
                                 </div>
+                            </div>
 
-                                <div ng-switch-when="Question">
-                                    <h4>{{a.questiontitle}} <span
-                                            style="float: right;">{{a.weight}}</span></h4>
-                                    <span style="font-weight: normal">{{a.result}}</span>
-                                </div>
+                            <div ng-switch-when="Question">
+                                <h4>{{a.questiontitle}} <span
+                                        style="float: right;">{{a.weight}} <input style="margin-left: 15px" type="checkbox" /></span></h4>
+                                <span style="font-weight: normal">{{a.result}}</span>
+                            </div>
 
-                                <div ng-switch-when="MultipleChoice">
-                                    <h4>{{a.questiontitle}} <span
-                                            style="float: right;">{{a.weight}}</span></h4>
-                                    <div ng-repeat="choice in a.choices" class="radio">
-                                        <label ng-if="a.result == choice.text"
-                                               style="color:green">{{choice.text}}</label>
-                                        <label ng-if="a.result != choice.text">{{choice.text}}</label>
-                                    </div>
+                            <div ng-switch-when="MultipleChoice">
+                                <h4>{{a.questiontitle}} <span
+                                        style="float: right;">{{a.weight}} <input style="margin-left: 15px" type="checkbox" /></span></h4>
+                                <div ng-repeat="choice in a.choices" class="radio">
+                                    <label ng-if="a.result == choice.text"
+                                           style="color:green">{{choice.text}}</label>
+                                    <label ng-if="a.result != choice.text">{{choice.text}}</label>
                                 </div>
+                            </div>
 
-                                <div class="form-group top-30">
-                                    <div>
-                                        <textarea class="animate msd-elastic: \n;" placeholder="Comment" style="resize: vertical; width: 100%" ng-model="a.comment" cols="100" rows="1"></textarea>
-                                    </div>
+                            <div class="form-group top-30">
+                                <div>
+                                        <textarea class="animate msd-elastic: \n;" placeholder="Comment"
+                                                  style="resize: vertical; width: 100%" ng-model="a.comment" cols="100"
+                                                  rows="1"></textarea>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div style="float: right; margin: 5px; display: inline-block; width: 100px">
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                <button type="button" class="btn btn-primary btn-block" ng-click="processForm()">Submit</button>
             </div>
         </div>
         {{selected}}
