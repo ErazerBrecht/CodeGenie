@@ -62,6 +62,38 @@ router.get("/answers/:answerID/delete", isAdmin, function (req, res) {
 
 //POST
 
+router.post("/answers/edit", isAdmin, function (req, res) {
+    var answerID = req.params.answerID;
+    var answerArray = req.body;
+
+    var totalaffected = 0;
+
+    var promises = answerArray.map(function (usobj) {
+        return new Promise(function (resolve, reject) {
+            AnswerModel.findOne({_id: usobj._id}, function (anError, result) {
+                if (anError) reject(anError);
+
+                ExerciseModel.findOne({_id: result.exerciseid}, function (exError, exResult) {
+                    if (exError) reject(exError);
+
+                    if (exResult.deadline) if (new Date() < exResult.deadline) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
+
+                    for (var field in req.body) result[field] = req.body[field];
+
+                    result.save(function (saveError) {
+                        if (saveError) reject(saveError);
+                        resolve();
+                    });
+                });
+            });
+        });
+    });
+
+    Promise.all(promises).then(function () {
+        savehandler(res, undefined, "Succesfully edited " + totalaffected + (totalaffected == 1 ? " answer." : " answers."))
+    }).catch(console.error);
+});
+
 router.post("/answers/:answerID/edit", isAdmin, function (req, res) {
     var answerID = req.params.answerID;
 
@@ -69,16 +101,16 @@ router.post("/answers/:answerID/edit", isAdmin, function (req, res) {
         if (err) return console.error(err);
 
         console.log(result);
-        ExerciseModel.findOne({_id: result.exerciseid}, function(exError, exResult){
-            if(exError) return console.error(exError);
+        ExerciseModel.findOne({_id: result.exerciseid}, function (exError, exResult) {
+            if (exError) return console.error(exError);
 
             if (exResult.deadline) if (new Date() < exResult.deadline) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
-            //TODO remove this? not sure if user should still be able to edit his answers after deadline
-            //Brecht: Keep this :)
 
             for (var field in req.body) result[field] = req.body[field];
 
-            result.save(function (err) { savehandler(res, err, "Answer edited."); });
+            result.save(function (err) {
+                savehandler(res, err, "Answer edited.");
+            });
         });
     });
 });
