@@ -67,7 +67,8 @@
                 answer.totalPoints = 0;
                 answer.checkTotalpoints = 0;
                 angular.forEach(answer.answers, function (a) {
-                    answer.totalPoints = answer.totalPoints + parseInt(a.weight);
+                    answer.totalPoints += parseInt(a.weight);
+                    answer.checkTotalpoints += a.received;
                     if(a.comment == undefined){
                         a.comment = "";
                     };
