@@ -39,12 +39,12 @@
                         <a data-toggle="collapse" data-parent="#userGroup" href="/#collapse{{$index}}">
                                     <div style="width: 95%; display: inline-block;">
                                         {{answer.name}}
-                                        <div class="pull-right">{{answer.totalPoints}}</div>
+                                        <div class="pull-right">{{answer.checkTotalpoints}}/{{answer.totalPoints}}</div>
                                     </div>
 
-                        </a>
-                        <input class="pull-right" type="checkbox" />
 
+                        </a>
+                        <input class="pull-right" type="checkbox" ng-model="checkboxTotal" ng-change="change(answer)"/>
                     </h4>
                 </div>
 
