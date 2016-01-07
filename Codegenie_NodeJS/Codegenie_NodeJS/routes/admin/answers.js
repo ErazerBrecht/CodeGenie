@@ -67,6 +67,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
     var answerArray = req.body;
 
     var totalaffected = 0;
+    var totalWitheld = 0;
 
     var promises = answerArray.map(function (usobj) {
         return new Promise(function (resolve, reject) {
@@ -76,21 +77,25 @@ router.post("/answers/edit", isAdmin, function (req, res) {
                 ExerciseModel.findOne({_id: result.exerciseid}, function (exError, exResult) {
                     if (exError) reject(exError);
 
-                    if (exResult.deadline) if (new Date() < exResult.deadline) return res.status(400).json(["Deadline not over yet. Users could still make changes."]);
+                    if (exResult.deadline && new Date() < exResult.deadline) {
+                        totalWitheld++;
+                        resolve()
+                    }
+                    else {
+                        for (var field in req.body) result[field] = req.body[field];
 
-                    for (var field in req.body) result[field] = req.body[field];
-
-                    result.save(function (saveError) {
-                        if (saveError) reject(saveError);
-                        resolve();
-                    });
+                        result.save(function (saveError) {
+                            if (saveError) reject(saveError);
+                            resolve();
+                        });
+                    }
                 });
             });
         });
     });
 
     Promise.all(promises).then(function () {
-        savehandler(res, undefined, "Succesfully edited " + totalaffected + (totalaffected == 1 ? " answer." : " answers."))
+        savehandler(res, undefined, "Succesfully edited " + totalaffected + (totalaffected == 1 ? " answer," : " answers,") + totalWitheld + (totalWitheld == 1 ? " answer" : " answers") + " were not edited because the deadline is not over yet.");
     }).catch(console.error);
 });
 
