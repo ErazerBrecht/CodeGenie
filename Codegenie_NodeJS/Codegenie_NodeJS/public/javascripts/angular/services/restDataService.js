@@ -6,7 +6,7 @@
             //adminPanel
             getUser: $resource("/users/mine"),
             editUser: $resource("/users/edit"),
-            getAllUsers: $resource("/users"),
+            getAllUsers: $resource("/admin/users"),
             getAllAnswers: $resource("/admin/answers"),
             getUserById: $resource('/admin/users/:userid', { userid: '@userid' }),
             removedUserById: $resource('/admin/users/:userid/delete', { userid: '@userid' }),
@@ -15,10 +15,10 @@
             getAnswersStatistics: $resource("/statistics/answers"),
             getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'}),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
-            updateAnswerById: $resource("/admin/answers/edit/:id", {id: '@id'}),
-            postExercise: $resource("/admin/exercises/post"),
-            postUpdateExercise: $resource("/admin/exercises/edit/:id", {id: '@id'}),
-            deleteExercise: $resource("/admin/exercises/delete/:id", {id: '@id'}),
+            updateAnswerById: $resource("/admin/answers/:id/edit/", {id: '@id'}),
+            postExercise: $resource("/admin/exercises"),
+            postUpdateExercise: $resource("/admin/exercises/:id/edit/", {id: '@id'}),
+            deleteExercise: $resource("/admin/exercises/:id/delete/", {id: '@id'}),
             postAssignUser: $resource("/admin/users/assign")
         };             
     };
