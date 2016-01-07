@@ -43,9 +43,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy: 'deadline'"
-         ng-show="(showRevised == true && exercise.revised == true) || (showSolved == true && exercise.solved == true) || (showExpired == true && exercise.deadline < today)"
-         ng-click="select(exercise)">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | userExercisesFilter: showSolved: showExpired: showRevised | orderBy: 'deadline'"  ng-click="select(exercise)">
 
         <div class="tile" ng-class="getTileClass(exercise)">
             <div class="triangle" ng-if="exercise.extra"></div>

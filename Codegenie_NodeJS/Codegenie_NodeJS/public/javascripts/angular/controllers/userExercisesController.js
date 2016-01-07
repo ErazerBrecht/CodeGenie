@@ -12,6 +12,7 @@
             //Convert deadline dates to real date types
             angular.forEach($scope.exercises, function (value, key) {
                 value.deadline = new Date(value.deadline);
+                value.revised = false;
 
                 if (value.solved) {
                     userRestData.getAnswer.get({exerciseid: value._id}, function (data) {
@@ -136,5 +137,26 @@
         };
     };
 
+    var userExercisesFilter = function()
+    {
+        return function( items, solved, expired, revised) {
+            var filtered = [];
+            var today = new Date();
+
+            angular.forEach(items, function(item) {
+                if(revised === true) {
+                    if(revised === item.revised)
+                        filtered.push(item);
+                    return;
+                }
+                if(solved === item.solved && ((!expired && item.deadline > today) || (expired && item.deadline < today)))
+                    filtered.push(item);
+            });
+
+            return filtered;
+        };
+    }
+
     app.controller("userExercisesController", userExercisesController);
+    app.filter("userExercisesFilter", userExercisesFilter);
 }());
