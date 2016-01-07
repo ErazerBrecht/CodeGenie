@@ -55,7 +55,13 @@ There are currently 4 pages: a login page, signup page, adminpanel and a userpan
     * Profile
       * Change your settings (email / password) 
 
-What are we doing now?
+Adminpanel has a javascript file at /public/javascripts/adminpanel.js that takes care of the intitalization of the AngularJS module. Also, in this file the routing of views takes place! Every view that is loaded in at the adminpanel has its own controller. The adminpanel himself also has a controller. All controllers are placed in /public/javascripts/controllers!
+
+The same structure is used on the userpanel!
+
+Our 4 main views (seperate html pages), they can be found at /views/. They are loaded by our NodeJS code.They are build in JADE, this has as advantage that we can bind on server side variables! The views we load in our main views (loaded with AngularJS) are written in html and can be found at /public/views/
+
+##What are we doing now?
 Finishing the project...
 
 ##Dependencies
