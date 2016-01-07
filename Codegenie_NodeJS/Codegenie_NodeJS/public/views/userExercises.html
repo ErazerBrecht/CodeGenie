@@ -65,7 +65,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title" ng-if="a.extra == true">
-                            <a data-toggle="collapse" href="/#collapse{{$index}}"><span
+                            <a style="display: inline-block; width: 100%" data-toggle="collapse" href="/#collapse{{$index}}"><span
                                     style="color:red; font-weight:bolder">EXTRA: </span>{{a.questiontitle}}
                                 <span class="pull-right"> Points: <span
                                         ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span>
@@ -76,7 +76,7 @@
 
                         <h4 class="panel-title" ng-if="a.extra == false">
 
-                            <a data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span
+                            <a style="display: inline-block; width: 100%" data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span
                                     class="pull-right"> Points: <span
                                     ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span></a>
                         </h4>
