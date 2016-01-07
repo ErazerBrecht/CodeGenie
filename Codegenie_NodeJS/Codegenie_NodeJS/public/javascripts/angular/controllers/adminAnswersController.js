@@ -11,19 +11,25 @@
 
         });
 
+
+        //checkbox logic
         $scope.change = function(answer) {
             if(answer.checkTotalpoints == 0){
                 answer.checkTotalpoints = answer.totalPoints;
                 angular.forEach(answer.answers, function(a){
-
                     a.received = a.weight;
+                    a.checkQuestion = true;
                 });
+
             }
             else{
                 answer.checkTotalpoints = 0;
                 angular.forEach(answer.answers, function(a){
                     a.received = 0;
+                    a.checkQuestion = false;
                 });
+                answer.totalCheck = false;
+
             }
         };
 
@@ -31,6 +37,7 @@
             if(answer.checkTotalpoints == 0) {
                 answer.checkTotalpoints += a.weight;
                 a.received = a.weight;
+                answer.totalCheck = true;
             }
             else{
                 if(a.received != 0){
