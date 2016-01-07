@@ -116,22 +116,20 @@ If you use Visual Studio and Node.JS tools you can also change the env variabele
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
 
 
-**All dates have the format of DD/MM/YYYY HH:MM:SS (e.g. 20/02/2015 15:20:30)**
+**All dates have the UTC format**
 
 
 *Defaults do not need need to be filled in, if the field is missing the server will default these.*
 
-*All of these objects also have an internal _id field which can be used but I won't mention them again.*
+*All of these objects also have an internal _id field which can be used but won't be mentioned again.*
 
 
 ###Users
-Users have 9 fields, 4 of which are required and 4 which have a default.
-
 Required: 
 * name: string, name of the user (e.g. John Smith) *is unique field*
 * password: string, encrypted password (encrypted with bCrypt)
 * class: string, current class enrollment of the user (e.g. 1EA1)
-* course: Current course *not implemented yet*
+* course: string, course the user is in. (e.g. Programming Principles)
 
 Defaults: 
 * status: number, register status, defaults to 0.
@@ -141,16 +139,14 @@ Defaults:
 
 Not required but field is available: 
 * email: string, for when the user wants to subscribe. *is unique & sparse field*
+* logins: number, amount of times the user logged in. Increases once per login.
 
 
 ###Exercises
-Exercises have 8 fields, 4 of which are required and 2 which have a default.
-
 Required:
 * title: string, title of the exercise (e.g. MongoDB)
 * classification: string, classification of the exercise (e.g. Databinding)
-* class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
-* course: Current course *not implemented yet*
+* course: string, course the exercise is in. (e.g. Programming Principles)
 
 Defaults:
 * created: date, when the exercise was posted, defaults to current time on the server.
@@ -158,62 +154,71 @@ Defaults:
 
 Not required but field is available: 
 * deadline: date, date by which the exercise has to be solved.
+* revealdate: date, date when the exercise has to be revealed to the users.
 * questions: array of 'question' objects (see: [question object](#questionobject)), this is an array of the questions in this exercise.
 
 
 ###Answers
-Answers have 10 fields, 8 of which are required and 1 which has a default.
-
 Required:
-* exerciseid: string, id of the exercise (e.g. 5637951a8a48cc983189c500)
-* userid: string, id of the user (e.g. 5637951a8a48cc983189c500)
+* exerciseid: ID, id of the exercise (e.g. 5637951a8a48cc983189c500)
+* userid: ID, id of the user (e.g. 5637951a8a48cc983189c500)
 * title: string, title of the original exercise (e.g. Databinding)
 * classification: string, classification of the original exercise (e.g. Databinding)
-* class: string, this is the class that is eligible to solve this exercise (e.g. 1EA1)
-* revised: boolean, check if the answer has been revised by the teacher.
+* course: string, course from the original exercise. (e.g. Programming Principles)
 * extra: boolean, check if the original exercise is an extra assignment or not.
-* course: Current course *not implemented yet*
 
 Defaults:
 * created: date, when the answer was posted, defaults to current time on the server.
+* revised: boolean, check if the answer has been revised by the teacher, defaults to false.
 
 Not required but field is available: 
 * answers: array of 'answer' objects (see: [answer object](#answerobject)), this is an array of the question answers in this answer.
 
 
+###Seen
+Required:
+* userid: ID, id of the user (e.g. 5637951a8a48cc983189c500)
+
+Not required but field is available: 
+* seenexercises: array of 'seenexercise' objects (see: [seenexercise object](#seenexercise)), this is an array of exercises the user has seen/opened.
+
+
 
 ####Question object<a name="questionobject"></a>
-The question object exists out of 5 fields, 2 of which are required and 2 which have a default.
-
 Required:
 * question: string, title of this question (e.g. What is 'Databinding'?)
 * weight: number, maximum score and weight of this exercise (e.g. 20)
 
 Defaults:
-* extra: boolean, check if this question is an extra question or not, defaults to false.
-* type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code')(defaults to "Checkbox")
+* extra: boolean, check if this question is an extra question or not. (defaults to false)
+* type: string with enum, type of question (currently accepted: 'Checkbox', 'Question', 'Code', 'MultipleChoice') (defaults to "Checkbox")
 
 Not required but field is available:
 * choices: array of objects with field 'text' and 'correct', multiple choice questions are saved here, correct indicates if it is the correct choice or not.
 
 ####Answer object<a name="answerobject"></a>
-The answer object exists out of 9 fields, 5 of which are required and 1 which has a default.
-
 Required:
-* questionid: number, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
+* questionid: ID, reference to the original questionid (e.g. 5637951a8a48cc983189c500)
 * questiontitle: string, title of the original question (e.g. What is 'Databinding'?)
 * weight: number, maximum score and weight of the original question (e.g. 5)
 * extra: boolean, check if the original question is an extra question or not.
 * type: string with enum, type of original question (currently accepted: 'Checkbox', 'Question', 'Code', 'MultipleChoice')
 
 Defaults:
-* received: number, how much the user received for this exercise (e.g. 5) (defaults to 0 obviously)
+* received: number, how much the user received for this exercise (e.g. 5) (defaults to 0)
 
 Not required but field is available: 
 * result: string, if code/question was asked, this is the field it will be placed in.
+* comment: string, the admin's comment on this question.
 * feedback: number, the user's feedback to this question.
 * choices: array of objects with field 'text', multiple choice answers are saved here.
 
+####Seenexercise object<a name="seenexercise"></a>
+Required:
+* exerciseid: ID, reference to the exercise ID (e.g. 5637951a8a48cc983189c500)
+
+Defaults:
+* dateseen: date, date the user has seen this exercise. (defaults to servertime)
 
 
 ##Data access, Information Portals
@@ -223,17 +228,18 @@ There are currently 3 portals, the /admin/ portal, /users/ portal and the /stati
 
 
 ###User portal
-The user portal has 8 gets and 2 posts.
 
-
-**GET**: /users/
-
-This gives all current users, currently only accessible for admin.
+####Users
 
 **GET**: /users/mine
 
 This gives the current user's information.
 
+**POST**: /users/edit
+
+For editing the user's profile.
+
+####Exercises
 
 **GET**: /users/exercises
 
@@ -259,15 +265,7 @@ This gives a specific exercise that the user is allowed to solve.
 
 This gives the answer corresponding with the exercise ID.
 
-
-**GET**: /users/seen/
-
-This gives the list of exercises that have been seen by the user.
-
-**POST**: /users/seen/{ID}
-
-This is for posting when the user has opened a new exercise.
-
+####Answers
 
 **GET**: /users/answers
 
@@ -278,7 +276,7 @@ This gives all the answers that the user has submitted.<br/>
 
 This gives a specific answer that the user has submitted.
 
-**POST**: /users/answer
+**POST**: /users/answers
 
 Users can post/edit solved exercises here.
 
@@ -286,30 +284,25 @@ Users can post/edit solved exercises here.
 Original exercise ID in a field named 'exerciseid'<br/>
 Array of [answer objects](#answerobject) with the field 'questionid' and 'text' filled in<br/>
 
+####Seen
 
-**POST**: /users/edit
+**GET**: /users/seen/
 
-Users can edit their profiles here.
+This gives the list of exercises that have been seen by the user.
 
+**POST**: /users/seen/{ID}
+
+This is for posting when the user has opened a new exercise.
 
 
 
 ###Admin portal
-The admin portal has 12 gets and 4 posts.
 
+####Users
 
-**GET**: /admin/
+**GET**: /admin/users/
 
-HTML page for the admin panel.
-
-
-**POST**: /admin/users
-
-Admins can create new users by posting here.
-
-**POST**: /admin/users/assign
-
-The admin can assign users by posting here.
+A list of all the users.
 
 **GET**: /admin/users/{ID}
 
@@ -324,6 +317,15 @@ Deletes the user with this ID.
 Gives all answers of userid {ID}<br/>
 ?display=summary can be added to this statement to get a summary instead of the whole thing.
 
+**POST**: /admin/users
+
+Admins can create new users by posting here.
+
+**POST**: /admin/users/assign
+
+The admin can assign users by posting here.
+
+####Exercises
 
 **GET**: /admin/exercises
 
@@ -337,20 +339,21 @@ This gives a specific exercise.
 
 This gives all the answers of the exercise with ID: {ID}
 
-**GET**: /admin/exercises/delete/{ID}
+**GET**: /admin/exercises/{ID}/delete
 
 This deletes the exercise with ID: {ID}
 
-**POST**: /admin/exercises/post
+**POST**: /admin/exercises
 
 The admin can create exercises by posting here.
 
-**POST**: /admin/exercises/edit/{ID}
+**POST**: /admin/exercises/{ID}/edit
 
 The admin can edit exercises by posting here.
 
+####Answers
 
-**GET**: /admin/answers 
+**GET**: /admin/answers
 
 This gives all answers.
 
@@ -366,18 +369,21 @@ This gives all revised answers.
 
 This gives a specific answer.
 
-**GET**: /admin/answers/delete/{ID}
+**GET**: /admin/answers/{ID}/delete
 
 This deletes the answer with ID: {ID}
 
-**POST**: /admin/answers/edit/{ID}
+**POST**: /admin/answers/edit
+
+The admin can edit multiple answers by posting here.
+
+**POST**: /admin/answers/{ID}/edit
 
 The admin can edit answers by posting here.
 
 
 
 ###Statistics portal
-The statistics has 8 gets.
 
 **GET**: /statistics/
 
@@ -388,22 +394,33 @@ Gives various numbers on the amount of users, admins, exercises, answers and use
 Gives the week information about all answers.<br/>
 ?filter=year or ?filter=week to filter the exercises by year or week.
 
+**GET**: /statistics/course/{COURSE}
+
+Gives the information about all courses, includes top users in both amount of answers & received score.<br/>
+?limit=# to receive the top # users.
+
+**GET**: /statistics/users/mine
+
+Gives summary about the current user, includes received scores for all answered exercises, activity by week & hour, logins compared to the average.
+
 **GET**: /statistics/users/{ID}
 
-Gives summary about all this users answers.
+Gives summary about all this user, includes received scores for all answered exercises, activity by week & hour, logins compared to the average.
+?filter=year or ?filter=week to filter the exercises by year or week.
 
 **GET**: /statistics/exercises
 
 Gives the amount of exercises and amount of exercises per class.
 
-**GET**: /statistics/exercises/graph/{ID}
+**GET**: /statistics/exercises/{ID}/graph
 
 Gives summaries about when users solved this exercise that can be used in a fancy graph.<br/>
 ?filter=year or ?filter=week to filter the exercises by year or week.
 
-**GET**: /statistics/exercises/average/{ID}
+**GET**: /statistics/exercises/{ID}/average
 
 Gives summary about the average score from this exercise that can be used in a fancy graph. (excludes unrevised answers)
+?limit=# to receive the top # users.
 
 **GET**: /statistics/answers
 
@@ -416,12 +433,3 @@ Gives the amount of answers that have been revised and amount of revised answers
 **GET**: /statistics/answers/unrevised
 
 Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
-
-
-
-##TODO:
-
-- Finish user panel
-- Fix lastseen update
-- Make fancy graphs
-- Finish profile manager
