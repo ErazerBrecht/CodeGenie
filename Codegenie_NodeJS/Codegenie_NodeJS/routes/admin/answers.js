@@ -82,7 +82,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
                         resolve()
                     }
                     else {
-                        for (var field in req.body) result[field] = req.body[field];
+                        for (var field in usobj) if (usobj.hasOwnProperty(field)) result[field] = usobj[field];
 
                         result.save(function (saveError, affected) {
                             if (saveError) reject(saveError);
@@ -96,7 +96,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
     });
 
     Promise.all(promises).then(function () {
-        savehandler(res, undefined, "Succesfully edited " + totalAffected + (totalAffected == 1 ? " answer," : " answers,") + totalWitheld + (totalWitheld == 1 ? " answer" : " answers") + " were not edited because the deadline is not over yet.");
+        savehandler(res, undefined, "Succesfully edited " + totalAffected + (totalAffected == 1 ? " answer, " : " answers, ") + totalWitheld + (totalWitheld == 1 ? " answer" : " answers") + " were not edited because the deadline is not over yet.");
     }).catch(console.error);
 });
 
