@@ -8,5 +8,5 @@ var createHash = function (password) {
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
 
-module.exports = isValidPassword;
-module.exports = createHash;
+exports.isValidPassword = isValidPassword;
+exports.createHash = createHash;

@@ -131,7 +131,7 @@ router.post("/users/assign", isAdmin, function (req, res) {
         return new Promise(function (resolve, reject) {
             UserModel.update({_id: usobj.id}, {$set: {status: 1, course: usobj.course}}, function (err, affected) {
                 if (err) return reject(err);
-                totalaffected += affected.result.n;
+                totalaffected += affected.nModified;
                 resolve();
             });
         });

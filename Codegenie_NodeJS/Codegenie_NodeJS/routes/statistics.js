@@ -5,6 +5,8 @@ var auth = require('../passport/authlevels');
 var router = express.Router();
 var moment = require('moment');
 
+//TODO: split this like admin & users
+
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
@@ -532,6 +534,8 @@ router.get('/answers/unrevised', isLoggedIn, function (req, res) {
 });
 
 function SendUserStatistic(userID, res, filter) {
+    //TODO: Add weekly & hourly activity
+
     AnswerModel.aggregate(
         [
             {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
