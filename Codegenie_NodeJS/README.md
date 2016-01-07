@@ -91,7 +91,7 @@ Frontend:
 * ngResource: TODO Arne explain this short!
 * Messagebox: Fancy alert box with animation to show errors and messages from backend to frontend (TODO: Check Matthew)
 * Elastic: TODO Arne
-* punchcard: Shows activity of user in nice punchcard (same as GitHub)
+* Punchcard: Shows activity of user in nice punch-card (same as GitHub)
 * nvd3: makes fancy graphs, based on d3. Will be used to show some statistics
 * Bootstrap checkbox: nicer checkboxes with more options than default ones
 
@@ -103,7 +103,7 @@ TODO: Update this printsreens!!!
 ![Printscreen](http://i.imgur.com/MTyw8FD.png)
 
 ##Bulding and using this project
-We used Visual Studio for this project, we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx).
+First we used Visual Studio for this project. If you use Visual Studio we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx). This tool also makes it easier to publish on Azure...
 
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
@@ -113,6 +113,9 @@ To connect to our database you will need a connectionstring (don't hesitate to a
 If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project! We recommend to do this. This is a better way of starting a node project, you start the project by pressing the green run button of Visual Studio (like you used to do with C# applications).
 
 Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
+
+##Flow of the application
+TODO
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
