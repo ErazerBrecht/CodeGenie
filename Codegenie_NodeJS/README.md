@@ -89,6 +89,11 @@ Frontend:
 * momentJS and momentJS angular for dynamic relative time!
 * Angular: ngDraggable: used to drop and drag our tiles to remove them
 * ngResource: TODO Arne explain this short!
+* messagebox: Fancy alert box with animation to show errors and messages from backend to frontend
+* elastic: TODO Arne
+* punchcard: Shows activity of user in nice punchcard (same as GitHub)
+* nvd3: makes fancy graphs, based on d3. Will be used to show some statistics
+* Bootstrap checkbox: nicer checkboxes with more options than default ones
 
 ##Printscreens
 
