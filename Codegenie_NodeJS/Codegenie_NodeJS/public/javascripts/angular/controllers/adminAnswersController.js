@@ -14,9 +14,16 @@
         $scope.change = function(answer) {
             if(answer.checkTotalpoints == 0){
                 answer.checkTotalpoints = answer.totalPoints;
+                angular.forEach(answer.answers, function(a){
+
+                    a.received = a.weight;
+                });
             }
             else{
                 answer.checkTotalpoints = 0;
+                angular.forEach(answer.answers, function(a){
+                    a.received = 0;
+                });
             }
         };
 
@@ -37,6 +44,7 @@
                 answer.checkTotalpoints = 0;
                 angular.forEach(answer.answers, function (a) {
                     answer.totalPoints = answer.totalPoints + parseInt(a.weight);
+                    a.comment = "";
                 });
             });
 
@@ -56,7 +64,7 @@
             $scope.error = null;
             $scope.message = null;
 
-            restData.updateAnswerById.save({id: answer._id},answer,
+            restData.updateAnswerById.save({id: answer._id},$scope.selected,
                 function(response){
                     $scope.message = response.data;
                 },
