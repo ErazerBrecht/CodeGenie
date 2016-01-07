@@ -66,6 +66,10 @@
             $scope.error = null;
             $scope.message = null;
 
+            angular.forEach($scope.selected, function(answer){
+                answer.revised = true;
+            });
+
             restData.postCorrectedAnswers.save($scope.selected,
                 function(response){
                     $scope.message = response.data;
