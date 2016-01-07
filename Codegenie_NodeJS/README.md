@@ -55,11 +55,11 @@ There are currently 4 pages: a login page, signup page, adminpanel and a userpan
     * Profile
       * Change your settings (email / password) 
 
-Adminpanel has a javascript file at /public/javascripts/adminpanel.js that takes care of the intitalization of the AngularJS module. Also, in this file the routing of views takes place! Every view that is loaded in at the adminpanel has its own controller. The adminpanel himself also has a controller. All controllers are placed in /public/javascripts/controllers!
+Adminpanel has a javascript file at /public/javascripts/adminpanel.js that takes care of the intitalization of the AngularJS module. Also, in this file the routing of views takes place! Every view that is loaded in at the adminpanel has its own controller. The adminpanel himself also has a controller. All controllers are placed in /public/javascripts/controllers! The names of the controllers are self-explanatory.
 
 The same structure is used on the userpanel!
 
-Our 4 main views (seperate html pages), they can be found at /views/. They are loaded by our NodeJS code.They are build in JADE, this has as advantage that we can bind on server side variables! The views we load in our main views (loaded with AngularJS) are written in html and can be found at /public/views/
+Our 4 main views (seperate html pages), they can be found at /views/. They are loaded by our NodeJS code. They are build in JADE, this has as advantage that we can bind on server side variables! The views we load in our main views (loaded with AngularJS) are written in html and can be found at /public/views/
 
 ##What are we doing now?
 Finishing the project...
@@ -89,8 +89,8 @@ Frontend:
 * momentJS and momentJS angular for dynamic relative time!
 * Angular: ngDraggable: used to drop and drag our tiles to remove them
 * ngResource: TODO Arne explain this short!
-* messagebox: Fancy alert box with animation to show errors and messages from backend to frontend
-* elastic: TODO Arne
+* Messagebox: Fancy alert box with animation to show errors and messages from backend to frontend (TODO: Check Matthew)
+* Elastic: TODO Arne
 * punchcard: Shows activity of user in nice punchcard (same as GitHub)
 * nvd3: makes fancy graphs, based on d3. Will be used to show some statistics
 * Bootstrap checkbox: nicer checkboxes with more options than default ones
@@ -108,9 +108,11 @@ We used Visual Studio for this project, we recommend [Node.js tools for Visual S
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
-To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine. This can easily be done by defining it in the cmd windows where you will start your node server. In our project we use a startup script (startnodemon.cmd), there you will need to add the connectionstring!
+To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine (e.g. Heroku, Azure, Local, ...). This can easily be done by defining it in the cmd windows where you will start your node server. In our project we used a startup script (startnodemon.cmd) that will do it for you! The only thing you need to do is make a file connectioninfo.config in the folder mongoose. It's important to use UTF-8 (Without BOM) as enconding for the file!
 
-If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project!
+If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project! We recommend to do this. This is a better way of starting a node project, you start the project by pressing the green run button of Visual Studio (like you used to do with C# applications).
+
+Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
