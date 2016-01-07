@@ -11,8 +11,7 @@
             postAnswer: $resource("/users/answers"),
             getStatisticsAnswers: $resource("/statistics/answers"),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
-            getStatisticsMyAnswersGraphWeek: $resource("statistics/users/mine?filter=week"),
-            getStatisticsMyAnswersGraphHour: $resource("statistics/users/mine?filter=hour"),
+            getStatisticsMyAnswersGraph: $resource("statistics/users/mine"),
             getRanking: $resource("/statistics/course/:course", { course: '@course'}),
             getNewExercises: $resource("/users/exercises/new"),
             addLastSeen: $resource("users/seen/:exerciseid", { exerciseid: '@exerciseid'})

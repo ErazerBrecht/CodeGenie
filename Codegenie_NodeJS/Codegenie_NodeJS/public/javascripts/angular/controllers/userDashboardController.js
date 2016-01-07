@@ -3,7 +3,7 @@
     var app = angular.module("userApp");
     
     var userDashboardController = function ($scope, userRestData) {
-        userRestData.getStatisticsMyAnswersGraphWeek.get(function (data)
+        userRestData.getStatisticsMyAnswersGraph.get(function (data)
         {
             $scope.logins = data.logins.mylogins;
             $scope.loginsAverage = data.logins.average;
@@ -12,23 +12,25 @@
             //Chart data should be sent as an array of series objects.
             $scope.graphData = [
                 {
-                    values: data.activity,      //values - represents the array of {x,y} data points
+                    values: data.activityWeekly,      //values - represents the array of {x,y} data points
                     key: 'Your answers', //key  - the name of the series.
                     color: '#5cb85c',  //color - optional: choose your own line color.
                 }
             ];
-        });
 
-        userRestData.getStatisticsMyAnswersGraphHour.get(function (data)
-        {
             //This needs to be a 2 dimensional array!!
             $scope.punchCardData = [
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             ];
 
-            angular.forEach(data.activity, function (value, key) {
-                $scope.punchCardData[0][value.x] = value.y;
+            //Calculate offset of local time with GMT time
+            //DB sends hours back in GMT
+            var offset = -parseInt(((new Date().getTimezoneOffset())/60));
+
+            angular.forEach(data.activityHourly, function (value, key) {
+                $scope.punchCardData[0][value.x + offset] = value.y;
             });
+
         });
 
         $scope.options = {
