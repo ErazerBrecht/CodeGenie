@@ -49,3 +49,51 @@ Bootstrap extension => Gray button
 .btn-group.open .btn.btn-gray.dropdown-toggle {
   background-color: #8c97a6;
 }
+
+
+/*light blue button*/
+.btn-lightblue {
+  color: #FFFFFF;
+  background-color: #009FF5;
+  border-color: #006ADB;
+}
+
+.btn-lightblue:hover,
+.btn-lightblue:focus,
+.btn-lightblue:active,
+.btn-lightblue.active,
+.open .dropdown-toggle.btn-lightblue {
+  color: #FFFFFF;
+  background-color: #00CCFF;
+  border-color: #006ADB;
+}
+
+.btn-lightblue:active,
+.btn-lightblue.active,
+.open .dropdown-toggle.btn-lightblue {
+  background-image: none;
+}
+
+.btn-lightblue.disabled,
+.btn-lightblue[disabled],
+fieldset[disabled] .btn-lightblue,
+.btn-lightblue.disabled:hover,
+.btn-lightblue[disabled]:hover,
+fieldset[disabled] .btn-lightblue:hover,
+.btn-lightblue.disabled:focus,
+.btn-lightblue[disabled]:focus,
+fieldset[disabled] .btn-lightblue:focus,
+.btn-lightblue.disabled:active,
+.btn-lightblue[disabled]:active,
+fieldset[disabled] .btn-lightblue:active,
+.btn-lightblue.disabled.active,
+.btn-lightblue[disabled].active,
+fieldset[disabled] .btn-lightblue.active {
+  background-color: #009FF5;
+  border-color: #006ADB;
+}
+
+.btn-lightblue .badge {
+  color: #009FF5;
+  background-color: #FFFFFF;
+}

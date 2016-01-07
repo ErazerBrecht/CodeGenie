@@ -92,7 +92,9 @@
 
         $scope.getTileClass = function (selected) {
             var tempExercise = selected
-
+            if(tempExercise.revised) {
+                return "lightblue";
+            }
             if (tempExercise.solved) {
                 if (tempExercise.answerDate > tempExercise.deadline)
                     return "orange";

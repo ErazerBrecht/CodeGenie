@@ -33,6 +33,10 @@
                     <span style="width: 200px; display: inline-block">Show expired exercises:</span>
                     <checkbox ng-model="showExpired" class="btn-danger left-30"/>
                 </div>
+                <div class="top-10">
+                    <span style="width: 200px; display: inline-block">Show revised exercises:</span>
+                    <checkbox ng-model="showRevised" class="btn-lightblue left-30"/>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +44,7 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | orderBy: 'deadline'"
-         ng-hide="(showSolved == false && exercise.solved == true) || (showExpired == false && exercise.deadline < today)"
+         ng-show="(showRevised == true && exercise.revised == true) || (showSolved == true && exercise.solved == true) || (showExpired == true && exercise.deadline < today)"
          ng-click="select(exercise)">
 
         <div class="tile" ng-class="getTileClass(exercise)">

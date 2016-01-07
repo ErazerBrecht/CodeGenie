@@ -32,7 +32,7 @@ strong {
 .tile .title {
   margin-top: 0px;
 }
-.tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green, .tile.grey {
+.tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green, .tile.grey, .tile.lightblue {
   color: #fff;
 }
 .tile.purple {
@@ -70,6 +70,12 @@ strong {
 }
 .tile.grey:hover {
   background: #626e7f;
+}
+.tile.lightblue {
+  background: #00CCFF;
+}
+.tile.lightblue:hover {
+  background: #009FF5;
 }
 
 .triangle {
