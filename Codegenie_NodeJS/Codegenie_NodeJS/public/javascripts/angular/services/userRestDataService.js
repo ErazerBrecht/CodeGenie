@@ -8,7 +8,7 @@
             editUser: $resource("/users/edit"),
             getExercises: $resource("/users/exercises"),
             getAnswer: $resource("users/exercises/:exerciseid/answers", { exerciseid: '@exerciseid' }),
-            postAnswer: $resource("/users/answer"),
+            postAnswer: $resource("/users/answers"),
             getStatisticsAnswers: $resource("/statistics/answers"),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
             getStatisticsMyAnswersGraphWeek: $resource("statistics/users/mine?filter=week"),
