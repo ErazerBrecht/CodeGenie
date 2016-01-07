@@ -86,7 +86,7 @@
                         <th>Name</th>
                         <th>Average score</th>
                     </tr>
-                    <tr ng-repeat="r in ranking">
+                    <tr ng-repeat="r in rankingScore">
                         <td>{{$index + 1}}</td>
                         <td>{{r.name}}</td>
                         <td>{{r.received}}</td>
@@ -101,7 +101,18 @@
                 <i class="fa fa-line-chart fa-fw"></i> Most answers
             </div>
             <div class="panel-body">
-                <div>I'm the very best like no one ever was</div>
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Total solved exercises</th>
+                    </tr>
+                    <tr ng-repeat="r in rankingAmount">
+                        <td>{{$index + 1}}</td>
+                        <td>{{r.name}}</td>
+                        <td>{{r.count}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

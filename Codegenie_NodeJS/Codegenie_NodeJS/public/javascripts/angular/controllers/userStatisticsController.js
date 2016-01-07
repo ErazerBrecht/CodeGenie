@@ -18,8 +18,9 @@
 
             //Get ranking
             //Placed it here because, $scope.user.course is already loaded here!
-            userRestData.getRanking.query({course: $scope.user.course}, function (data) {
-                $scope.ranking = data;
+            userRestData.getRanking.get({course: $scope.user.course}, function (data) {
+                $scope.rankingScore = data.topReceived;
+                $scope.rankingAmount = data.topAmount;
             });
         });
 
