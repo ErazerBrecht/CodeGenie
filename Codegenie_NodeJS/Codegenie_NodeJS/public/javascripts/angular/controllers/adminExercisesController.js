@@ -156,10 +156,16 @@
             return "blue";
         };
 
+
+        /*
+        Unused code:
+        Was used for scrolling to the Exercice form
+        Still here because maybe one day we'll need it again...
         function scrollToExercise() {
             $location.hash('exerciseRow');
             $anchorScroll();
         };
+        */
     };
 
     app.controller("adminExercisesController", adminExercisesController);
