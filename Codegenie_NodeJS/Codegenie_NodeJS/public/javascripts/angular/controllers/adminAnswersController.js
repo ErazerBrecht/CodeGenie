@@ -9,6 +9,10 @@
         restData.getExercises.query(function (data) {
             $scope.exercises = data;
 
+            angular.forEach($scope.exercises, function(value, key)
+            {
+                value.deadline = new Date(value.deadline);
+            });
 
         });
 
@@ -122,35 +126,16 @@
         }
     }
 
-    var userExercisesFilter = function()
-    {
-        return function( items, solved, expired, revised) {
-            var filtered = [];
-            var today = new Date();
-
-            angular.forEach(items, function(item) {
-                if(revised === true) {
-                    if(revised === item.revised)
-                        filtered.push(item);
-                    return;
-                }
-                if(solved === item.solved && ((!expired && item.deadline > today) || (expired && item.deadline < today)))
-                    filtered.push(item);
-            });
-
-            return filtered;
-        };
-    }
     var adminAnswerFilter = function()
     {
-        return function(items, yolo) {
+        return function(items, course, extra, expired) {
             var filtered = [];
             var today = new Date();
 
             angular.forEach(items, function(item){
-                if(yolo == "All" || yolo == item.course){
+                if((course == "All" || course == item.course) && (extra == item.extra) && ((!expired && item.deadline > today) || (expired && item.deadline < today))){
                     filtered.push(item);
-                };
+                }
             });
             return filtered;
 
@@ -158,5 +143,4 @@
     };
     app.controller("adminAnswersController", adminAnswersController);
     app.filter("adminAnswerFilter", adminAnswerFilter);
-    app.filter("userExercisesFilter", userExercisesFilter);
 }());
