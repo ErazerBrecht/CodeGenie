@@ -115,7 +115,11 @@ If you use Visual Studio and Node.JS tools you can also change the env variabele
 Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
 
 ##Flow of the application
-TODO
+The first route you connect to is our root route. We called this route index.js. This route will determine if your're already sign in. If you are, you're automatically redirected to the home.js route.
+
+If not the login.jade will be rendered in your browser. This view is a sigin form. There is also the possibility to make a new account. If you want this, you will be routed the the signup.js route. The sigup.jade view will be rendered. You can now post userdetails to this route for making a new account. The request will be processed by our passport module.
+
+This module takes care of our login / signup logic. Two main tasks, making a new user with a hashed (bcrypt) password. And check if the visitor is signed in / check if the visitor is an admin. The logic for this module can be found in the folder *passport*
 
 ##Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
