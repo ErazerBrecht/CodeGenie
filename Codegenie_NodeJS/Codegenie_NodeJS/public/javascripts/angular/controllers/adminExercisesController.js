@@ -28,12 +28,6 @@
             $scope.selected.deadline = new Date();
             $scope.error = null;
             $scope.message = null;
-
-            //Needs delay, because the view needs to change
-            //The form is visible when selected is not null
-            //When we wait, the view is already updated
-            //Now we can scroll to the form
-            $timeout(scrollToExercise,10);
         };
 
         $scope.select = function (exercise) {
@@ -41,12 +35,6 @@
             //$scope.selected.deadline = new Date($scope.selected.deadline);
             $scope.error = null;
             $scope.message = null;
-
-            //Needs delay, because the view needs to change
-            //The form is visible when selected is not null
-            //When we wait, the view is already updated
-            //Now we can scroll to the form
-            $timeout(scrollToExercise,10);
         };
 
         //THIS IS TO SLOWWW!
