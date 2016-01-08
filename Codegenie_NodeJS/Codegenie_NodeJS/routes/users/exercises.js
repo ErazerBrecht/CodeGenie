@@ -23,21 +23,35 @@ router.get('/exercises', isLoggedIn, function (req, res) {
         UserSeenModel.findOne({userid: req.user._id}, function (err, seenresult) {
             if (err) return console.error(err);
 
-            UserModel.findOne({_id: req.user._id}, {lastseen: 1}, function (err, userResult) {
+            AnswerModel.find({userid: req.user._id, revised: true}).lean().exec(function (err, answerResult) {
                 if (err) return console.error(err);
 
+                var wtflist = [] // lijst van objecten die niet gevonden zijn
+
+                for (var i in answerResult) { //door heel lijst van revised oefeningen gaan
+                    if (!seenresult.seenexercises.some(function (seenobj) { // als het exerciseid niet voorkomt samen met true revised in seenexercise
+                            return (seenobj.exerciseid == answerResult[i].exerciseid && seenobj.revised == true);
+                        })) {
+                        wtflist.push(answerResult[i].exerciseid);
+                    }
+                }
+
                 var exerciselist = [];
-                for (var index in exresult) {
-                    var obj = exresult[index];
+                for (var i in exresult) {
+                    var obj = exresult[i];
                     if (obj.revealdate && new Date() < obj.revealdate) continue;
 
                     exerciselist.push({
-                        "id": obj._id,
-                        "index": index,
-                        "seen": seenresult ? seenresult.seenexercises.some(function (seenobj) {
-                            return seenobj.exerciseid.equals(obj._id);
-                        }) : false
-                    });
+                            "id": obj._id,
+                            "index": i,
+                            "revisedseen": wtflist.some(function (wtfobj) {
+                                return seenobj.exerciseid.equals(obj._id);
+                            }) ? true : false,
+                            "seen": seenresult ? seenresult.seenexercises.some(function (seenobj) {
+                                return seenobj.exerciseid.equals(obj._id);
+                            }) : false
+                        }
+                    );
                 }
 
                 var promises = exerciselist.map(function (exobj) {
@@ -54,6 +68,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                             else exresult[exobj.index].solved = false;
 
                             exresult[exobj.index].seen = exobj.seen;
+                            exresult[exobj.index].revisedseen = exobj.revisedseen;
                             response.push(exresult[exobj.index]);
                             resolve();
                         });
@@ -68,8 +83,10 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 }).catch(console.error);
             });
         });
-    });
-});
+    })
+    ;
+})
+;
 
 router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;

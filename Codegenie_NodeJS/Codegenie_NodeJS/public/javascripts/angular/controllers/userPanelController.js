@@ -15,7 +15,7 @@
 
         $scope.discard = function(exercise)
         {
-            userRestData.addLastSeen.save({ exerciseid: exercise._id }, function (data) {
+            userRestData.addLastSeenNew.save({ exerciseid: exercise._id }, function (data) {
 
             });
 

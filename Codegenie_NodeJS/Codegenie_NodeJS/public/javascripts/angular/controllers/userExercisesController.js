@@ -76,7 +76,7 @@
                     var questions = $scope.selected.questions;
 
                     //Update your exercises seen array with this exercise
-                    userRestData.addLastSeen.save({exerciseid: $scope.selected._id}, function (data) {
+                    userRestData.addLastSeenNew.save({exerciseid: $scope.selected._id}, function (data) {
 
                     });
 
