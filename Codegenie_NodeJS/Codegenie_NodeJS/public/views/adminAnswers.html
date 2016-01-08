@@ -22,37 +22,50 @@
 <div class="row" ng-show="selected == null">
     <div class="col-lg-12">
         <div class="panel panel-success">
-            <div class="panel-heading">Filters</div>
-            <div class="panel-body">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label>Show:</label>
-                        <select class="form-control right-30"  ng-model="selectedCourse" ng-init="selectedCourse = 'All'">
-                            <option>All</option>
-                            <option>Programming Principles</option>
-                            <option>OO</option>
-                            <option>Mobile-dev</option>
-                            <option>SO4</option>
-                            <option>Admin</option>
-                        </select>
-                    </div>
-                    <div class="form-group" >
-                        <span style="width: 50px; display: inline-block">Extra:</span>
-                        <checkbox ng-model="showExtra" class="btn-success left-10 right-30"/>
-                    </div>
-                    <div class="form-group" >
-                        <span style="width: 70px; display: inline-block">Expired:</span>
-                        <checkbox ng-model="showExpired" class="btn-danger left-10"/>
-                    </div>
-                </form>
+            <div class="panel-heading">Filters
+                <span class="pull-right">
+                    <label data-toggle="collapse" data-target="#collapseOne">
+                        <checkbox ng-model="showAll" ng-init="showAll = true" class="btn-success"/>
+                    </label>
+                </span>
 
             </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label>Show:</label>
+                            <select class="form-control right-30" ng-model="selectedCourse"
+                                    ng-init="selectedCourse = 'All'">
+                                <option>All</option>
+                                <option>Programming Principles</option>
+                                <option>OO</option>
+                                <option>Mobile-dev</option>
+                                <option>SO4</option>
+                                <option>Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span style="width: 50px; display: inline-block">Extra:</span>
+                            <checkbox ng-model="showExtra" class="btn-success left-10 right-30"/>
+                        </div>
+                        <div class="form-group">
+                            <span style="width: 70px; display: inline-block">Expired:</span>
+                            <checkbox ng-model="showExpired" class="btn-danger left-10"/>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
 <div class="row" ng-show="selected.length == 0 || selected == null">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | adminAnswerFilter: selectedCourse: showExtra: showExpired" ng-click="select(exercise)">
+    <div class="col-sm-12 col-md-6 col-lg-4"
+         ng-repeat="exercise in exercises | adminAnswerFilter: showAll: selectedCourse: showExtra: showExpired"
+         ng-click="select(exercise)">
         <div class="tile blue">
             <div class="triangle" ng-if="exercise.extra"></div>
             <div class="title">
@@ -76,7 +89,8 @@
 
 
                         </a>
-                        <input class="pull-right" type="checkbox" ng-model="answer.totalCheck" ng-checked="answer.totalCheck"
+                        <input class="pull-right" type="checkbox" ng-model="answer.totalCheck"
+                               ng-checked="answer.totalCheck"
                                ng-change="change(answer)"/>
                     </h4>
                 </div>
@@ -87,7 +101,9 @@
                         <div class="panel-body" ng-switch on="a.type">
                             <div ng-switch-when="Checkbox">
                                 <h4>{{a.questiontitle}} <span
-                                        style="float: right;">{{a.received}}/{{a.weight}} <input style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion" ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
+                                        style="float: right;">{{a.received}}/{{a.weight}} <input
+                                        style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion"
+                                        ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
                                 Check / Uncheck <input ng-model="a.result" type="checkbox"
                                                        ng-checked="a.result == 'true'"
                                                        onclick="return false"/>
@@ -95,7 +111,9 @@
 
                             <div ng-switch-when="Code">
                                 <h4>{{a.questiontitle}} <span
-                                        style="float: right;">{{a.received}}/{{a.weight}} <input style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion" ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
+                                        style="float: right;">{{a.received}}/{{a.weight}} <input
+                                        style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion"
+                                        ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
 
                                 <div ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
@@ -108,13 +126,17 @@
 
                             <div ng-switch-when="Question">
                                 <h4>{{a.questiontitle}} <span
-                                        style="float: right;">{{a.received}}/{{a.weight}} <input style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion" ng-model="a.checkQuestion" ng-change="changePoints(a, answer)" /></span></h4>
+                                        style="float: right;">{{a.received}}/{{a.weight}} <input
+                                        style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion"
+                                        ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
                                 <span style="font-weight: normal">{{a.result}}</span>
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
                                 <h4>{{a.questiontitle}} {{a.checkQuestion}}<span
-                                        style="float: right;">{{a.received}}/{{a.weight}} <input style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion" ng-model="a.checkQuestion" ng-change="changePoints(a, answer)" /></span></h4>
+                                        style="float: right;">{{a.received}}/{{a.weight}} <input
+                                        style="margin-left: 15px" type="checkbox" ng-checked="a.checkQuestion"
+                                        ng-model="a.checkQuestion" ng-change="changePoints(a, answer)"/></span></h4>
                                 <div ng-repeat="choice in a.choices" class="radio">
                                     <label ng-if="a.result == choice.text"
                                            style="color:green">{{choice.text}}</label>
@@ -133,7 +155,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group top-20 pull-right" >
+            <div class="form-group top-20 pull-right">
                 <button type="button" class="btn btn-primary" ng-click="processForm()">Submit</button>
                 <button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>
             </div>

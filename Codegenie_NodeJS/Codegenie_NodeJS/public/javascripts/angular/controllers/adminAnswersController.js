@@ -128,9 +128,11 @@
 
     var adminAnswerFilter = function()
     {
-        return function(items, course, extra, expired) {
+        return function(items, all, course, extra, expired) {
             var filtered = [];
             var today = new Date();
+            if(!all)
+                return items;
 
             angular.forEach(items, function(item){
                 if((course == "All" || course == item.course) && (extra == item.extra) && ((!expired && item.deadline > today) || (expired && item.deadline < today))){
