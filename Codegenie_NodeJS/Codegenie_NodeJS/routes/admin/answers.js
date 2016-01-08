@@ -63,7 +63,6 @@ router.get("/answers/:answerID/delete", isAdmin, function (req, res) {
 //POST
 
 router.post("/answers/edit", isAdmin, function (req, res) {
-    var answerID = req.params.answerID;
     var answerArray = req.body;
 
     var totalAffected = 0;
@@ -79,7 +78,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
 
                     if (exResult.deadline && new Date() < exResult.deadline) {
                         totalWitheld++;
-                        resolve()
+                        resolve();
                     }
                     else {
                         for (var field in usobj) if (usobj.hasOwnProperty(field)) result[field] = usobj[field];
@@ -106,7 +105,6 @@ router.post("/answers/:answerID/edit", isAdmin, function (req, res) {
     AnswerModel.findOne({_id: answerID}, function (err, result) {
         if (err) return console.error(err);
 
-        console.log(result);
         ExerciseModel.findOne({_id: result.exerciseid}, function (exError, exResult) {
             if (exError) return console.error(exError);
 

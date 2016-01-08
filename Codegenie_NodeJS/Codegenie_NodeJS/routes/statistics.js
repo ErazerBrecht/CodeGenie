@@ -168,7 +168,6 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
                 ],
                 function (err, aggresultTopAmount) {
                     if (err) return console.error(err);
-                    console.log(aggresultTopAmount)
                     topReceived = [];
                     topAmount = [];
 

@@ -4,12 +4,14 @@ var mongoose = require('mongoose');
 var auth = require('../../passport/authlevels');
 var router = express.Router();
 
+var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var UserSeenModel = schemas.UserSeenModel;
 var AnswerModel = schemas.AnswerModel;
 
 var savehandler = schemas.savehandler;
 
+var isLoggedIn = auth.isLoggedIn;
 var isAdmin = auth.isAdmin;
 
 //ADMIN EXERCISES
@@ -73,6 +75,31 @@ router.get("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
     });
 });
 
+router.get('/exercises/:exerciseID/unsolved', isAdmin, function (req, res) {
+    var exerciseID = req.params.exerciseID;
+
+    ExerciseModel.findById(exerciseID).lean().exec(function (err, exerciseResult) {
+        if (err) return console.error(err);
+        if (!exerciseResult) return res.status(400).json(["Exercise not found."])
+
+        AnswerModel.find({course: exerciseResult.course, exerciseid: exerciseID}).lean().exec(function (err, answerResult) {
+            if (err) return console.error(err);
+
+            var userList = [];
+
+            for (var i in answerResult)
+                if (answerResult.hasOwnProperty(i))
+                    userList.push(answerResult[i].userid);
+
+            UserModel.find({ "_id": {$nin: userList}, course: exerciseResult.course}).lean().exec(function (err, userResult) {
+                if (err) return console.error(err);
+
+                res.status(200).json(userResult)
+            });
+        });
+    })
+});
+
 //POST
 
 router.post("/exercises/", isAdmin, function (req, res) {
@@ -84,8 +111,7 @@ router.post("/exercises/", isAdmin, function (req, res) {
     newexercise.deadline.setMinutes(59);
     newexercise.deadline.setSeconds(59);
 
-    if(newexercise.revealdate != undefined)
-    {
+    if (newexercise.revealdate != undefined) {
         newexercise.revealdate.setHours(0);
         newexercise.revealdate.setMinutes(0);
         newexercise.revealdate.setSeconds(0);
