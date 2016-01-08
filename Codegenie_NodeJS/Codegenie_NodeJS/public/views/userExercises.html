@@ -51,7 +51,7 @@
                 <h3>{{exercise.title}}</h3>
                 <div ng-if="exercise.revised == true">{{exercise.totalpoints}}/{{exercise.totalAvailablePoints}}</div>
             </div>
-            <div ng-if="exercise.revised == false || exercise.revised == undefined">Deadline:
+            <div ng-if="exercise.revised == false">Deadline:
                 <time am-time-ago="exercise.deadline"></time>
             </div>
         </div>
@@ -88,7 +88,7 @@
                         <div class="panel-body" ng-switch on="a.type">
                             <div ng-switch-when="Checkbox">
                                 Check / Uncheck <input
-                                    ng-if="selected.revised == false || selected.revised == undefined"
+                                    ng-if="selected.revised == false"
                                     ng-model="a.result" type="checkbox" ng-true-value="'true'"
                                     ng-false-value="'false'"/>
                                 <input ng-if="selected.revised == true" ng-model="a.result"
@@ -98,7 +98,7 @@
 
 
                             <div ng-switch-when="Code">
-                                <div ng-if="selected.revised == false || selected.revised == undefined">
+                                <div ng-if="selected.revised == false">
                                     <button type="button" ng-click="beautify(a)" class="btn btn-default"><i
                                             class="fa fa-pencil" style="padding-right: 0px; !important;"></i></button>
                                     <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
@@ -122,7 +122,7 @@
                             </div>
 
                             <div ng-switch-when="Question">
-                                <textarea ng-if="selected.revised == false || selected.revised == undefined" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
+                                <textarea ng-if="selected.revised == false" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
                                           ng-model="a.result" cols="100" rows="10"></textarea>
 
                                 <textarea readonly ng-if="selected.revised == true" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
@@ -130,7 +130,7 @@
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
-                                <div ng-if="selected.revised == false || selected.revised == undefined" ng-repeat="choice in a.choices" class="radio">
+                                <div ng-if="selected.revised == false" ng-repeat="choice in a.choices" class="radio">
                                     <label><input type="radio" ng-model="a.result" ng-value="choice.text"/>{{choice.text}}</label>
                                 </div>
 
@@ -151,7 +151,7 @@
 
 
         <div class="form-group top-30">
-            <button ng-if="selected.revised == false || selected.revised == undefined" type="submit"
+            <button ng-if="selected.revised == false" type="submit"
                     class="btn btn-default">Submit
             </button>
         </div>
