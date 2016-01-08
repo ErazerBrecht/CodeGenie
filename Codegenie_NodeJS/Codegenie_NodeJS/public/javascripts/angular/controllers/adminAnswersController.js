@@ -43,6 +43,9 @@
                 if(a.received != 0){
                     a.received = 0;
                     answer.checkTotalpoints -= a.weight;
+                    if(answer.checkTotalpoints == 0){
+                        answer.totalCheck = false;
+                    }
                 }
                 else{
                     a.received = a.weight;
@@ -69,6 +72,11 @@
                 angular.forEach(answer.answers, function (a) {
                     answer.totalPoints += parseInt(a.weight);
                     answer.checkTotalpoints += a.received;
+
+                    if(a.received != 0){
+                        a.checkQuestion = true;
+                        answer.totalCheck = true;
+                    }
                     if(a.comment == undefined){
                         a.comment = "";
                     };
