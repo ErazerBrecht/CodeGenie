@@ -45,7 +45,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                             "id": obj._id,
                             "index": i,
                             "revisedseen": wtflist.some(function (wtfobj) {
-                                return seenobj.exerciseid.equals(obj._id);
+                                return wtfobj.equals(obj._id);
                             }) ? true : false,
                             "seen": seenresult ? seenresult.seenexercises.some(function (seenobj) {
                                 return seenobj.exerciseid.equals(obj._id);
