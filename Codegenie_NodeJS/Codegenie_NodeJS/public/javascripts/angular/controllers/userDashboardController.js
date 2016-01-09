@@ -28,6 +28,9 @@
             var offset = -parseInt(((new Date().getTimezoneOffset())/60));
 
             angular.forEach(data.activityHourly, function (value, key) {
+                if((value.x + offset) > 23)
+                    offset -= 24;               //24 equals 0, 25 equals 1, ....
+
                 $scope.punchCardData[0][value.x + offset] = value.y;
             });
 
