@@ -84,7 +84,10 @@ exports.AnswerModel = AnswerModel;
 exports.savehandler = function (res, err, successMessage) {
     if (err) {
         var errorMessage = [];
-        for (var field in err.errors) errorMessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
+        for (var field in err.errors)
+            if (err.errors.hasOwnProperty(field))
+                errorMessage.push(err.errors[field].message + " Found " + err.errors[field].value + ".");
+
         return res.status(400).json(errorMessage);
     }
     else return res.status(201).json({ "data": successMessage });
@@ -92,8 +95,10 @@ exports.savehandler = function (res, err, successMessage) {
 
 exports.questionExists = function (answer, questions) {
     for (var index in questions) {
-        if (!answer.hasOwnProperty("questionid")) return false;
-        if (questions[index]._id == answer.questionid) return true;
+        if (questions.hasOwnProperty(index)) {
+            if (!answer.hasOwnProperty("questionid")) return false;
+            if (questions[index]._id == answer.questionid) return true;
+        }
     }
     return false;
 };
