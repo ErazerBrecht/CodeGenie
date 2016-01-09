@@ -44,7 +44,7 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
 
     ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
         if (err) return console.error(err);
-        if (result) return res.status(400).json(["Not an eligible exercise ID."]);
+        if (!result) return res.status(400).json(["Not an eligible exercise ID."]);
 
         AnswerModel.find({exerciseid: exerciseID}).lean().exec(function (err, result) {
             if (err) return console.error(err);
