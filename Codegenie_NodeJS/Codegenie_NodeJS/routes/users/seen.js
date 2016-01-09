@@ -60,6 +60,6 @@ var AddSeen = function (req, res, revised) {
             });
         }
     });
-}
+};
 
 module.exports = router;

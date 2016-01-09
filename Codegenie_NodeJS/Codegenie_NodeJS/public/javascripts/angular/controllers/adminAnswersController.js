@@ -84,11 +84,11 @@
                     }
                     if(a.comment == undefined){
                         a.comment = "";
-                    };
+                    }
                 });
             });
 
-        }
+        };
 
 
         $scope.select = function (answer) {
@@ -120,11 +120,11 @@
                 function(error){
                     $scope.error = error.data;
                 }
-            )
+            );
 
             $scope.selected = undefined;
         }
-    }
+    };
 
     var adminAnswerFilter = function()
     {
