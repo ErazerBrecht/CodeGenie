@@ -13,9 +13,8 @@
             getStatisticsAnswersGraph: $resource("statistics/graph"),
             getStatisticsMyAnswersGraph: $resource("statistics/users/mine"),
             getRanking: $resource("/statistics/course/:course", { course: '@course'}),
-            getNewExercises: $resource("/users/exercises/new"),
-            addLastSeenNew: $resource("users/seen/new", { exerciseid: '@exerciseid'})
-            //addLastSeenRevised: $resource("users/seen/new", { exerciseid: '@exerciseid'}) // called pressed when viewing revised tile
+            addLastSeenNew: $resource("users/seen/new", { exerciseid: '@exerciseid'}),
+            addLastSeenRevised: $resource("users/seen/revised", { exerciseid: '@exerciseid'}) // called pressed when viewing revised tile
         };
     };
     

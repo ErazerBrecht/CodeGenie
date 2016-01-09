@@ -6,32 +6,6 @@
     var userExercisesController = function ($scope, userRestData) {
         $scope.today = new Date();
 
-        userRestData.getExercises.query(function (data) {
-            $scope.exercises = data;
-
-            //Convert deadline dates to real date types
-            angular.forEach($scope.exercises, function (value, key) {
-                value.deadline = new Date(value.deadline);
-                value.revised = false;
-
-                if (value.solved) {
-                    userRestData.getAnswer.get({exerciseid: value._id}, function (data) {
-                        value.answers = data.answers;
-                        value.answerDate = new Date(data.created);
-                        value.revised = data.revised;
-                        value.totalpoints = 0;
-                        value.totalAvailablePoints = 0;
-                        if(value.revised) {
-                            angular.forEach(value.answers, function (d, key) {
-                                value.totalpoints += d.received;
-                                value.totalAvailablePoints += d.weight;
-                            });
-                        }
-                    });
-                }
-            });
-        });
-
         $scope.beautify = function (ans) {
             var array = ans.result.split(/\n/);
             array[0] = array[0].trim();
@@ -50,7 +24,6 @@
             });
 
         };
-
 
         //for making textarea automatic bigger and smaller
         function textAreaAdjust(o) {
@@ -76,7 +49,7 @@
                     var questions = $scope.selected.questions;
 
                     //Update your exercises seen array with this exercise
-                    userRestData.addLastSeenNew.save({exerciseid: $scope.selected._id}, function (data) {
+                    userRestData.addLastSeenNew.save({exerciseid: $scope.selected._id, }, function (data) {
 
                     });
 
@@ -87,6 +60,12 @@
                     });
 
                     $scope.selected.answers = questions;
+                }
+                else if($scope.selected.revised)
+                {
+                    userRestData.addLastSeenRevised.save({exerciseid: $scope.selected._id, }, function (data) {
+
+                    });
                 }
             }
         };
