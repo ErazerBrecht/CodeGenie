@@ -38,7 +38,7 @@ var AddSeen = function (req, res, revised) {
         else {
             //ADD
             if (!result.seenexercises.some(function (seenobj) {
-                    return (seenobj.exerciseid == req.body.exerciseid && seenobj.revised == req.body.revised);
+                    return (seenobj.exerciseid == req.body.exerciseid);
                 })) {
                 //DOESNT EXIST, ADD
                 result.seenexercises.push({exerciseid: req.body.exerciseid, revised: revised});
@@ -46,11 +46,13 @@ var AddSeen = function (req, res, revised) {
             else {
                 //EXISTS, UPDATE SEEN
                 for (var x = 0; x < result.seenexercises.length; x++)
-                    if (result.seenexercises[x].exerciseid == req.body.exerciseid && result.seenexercises[x].revised == req.body.revised) result.seenexercises.set(x, {
-                        exerciseid: result.seenexercises[x].exerciseid,
-                        revised: result.seenexercises[x].revised,
-                        dateseen: new Date()
-                    });
+                    if (result.seenexercises[x].exerciseid == req.body.exerciseid) {
+                        result.seenexercises.set(x, {
+                            exerciseid: result.seenexercises[x].exerciseid,
+                            revised: revised,
+                            dateseen: new Date()
+                        });
+                    }
             }
 
             result.save(function (err) {
