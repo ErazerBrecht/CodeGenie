@@ -29,8 +29,9 @@ router.get('/exercises', isLoggedIn, function (req, res) {
                 var wtflist = [] // lijst van objecten die niet gevonden zijn
 
                 for (var i in answerResult) { //door heel lijst van revised oefeningen gaan
-                    if (!seenresult.seenexercises.some(function (seenobj) { // als het exerciseid niet voorkomt samen met true revised in seenexercise
-                            return (seenobj.exerciseid == answerResult[i].exerciseid && seenobj.revised == true);
+
+                    if (seenresult.seenexercises.some(function (seenobj) { // als het exerciseid WEL voorkomt samen met true revised in seenexercise
+                            return (seenobj.exerciseid.equals(answerResult[i].exerciseid) && seenobj.revised == true)
                         })) {
                         wtflist.push(answerResult[i].exerciseid);
                     }
@@ -92,34 +93,6 @@ router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
     switch (exerciseID) {
-        case 'new':
-            UserSeenModel.findOne({userid: req.user._id}).lean().exec(function (err, seenresult) {
-                if (err) return console.error(err);
-
-                var exerciseIDs = [];
-
-                if (seenresult)
-                    for (var index in seenresult.seenexercises)
-                        exerciseIDs.push(seenresult.seenexercises[index].exerciseid);
-
-                ExerciseModel.find({
-                    _id: {$nin: exerciseIDs},
-                    course: req.user.course
-                }).lean().exec(function (err, exresult) {
-                    if (err) return console.error(err);
-
-                    var send = {};
-                    var newexarray = [];
-                    for (var x in exresult) {
-                        var obj = exresult[x];
-                        if (obj.revealdate && new Date() < obj.revealdate) continue;
-                        newexarray.push(obj);
-                    }
-
-                    res.status(200).json(newexarray);
-                })
-            });
-            break;
         case 'solved':
             AnswerModel.find({userid: req.user._id}, {exerciseid: 1}, function (err, anresult) {
                 if (err) return console.error(err);
