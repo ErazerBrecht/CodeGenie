@@ -18,6 +18,30 @@
                 angular.forEach($scope.users, function(value, key)
                 {
                     value.lastseen = new Date(value.lastseen);
+                    restData.getUserStatistic.get({ userid: value._id }, function (response) {
+                        //This needs to be a 2 dimensional array!!
+                        var punchCard =
+                            [
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            ];
+
+                        //Calculate offset of local time with GMT time
+                        //DB sends hours back in GMT
+                        var offset = -parseInt(((new Date().getTimezoneOffset()) / 60));
+
+                        for (var i = 0; i < response.activityHourly.length; i++) {
+                            if ((response.activityHourly[i].x + offset) > 23)
+                                offset -= 24;               //24 equals 0, 25 equals 1, ....
+
+                            else if ((response.activityHourly[i].x + offset) < 0)
+                                offset += 24;               //-1 equals 23, -2 equals 22, ....
+
+                            punchCard[0][response.activityHourly[i].x + offset] = response.activityHourly[i].y;
+                        }
+
+                        value.punchCardData = punchCard;
+
+                    });
                 });
             });
         };
