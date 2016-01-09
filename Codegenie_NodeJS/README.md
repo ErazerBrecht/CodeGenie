@@ -30,7 +30,9 @@ There are currently 4 pages: a login page, signup page, adminpanel and a userpan
       * Delete users
       * Check some information of the user (e-mail, lastseen)
     * Able to get a list of answers
-      * ARNE 
+      * See all answers that need revising
+      * Filtering through answers (extra, expired, class)
+      * Revising answer for each user that answered the exercise
 * Userpanel: The page for the students
   * Has the following views: 
     * Dashboard: Home page
@@ -88,9 +90,9 @@ Frontend:
 * Beautify: Will format the code in the code editor
 * momentJS and momentJS angular for dynamic relative time!
 * Angular: ngDraggable: used to drop and drag our tiles to remove them
-* ngResource: TODO Arne explain this short!
+* ngResource: A default angularjs factory which creates a resource object that lets you interact with RESTful server-side data sources
 * Messagebox: Fancy alert box with animation to show errors and messages from backend to frontend (TODO: Check Matthew)
-* Elastic: TODO Arne
+* Elastic: A third party module that can be added to our own angular module. It gives us the ability to resize textarea depending on how much text or enters you put into it.ar
 * Punchcard: Shows activity of user in nice punch-card (same as GitHub)
 * nvd3: makes fancy graphs, based on d3. Will be used to show some statistics
 * Bootstrap checkbox: nicer checkboxes with more options than default ones
