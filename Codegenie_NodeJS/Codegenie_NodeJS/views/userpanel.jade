@@ -29,20 +29,19 @@ block content
                     i.fa.fa-bell.fa-fw
                     i.fa.fa-caret-down
                 ul.dropdown-menu.dropdown-alerts
-                    li(ng-repeat-start='exercise in newExercises | orderBy : "-created"')
+                    li(ng-repeat='exercise in exercises | filter: {seen : "false"} | orderBy : "-created"')
                         a(href='#/exercises')
                             div
                                 i.fa.fa-comment.fa-fw
                                 |  New exercise
                                 i.fa.fa-minus-circle.fa-fw.pull-right(ng-click='discard(exercise)')
                                 time.pull-right.text-muted(am-time-ago="exercise.created")
-                    li(ng-repeat-end='' class='divider')
-                    li
+                    li(ng-repeat='exercise in exercises | orderBy : "-created"' ng-if="exercise.solved == true && exercise.revisedseen == false")
                         a(href='#/exercises')
                             div
                                 i.fa.fa-envelope.fa-fw
-                                | TODO Exercise revised
-                                span.pull-right.text-muted.small 4 minutes ago
+                                | Exercise revised
+                                time.pull-right.text-muted(am-time-ago="exercise.created")
             li.dropdown
                 a.dropdown-toggle(href='', data-toggle='dropdown')
                     i.fa.fa-user
