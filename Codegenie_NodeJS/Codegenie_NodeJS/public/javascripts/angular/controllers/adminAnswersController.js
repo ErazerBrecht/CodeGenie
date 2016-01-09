@@ -104,6 +104,16 @@
             $scope.message = null;
         };
 
+        $scope.getTileClass = function (selected) {
+            var tempExercise = selected;
+
+            if (tempExercise.deadline < new Date())
+                return "red";
+
+            return "blue";
+
+        };
+
         $scope.processForm = function () {
             //Clear error and message
             $scope.error = null;
