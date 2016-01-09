@@ -13,7 +13,7 @@
             var options =
             {
                 "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
-            }
+            };
             ans.result = js_beautify(ans.result, options);
 
             angular.forEach($scope.selected.answers, function (value, key) {
@@ -29,8 +29,7 @@
         function textAreaAdjust(o) {
             o.style.height = "1px";
             o.style.height = (25 + o.scrollHeight) + "px";
-        };
-
+        }
         $scope.dismissMessage = function () {
             $scope.message = null;
         };
@@ -71,7 +70,7 @@
         };
 
         $scope.getTileClass = function (selected) {
-            var tempExercise = selected
+            var tempExercise = selected;
             if(tempExercise.revised) {
                 return "lightblue";
             }
@@ -134,7 +133,7 @@
 
             return filtered;
         };
-    }
+    };
 
     app.controller("userExercisesController", userExercisesController);
     app.filter("userExercisesFilter", userExercisesFilter);

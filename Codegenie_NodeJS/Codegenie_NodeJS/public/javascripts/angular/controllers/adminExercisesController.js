@@ -15,8 +15,7 @@
                         value.revealdate = new Date(value.revealdate);
                 });
             });
-        };
-
+        }
         $scope.today = new Date();
 
         $scope.dismissMessage = function () {
@@ -24,7 +23,7 @@
         };
 
         $scope.add = function () {
-            $scope.selected = {}
+            $scope.selected = {};
             $scope.selected.deadline = new Date();
             $scope.error = null;
             $scope.message = null;

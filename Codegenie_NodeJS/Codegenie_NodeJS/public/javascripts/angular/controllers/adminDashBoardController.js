@@ -21,8 +21,7 @@
                     answer.name = data.name;
                 });
             });
-        };
-
+        }
         restData.getAnswersStatistics.get(function (data)
         {
             $scope.countTotalAnswers = data.count;
@@ -89,13 +88,13 @@
                     return "panel-primary";
                     break;
                 case "OO":
-                    return "panel-yellow"
+                    return "panel-yellow";
                     break;
                 case "Mobile-dev":
-                    return "panel-green"
+                    return "panel-green";
                     break;
                 case "SO4":
-                    return "panel-red"
+                    return "panel-red";
                     break;
             }
         };

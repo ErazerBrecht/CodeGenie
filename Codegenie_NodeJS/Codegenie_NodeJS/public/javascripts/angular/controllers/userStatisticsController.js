@@ -85,7 +85,7 @@
                     x: 1,
                     y: 2
                 }
-            ]
+            ];
 
             //Chart data should be sent as an array of series objects.
             $scope.graphData = [

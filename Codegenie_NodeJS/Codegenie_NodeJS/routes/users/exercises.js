@@ -26,11 +26,10 @@ router.get('/exercises', isLoggedIn, function (req, res) {
             AnswerModel.find({userid: req.user._id, revised: true}).lean().exec(function (err, answerResult) {
                 if (err) return console.error(err);
 
-                var wtflist = [] // lijst van objecten die niet gevonden zijn
-
-                for (var i in answerResult) { //door heel lijst van revised oefeningen gaan
-
-                    if (seenresult.seenexercises.some(function (seenobj) { // als het exerciseid WEL voorkomt samen met true revised in seenexercise
+                var wtflist = [];
+                //this could be done + named better..
+                for (var i in answerResult) {
+                    if (seenresult.seenexercises.some(function (seenobj) {
                             return (seenobj.exerciseid.equals(answerResult[i].exerciseid) && seenobj.revised == true)
                         })) {
                         wtflist.push(answerResult[i].exerciseid);

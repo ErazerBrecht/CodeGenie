@@ -44,8 +44,7 @@
                     });
                 });
             });
-        };
-
+        }
         $scope.checkboxUser =  function (user)
         {
             if (user.checkbox)

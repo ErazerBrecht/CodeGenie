@@ -8,7 +8,6 @@ var flash = require('connect-flash');
 
 //Mongoose
 var mongoose = require('./mongoose/dbconnection');
-var schemas = require('./mongoose/schemas');
 
 //Certificate
 var sslOptions = {
@@ -57,7 +56,7 @@ app.use(session({
     name: "Codegenie",
     store: new cookiestore({
         mongooseConnection: mongoose.db,
-        ttl: 7 * 24 * 60 * 60,
+        ttl: 7 * 24 * 60 * 60
     }),
     resave: true,
     saveUninitialized: true

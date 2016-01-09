@@ -11,7 +11,6 @@ var AnswerModel = schemas.AnswerModel;
 
 var savehandler = schemas.savehandler;
 
-var isLoggedIn = auth.isLoggedIn;
 var isAdmin = auth.isAdmin;
 
 //ADMIN EXERCISES
@@ -22,7 +21,9 @@ router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
 
-        for (var index in result) result[index].revealed = !(result[index].revealdate && new Date() < result[index].revealdate);
+        for (var index in result)
+            if (result.hasOwnProperty(index))
+                result[index].revealed = !(result[index].revealdate && new Date() < result[index].revealdate);
 
         res.status(200).json(result);
     })
@@ -41,36 +42,46 @@ router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
 router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
-    AnswerModel.find({exerciseid: exerciseID}).lean().exec(function (err, result) {
+    ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
         if (err) return console.error(err);
+        if (result) return res.status(400).json(["Not an eligible exercise ID."]);
 
-        res.status(200).json(result);
+        AnswerModel.find({exerciseid: exerciseID}).lean().exec(function (err, result) {
+            if (err) return console.error(err);
+
+            res.status(200).json(result);
+        })
     })
 });
 
 router.get("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
-    ExerciseModel.find({_id: exerciseID}).remove(function (err, affected) {
-        if (err) return res.status(400).json(["Exercise doesn't exist."]);
+    ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
+        if (err) return console.error(err);
+        if (result) return res.status(400).json(["Not an eligible exercise ID."]);
 
-        AnswerModel.find({exerciseid: exerciseID}).remove(function (err, affectedanswers) {
-            if (err) return res.status(400).json(["Error removing the answers."]);
+        ExerciseModel.find({_id: exerciseID}).remove(function (err, affected) {
+            if (err) return res.status(400).json(["Exercise doesn't exist."]);
 
-            // Maybe move this so we don't have to go through all the seenmodels,
-            // only remove when the user gets /users/exercises and the corresponding exercise cant be found?
-            // would also work when the user switches courses
-            UserSeenModel.find({}).stream()
-                .on('data', function (doc) {
-                    doc.seenexercises.remove({exerciseid: req.params.exerciseID});
-                    doc.save();
-                })
-                .on('error', function (err) {
-                    console.error(err);
-                })
-                .on('end', function () {
-                    savehandler(res, undefined, "Succesfully deleted " + affected.result.n + (affected.result.n == 1 ? " exercise." : " exercises.") + " and " + affectedanswers.result.n + (affectedanswers.result.n == 1 ? " answer." : " answers."));
-                });
+            AnswerModel.find({exerciseid: exerciseID}).remove(function (err, affectedanswers) {
+                if (err) return res.status(400).json(["Error removing the answers."]);
+
+                // Maybe move this so we don't have to go through all the seenmodels,
+                // only remove when the user gets /users/exercises and the corresponding exercise cant be found?
+                // would also work when the user switches courses
+                UserSeenModel.find({}).stream()
+                    .on('data', function (doc) {
+                        doc.seenexercises.remove({exerciseid: exerciseID});
+                        doc.save();
+                    })
+                    .on('error', function (err) {
+                        console.error(err);
+                    })
+                    .on('end', function () {
+                        savehandler(res, undefined, "Succesfully deleted " + affected.result.n + (affected.result.n == 1 ? " exercise." : " exercises.") + " and " + affectedanswers.result.n + (affectedanswers.result.n == 1 ? " answer." : " answers."));
+                    });
+            });
         });
     });
 });
@@ -80,9 +91,12 @@ router.get('/exercises/:exerciseID/unsolved', isAdmin, function (req, res) {
 
     ExerciseModel.findById(exerciseID).lean().exec(function (err, exerciseResult) {
         if (err) return console.error(err);
-        if (!exerciseResult) return res.status(400).json(["Exercise not found."])
+        if (!exerciseResult) return res.status(400).json(["Exercise not found."]);
 
-        AnswerModel.find({course: exerciseResult.course, exerciseid: exerciseID}).lean().exec(function (err, answerResult) {
+        AnswerModel.find({
+            course: exerciseResult.course,
+            exerciseid: exerciseID
+        }).lean().exec(function (err, answerResult) {
             if (err) return console.error(err);
 
             var userList = [];
@@ -91,7 +105,10 @@ router.get('/exercises/:exerciseID/unsolved', isAdmin, function (req, res) {
                 if (answerResult.hasOwnProperty(i))
                     userList.push(answerResult[i].userid);
 
-            UserModel.find({ "_id": {$nin: userList}, course: exerciseResult.course}).lean().exec(function (err, userResult) {
+            UserModel.find({
+                "_id": {$nin: userList},
+                course: exerciseResult.course
+            }).lean().exec(function (err, userResult) {
                 if (err) return console.error(err);
 
                 res.status(200).json(userResult)
@@ -128,7 +145,9 @@ router.post("/exercises/:exerciseID/edit", isAdmin, function (req, res) {
     ExerciseModel.findOne({_id: exerciseID}, function (err, result) {
         if (err || !result) return res.status(400).json(["Exercise doesn't exist."]);
 
-        for (var field in req.body) result[field] = req.body[field];
+        for (var field in req.body)
+            if (req.body.hasOwnProperty(field))
+                result[field] = req.body[field];
 
         result.deadline.setHours(23);
         result.deadline.setMinutes(59);
