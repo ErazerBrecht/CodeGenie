@@ -88,7 +88,7 @@ Frontend:
 * AngularJS: used for client side routing and MVC pattern
 * ACE editor: A code editor, we will use this to post code. It will mostly be used for syntaxhighlighting
 * Beautify: Will format the code in the code editor
-* momentJS and momentJS angular for dynamic relative time!
+* momentJS: Parse, validate, manipulate, and display dates in JavaScript. E.g. relative time
 * Angular: ngDraggable: used to drop and drag our tiles to remove them
 * ngResource: A default angularjs factory which creates a resource object that lets you interact with RESTful server-side data sources
 * Messagebox: Fancy alert box with animation to show errors and messages from backend to frontend (TODO: Check Matthew)
@@ -97,12 +97,6 @@ Frontend:
 * nvd3: makes fancy graphs, based on d3. Will be used to show some statistics
 * Bootstrap checkbox: nicer checkboxes with more options than default ones
 
-##Printscreens
-
-TODO: Update this printsreens!!!
-
-![Printscreen questions](http://erazerbrecht.duckdns.org/Images/NodeJS_REST_MONGO_TEST2.png)
-![Printscreen](http://i.imgur.com/MTyw8FD.png)
 
 ##Bulding and using this project
 First we used Visual Studio for this project. If you use Visual Studio we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx). This tool also makes it easier to publish on Azure...
@@ -110,27 +104,34 @@ First we used Visual Studio for this project. If you use Visual Studio we recomm
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
-To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine (e.g. Heroku, Azure, Local, ...). This can easily be done by defining it in the cmd windows where you will start your node server. In our project we used a startup script (startnodemon.cmd) that will do it for you! The only thing you need to do is make a file connectioninfo.config in the folder mongoose. It's important to use UTF-8 (Without BOM) as enconding for the file!
+To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine (e.g. Heroku, Azure, Local, ...). This can easily be done by defining it in the cmd window where you will start your node server. In our project we used a startup script (startnodemon.cmd) that will do it for you! The only thing you need to do is make a file connectioninfo.config in the folder mongoose. It's important to use UTF-8 (Without BOM) as enconding for the file!
 
 If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project! We recommend to do this. This is a better way of starting a node project, you start the project by pressing the green run button of Visual Studio (like you used to do with C# applications).
 
-Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
+Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! WebStorm is also more lightweight, Visual Studio takes to long to boot and Visual Studio's support for Node is still youngh. The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
 
 ##Flow of the application
 The first route you connect to is our root route. We called this route index.js. This route will determine if your're already signed in. If you are, you're automatically redirected to the home.js route.
 
-If not the login.jade will be rendered in your browser. This view is a sigin form. There is also the possibility to make a new account. If you want this, you will be routed the the signup.js route. The sigup.jade view will be rendered. You can now post userdetails to this route for making a new account. The request will be processed by our passport module.
+If not the login.jade will be rendered in your browser (this file can found in /views/). This view is a sigin form. There is also the possibility to make a new account. If you want this, you will be routed the the signup.js route. The sigup.jade view will be rendered. You can now post userdetails to this route for making a new account. The request will be processed by our passport module.
+
+![Index](http://i.imgur.com/BMEN0WR.png)
 
 This module takes care of our login / signup logic. Three main tasks, making a new user with a hashed (bcrypt) password, if the user credentials are corrent and check if the visitor is signed in / check if the visitor is an admin. The logic for this module can be found in the folder *passport*
 
 If you already have an account, you can of course login. You'll post your credentials to /login. It will check with our passport module if the credentails are correct. This logic can be found @ */pasport/login.js*. If it's not correct you will see a 'flash-message' (nothing to do with Adobe Flash).
 
+![Wrong](http://i.imgur.com/6oj6zqJ.png)
+
 If everything was correct you will be routed to /home. This route (home.js) will render the correct panel. If you're an admin it will render the adminpanel if you're not it will render the userpanel. It also uses a *authlevel*,  these a clearance levels we defined. If you do not meet this clearance level there happens something (show error, redirect). You can find these in the passport/authlevels.js file. For the /home route we used *'isLoggedInRedirect'* like the name says if you're not logged in, you will be redirected to the index page (you'll see login.jade). This is to prevent that users try to login with manually changing the URL.
 
-When you login as an admin, public/views/adminPanel.jade and public/javascripts/adminPanel.js will be loaded. In the jade file is the shell of our application located. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that Angular knows which controller and view needs to be loaded. By default the route is "/". This will load the public/views/adminDashboard.html view together with the public/javascripts/angular/controllers/adminDashBoardController.js controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff). 
+When you login as an admin, *public/views/adminPanel.jade* and *public/javascripts/adminPanel.js* will be loaded. In the jade file is the shell of our application located. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that Angular knows which controller and view needs to be loaded. By default the route is "/". This will load the *public/views/adminDashboard.html* view together with the *public/javascripts/angular/controllers/adminDashBoardController.js* controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff aka the code begin). 
+
 Now let's press "Users" in the navigation. This will go to the url: #/users. The adminPanel.js sees this route and will load the public/views/adminUsers.html and the public/javascripts/angular/controllers/adminUsersController.js accordingly. 
 ![adminUsers](http://i.imgur.com/e33OUWu.png)
 The admin sees all the users that have an account on the application including in which course this user is located. The admin can see some general information about the user. Email, last time logged in and how active the user is. The admin can delete users, move them around through different courses. Last but not least there is a filter option on the course. So the admin can easily change a group of courses to a new course. 
+
+TODO BRECHT
 
 Let's press answers in the navigation. This will go to the url: #/answers. The andminPanel.js sees this route and will load the public/views/adminAnswers.html and the public/javascripts/angular/controllers/adminAnswersController.js accordingly
 ![adminAnswers](http://i.imgur.com/RyVYcnX.png)
