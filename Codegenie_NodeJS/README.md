@@ -140,9 +140,9 @@ Now let's press "Users" in the navigation. This will go to the url: #/users. The
 ![adminUsers](http://i.imgur.com/e33OUWu.png)
 The admin sees all the users that have an account on the application including in which course this user is located. The admin can see some general information about the user. Email, last time logged in and how active the user is. The admin can delete users, move them around through different courses. Last but not least there is a filter option on the course. So the admin can easily change a group of courses to a new course. 
 
-When going to 'Exericses' in the navigation, we will go to /home#/exercises. The 'codebehind' (AngularJS) of this view is loaded by our adminPanel.js file. The codebehind can be found at public/javascripts/angular/controllers/adminExercisesController.js. Ofcourse the view (html) is also loaded this one can be found in our public views folder. 
+When going to 'Exericses' in the navigation, we will go to */home#/exercises*. The 'codebehind' (AngularJS) of this view is loaded by our adminPanel.js file. The codebehind can be found at *"public/javascripts/angular/controllers/adminExercisesController.js"*. Ofcourse the view (html) is also loaded this one can be found in our public views folder. This view is used for creating and modifying exercises. The code behind is well documented in the source code. We used ngDraggeble for deleting exersises on a intuitive way. Getting the exercises is done by a AJAX call to our REST API (*/admin/exercises*). Admins are the only people that can use this route. The logic for this route is found at following url: *"/admin/exercises"*. The logic for this route can be found in our project at *"/routes/admin/exercises.js"*. Maybe a small remark, when loading the exercise data you will have to cast the dates (deadline and revealdate) to a date type! Don't forget this, AngularJS doesn't like it otherwise...
 
-TODO BRECHT
+![adminExercises](http://i.imgur.com/su6QLmO.png)
 
 Let's press 'Answers' in the navigation. This will go to the url: #/answers. The andminPanel.js sees this route and will load the view adminAnswers.html (found in the public/views folder) and the controller adminAnswersController.js (found in our public/javascripts/angular/controllers folder).
 
