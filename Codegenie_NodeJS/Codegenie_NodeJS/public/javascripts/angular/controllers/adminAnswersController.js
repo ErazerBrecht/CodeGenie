@@ -12,6 +12,15 @@
             angular.forEach($scope.exercises, function(value, key)
             {
                 value.deadline = new Date(value.deadline);
+                value.gotAnswers = false;
+                restData.getAnswersByExerciseid.query({id: value._id}, function(data){
+                    if(data.length == 0){
+                        value.gotAnswers = false;
+                    }
+                    else{
+                        value.gotAnswers = true;
+                    }
+                });
             });
 
         });
@@ -145,6 +154,7 @@
                 return items;
 
             angular.forEach(items, function(item){
+
                 if((course == "All" || course == item.course) && (extra == item.extra) && ((!expired && item.deadline > today) || (expired && item.deadline < today))){
                     filtered.push(item);
                 }

@@ -65,7 +65,7 @@
 <div class="row" ng-show="selected.length == 0 || selected == null">
     <div class="col-sm-12 col-md-6 col-lg-4"
          ng-repeat="exercise in exercises | adminAnswerFilter: showAll: selectedCourse: showExtra: showExpired"
-         ng-click="select(exercise)">
+         ng-click="select(exercise)" ng-if="exercise.gotAnswers == true">
         <div class="tile" ng-class="getTileClass(exercise)">
             <div class="triangle" ng-if="exercise.extra"></div>
             <div class="title">
