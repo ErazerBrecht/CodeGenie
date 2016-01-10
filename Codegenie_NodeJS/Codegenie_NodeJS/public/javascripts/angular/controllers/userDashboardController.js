@@ -9,12 +9,65 @@
             $scope.loginsAverage = data.logins.average;
             $scope.myAnswers = data.received.length;
 
+            var max = 0;
+
+            for(var i = 0; i < data.activityWeekly.length; i++)
+            {
+                if(data.activityWeekly[i].y > max)
+                    max = data.activityWeekly[i].y;
+            }
+
+            $scope.options = {
+                chart: {
+                    type: 'multiChart',
+                    height: 450,
+                    margin : {
+                        top: 30,
+                        right: 60,
+                        bottom: 50,
+                        left: 70
+                    },
+                    yDomain1: [0, max],
+                    yDomain2: [0, 100],
+                    color: d3.scale.category10().range(),
+                    //useInteractiveGuideline: true,
+                    duration: 500,
+                    xAxis: {
+                        "axisLabel": "Week",
+                        tickFormat: function(d){
+                            return d3.format(',f')(d);
+                        }
+                    },
+                    yAxis1: {
+                        "axisLabel": "Exercises",
+                        tickFormat: function(d){
+                            return d3.format(',.f')(d);
+                        }
+                    },
+                    yAxis2: {
+                        "axisLabel": "Percent",
+                        tickFormat: function(d){
+                            return d3.format(',.f')(d);
+                        }
+                    },
+                }
+            };
+
             //Chart data should be sent as an array of series objects.
             $scope.graphData = [
                 {
                     values: data.activityWeekly,      //values - represents the array of {x,y} data points
                     key: 'Your answers', //key  - the name of the series.
                     color: '#5cb85c',  //color - optional: choose your own line color.
+                    type: "bar",
+                    yAxis: 1
+                },
+                {
+                    values: data.averageWeekly,      //values - represents the array of {x,y} data points
+                    key: 'Your average', //key  - the name of the series.
+                    color: '#f0ad4e',  //color -
+                    type: "line",
+                    yAxis: 2
                 }
             ];
 
