@@ -127,10 +127,22 @@ If you already have an account, you can of course login. You'll post your creden
 
 If everything was correct you will be routed to /home. This route (home.js) will render the correct panel. If you're an admin it will render the adminpanel if you're not it will render the userpanel. It also uses a *authlevel*,  these a clearance levels we defined. If you do not meet this clearance level there happens something (show error, redirect). You can find these in the passport/authlevels.js file. For the /home route we used *'isLoggedInRedirect'* like the name says if you're not logged in, you will be redirected to the index page (you'll see login.jade). This is to prevent that users try to login with manually changing the URL.
 
-When you login as an admin, adminPanel.jade and adminPanel.js will be loaded. In the jade file will be the shell of our application. The navigation will be there and also the title bar with some information on it. The adminPanel.js containes all the routes to the different views. A route is a way that angular knows which controller and view needs to be loaded. By default the route is "/". This will load the adminDashboard.html view together with the adminDashBoardController.js controller. The controller discribes how the react when you interact with your view (pressing buttons, clicking stuff). 
+When you login as an admin, adminPanel.jade and adminPanel.js will be loaded. In the jade file will be the shell of our application. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that angular knows which controller and view needs to be loaded. By default the route is "/". This will load the adminDashboard.html view together with the adminDashBoardController.js controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff). 
 Now let's press "users" in the navigation. This will go to the url: /users. The adminPanel.js sees this route and will load the adminUsers.html and the adminUsersController accordingly. 
 ![adminUsers](http://i.imgur.com/e33OUWu.png)
 The admin sees all the users that have an account on the application including in which course this user is located. The admin can see some general information about the user. Email, last time logged in and how active the user is. The admin can delete users, move them around through different courses. Last but not least there is a filter option on the course. So the admin can easily change a group of courses to a new course. 
+
+Let's press answers in the navigation. This will go to the url: /answers. The andminPanel.js sees this route and will load the adminAnswers.html and the adminAnswersController accordingly
+![adminAnswers](http://i.imgur.com/RyVYcnX.png)
+This is the view where the admin can see all the exercises that need to be revised. There is also a filter which can be turned on and off. By default the filter is on and will only show the expired answers (deadline is over so admin can start correcting). 
+![adminAnswersNoFilter](http://i.imgur.com/GVMcbQx.png)
+When the filter is off you see all the answers. Red tiles mean that the deadline is over and those can be corrected. Blue means deadline isn't over yet so answers can still be added. The admin can now chose to revise an answer. It will show all the users who answered the question.
+![adminAnswersCorrecting](http://i.imgur.com/cofblJR.png)
+when opening a user it shows the answer the user gave to the questions. The admin can give the user all the points because everything is correct. Or give every question points separately. When the admin gave points to every user it can press submit and the points and comment will be saved.
+
+
+
+
 ## Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
 
