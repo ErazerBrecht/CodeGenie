@@ -133,7 +133,8 @@
 
                 restData.postExercise.save($scope.selected,
                     function(response){
-                        //Reload all exercises, this is done to add new exercise with id from the server... => Otherwise this exercise can't be updated till the page is refreshed
+                        //Reload all exercises, this is done to add new exercise with id from the server...
+                        //Otherwise this exercise can't be updated till the page is refreshed
                         loadData();
                         $scope.selected = null;
                         $scope.message = response.data;
