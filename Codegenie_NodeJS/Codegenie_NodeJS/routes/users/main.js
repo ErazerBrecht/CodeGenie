@@ -28,22 +28,23 @@ router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
 
-        if (!passwordhandler.isValidPassword(result, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
+        if (!passwordhandler.isValidPassword(result.password, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
 
         if (req.body.password == '') delete req.body.password;
 
-        for (var field in req.body) result[field] = req.body[field];
-
-        delete result._id; //prevent user from editing random/protected information, everything else is allowed.
-        delete result.status;
-        delete result.course;
+        delete req.body._id; //prevent user from editing random/protected information, everything else is allowed.
+        delete req.body.status;
+        delete req.body.course;
 
         if (req.body.password != undefined)  //otherwise we will hash or hashed password...
-            result.password = passwordhandler.createHash(result.password);
+            req.body.password = passwordhandler.createHash(req.body.password);
 
-        result.registerdate = new Date();
-        result.lastseen = new Date();
-        delete result.__v;
+        delete req.body.registerdate;
+        delete req.body.logins;
+        req.body.lastseen = new Date();
+        delete req.body.__v;
+
+        for (var field in req.body) result[field] = req.body[field];
 
         result.save(function (err) {
             savehandler(res, err, "Profile edited.");
