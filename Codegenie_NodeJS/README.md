@@ -146,6 +146,26 @@ Let's press the profile button. This will go to the #/profile url. The adminpane
 That will show this view
 ![adminProfile2](http://i.imgur.com/nLUyNXy.png)
 The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible.
+
+When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. 
+
+So we can press Exercises in the navigation. This will go to the URL: #/exercises. The userPanel.js will see the route and will load the right view and controller for this route. (public/view/userExercises.html and public/javascripts/angular/controller/userExercisesController.js). You will get to see this screen
+![userExercise](http://i.imgur.com/qPF3pO2.png)
+When the filter is on and you don't filter anything it will show the exercises that still need to be made. You can also filter for the expired, solved and revised exercises. Exercise has his own tile with a color. 
+* blue: new exercises but the user hasn't looked at it yet
+* purple: new exercise user checked it out but not yet solved the exercise
+* green: An exercise that the user solved and which isn't revised yet
+* orange: exercise the user solved but after the deadline
+* red: unsolved exercises which aren't solved yet and deadline is already over
+* lightblue: revised answer by the admin
+
+The user can also turn of the filter and this will show every exercise without any filter.
+
+when opening an exercise the user will get this added to his screen
+![userExercise2](http://i.imgur.com/35jtaBu.png)
+
+The user will be able to see all the questions and the points for each question. He can open every question and answer it. When the user is done he will submit the answer. When the answer is revised by the admin won't the user be able the edit the exercise afterwards. 
+
 ## Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
 
