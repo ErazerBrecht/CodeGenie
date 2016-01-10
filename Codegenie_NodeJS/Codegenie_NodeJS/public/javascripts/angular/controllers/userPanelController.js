@@ -48,13 +48,13 @@
 
             });
 
-            var index = $scope.newExercises.exercises.indexOf(exercise);
+            var index = $scope.exercises.indexOf(exercise);
             if (index > -1)
             {
-                $scope.newExercises.exercises.splice(index, 1);
+                $scope.exercises[index].seen = true;
             }
 
-            $scope.newExercises.count--;
+            $scope.newExercises--;
         };
     };
     
