@@ -83,6 +83,9 @@
             angular.forEach(data.activityHourly, function (value, key) {
                 if((value.x + offset) > 23)
                     offset -= 24;               //24 equals 0, 25 equals 1, ....
+                else if ((value.x + offset) < 0)
+                    offset += 24;               //-1 equals 23, -2 equals 22, ....
+
 
                 $scope.punchCardData[0][value.x + offset] = value.y;
             });
