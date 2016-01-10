@@ -28,7 +28,7 @@ router.post("/edit", isLoggedIn, function (req, res) {
     UserModel.findById(req.user._id, function (err, result) {
         if (err) return console.error(err);
 
-        if (!passwordhandler.isValidPassword(result.password, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
+        if (!passwordhandler.isValidPassword(result, req.body.oldpassword)) return res.status(400).json(["Your password isn't correct!"]);
 
         if (req.body.password == '') delete req.body.password;
 
