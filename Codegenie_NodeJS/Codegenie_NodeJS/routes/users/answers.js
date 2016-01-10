@@ -157,6 +157,7 @@ router.post('/answers', isLoggedIn, function (req, res) {
                 if (err) return console.error(err);
                 if (!result) return res.status(400).json(["Not an eligible exercise ID"]);
 
+                if (result.revised) return res.status(400).json(["Answer has already been revised."]);
                 if (result.deadline) if (new Date() > result.deadline) return res.status(400).json(["Deadline is already over."]);
                 if (result.revealdate) if (new Date() < result.revealdate) return res.status(400).json(["Not an eligible exercise ID"]);
 

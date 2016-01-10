@@ -14,7 +14,6 @@ var AnswerModel = schemas.AnswerModel;
 var isLoggedIn = auth.isLoggedIn;
 var isAdmin = auth.isAdmin;
 
-
 router.get('/', isLoggedIn, function (req, res) {
     var response = {users: 0, admins: 0, exercises: 0, answers: 0, classes: []};
 
@@ -199,7 +198,7 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
             {
                 $group: {
                     "_id": "$userid",
-                    "answers": {$push: "$answers"},
+                    "answers": {$push: "$answers"}
                 }
             },
             {$unwind: "$answers"},
@@ -256,8 +255,8 @@ router.get('/course/:course', isLoggedIn, function (req, res) {
                 ],
                 function (err, aggresultTopAmount) {
                     if (err) return console.error(err);
-                    topReceived = [];
-                    topAmount = [];
+                    var topReceived = [];
+                    var topAmount = [];
 
                     for (var x = 0; x < aggresultTopReceived.length; x++)
                         topReceived.push({
@@ -519,7 +518,7 @@ router.get('/exercises/:exerciseID/average', isLoggedIn, function (req, res) {
                             {
                                 $group: {
                                     "_id": "$userid",
-                                    "answers": {$push: "$answers"},
+                                    "answers": {$push: "$answers"}
                                 }
                             },
                             {$unwind: "$answers"},
@@ -546,7 +545,7 @@ router.get('/exercises/:exerciseID/average', isLoggedIn, function (req, res) {
                         ],
                         function (err, aggresultTop) {
                             if (err) return console.error(err);
-                            topUsers = [];
+                            var topUsers = [];
 
                             for (var x = 0; x < aggresultTop.length; x++)
                                 topUsers.push({
@@ -637,7 +636,7 @@ function SendUserStatistic(userID, res) {
                         "created": "$created",
                         "revised": "$revised"
                     },
-                    "answers": {$push: "$answers"},
+                    "answers": {$push: "$answers"}
                 }
             },
             {$unwind: "$answers"},
@@ -759,7 +758,7 @@ function SendUserStatistic(userID, res) {
                                             "_id": {
                                                 "exerciseid": "$exerciseid",
                                                 "created": "$created",
-                                                "hour": {$hour: "$created"},
+                                                "hour": {$hour: "$created"}
                                             }
                                         }
                                     },

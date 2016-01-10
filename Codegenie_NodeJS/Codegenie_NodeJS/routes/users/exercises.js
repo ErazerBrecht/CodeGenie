@@ -28,11 +28,11 @@ router.get('/exercises', isLoggedIn, function (req, res) {
 
                 var wtflist = [];
                 //this could be done + named better..
-                for (var i in answerResult) {
+                for (var x in answerResult) {
                     if (seenresult.seenexercises.some(function (seenobj) {
-                            return (seenobj.exerciseid.equals(answerResult[i].exerciseid) && seenobj.revised == true)
+                            return (seenobj.exerciseid.equals(answerResult[x].exerciseid) && seenobj.revised == true)
                         })) {
-                        wtflist.push(answerResult[i].exerciseid);
+                        wtflist.push(answerResult[x].exerciseid);
                     }
                 }
 

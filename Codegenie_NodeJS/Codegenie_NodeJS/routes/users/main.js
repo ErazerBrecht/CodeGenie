@@ -34,17 +34,15 @@ router.post("/edit", isLoggedIn, function (req, res) {
 
         for (var field in req.body) result[field] = req.body[field];
 
-        delete result._id;
-        delete result.admin; //prevent user from editing random/protected information, everything else is allowed.
+        delete result._id; //prevent user from editing random/protected information, everything else is allowed.
         delete result.status;
-        delete result.class;
         delete result.course;
 
         if (req.body.password != undefined)  //otherwise we will hash or hashed password...
             result.password = passwordhandler.createHash(result.password);
 
-        delete result.registerdate;
-        delete result.lastseen;
+        result.registerdate = new Date();
+        result.lastseen = new Date();
         delete result.__v;
 
         result.save(function (err) {

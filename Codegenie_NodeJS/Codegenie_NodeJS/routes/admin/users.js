@@ -48,7 +48,8 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
 
 router.get('/users/:userID/answers', isAdmin, function (req, res) {
     var userID = req.params.userID;
-    UserModel.findById(userID), function (err, result) {
+
+    UserModel.findById(userID).lean.exec(function (err, result) {
         if (err) return console.error(err);
         if (!result) return res.status(400).json(["Not an eligible user ID."]);
 
@@ -108,13 +109,16 @@ router.get('/users/:userID/answers', isAdmin, function (req, res) {
                 res.status(200).json(result);
             })
         }
-    };
+    });
 });
 
 //POST
 
 router.post("/users", isAdmin, function (req, res) {
     var newuser = new UserModel(req.body);
+
+    newuser.registerdate = new Date();
+    newuser.lastseen = new Date();
 
     newuser.save(function (err) {
         savehandler(res, err, "User created.");

@@ -13,8 +13,8 @@ var userSchema = mongoose.Schema({
     email: { type: String, unique: true, sparse: true },
     logins: Number,
     status: { type: Number, default: "0" },
-    registerdate: { type: Date, default: new Date() },
-    lastseen: { type: Date, default: new Date() }
+    registerdate: { type: Date },
+    lastseen: { type: Date }
 });
 
 var userSeenSchema = mongoose.Schema({
@@ -22,7 +22,7 @@ var userSeenSchema = mongoose.Schema({
     seenexercises: [{
             _id: false,
             exerciseid: { type: mongoose.Schema.ObjectId, required: true },
-            dateseen: { type: Date, default: new Date() },
+            dateseen: { type: Date, required: true },
             revised: { type: Boolean, default: false }
     }]
 });
@@ -33,7 +33,7 @@ var exerciseSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum },
     revealdate: { type: Date },
     deadline: { type: Date },
-    created: { type: Date, default: new Date() },
+    created: { type: Date, required: true },
     extra: { type: Boolean, default: false },
     questions: [{
             questiontitle: { type: String, required: true },
@@ -56,7 +56,7 @@ var answerSchema = mongoose.Schema({
     course: { type: String, required: true, enum: courseEnum },
     extra: { type: Boolean, required: true },
     revised: { type: Boolean, default: false },
-    created: { type: Date, default: new Date() },
+    created: { type: Date, required: true },
     answers: [{
             questionid: { type: mongoose.Schema.ObjectId, required: true },
             questiontitle: { type: String, required: true },

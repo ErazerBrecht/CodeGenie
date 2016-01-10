@@ -3,8 +3,6 @@ var express = require('express');
 var auth = require('../../passport/authlevels');
 var router = express.Router();
 
-var AnswerModel = schemas.AnswerModel;
-var ExerciseModel = schemas.ExerciseModel;
 var UserSeenModel = schemas.UserSeenModel;
 
 var savehandler = schemas.savehandler;
@@ -30,7 +28,7 @@ var AddSeen = function (req, res, revised) {
             //CREATE
             var newUserSeen = new UserSeenModel({userid: req.user._id, seenexercises: []});
 
-            newUserSeen.seenexercises.push({exerciseid: req.body.exerciseid, revised: revised});
+            newUserSeen.seenexercises.push({exerciseid: req.body.exerciseid, revised: revised, dateseen: new Date()});
             newUserSeen.save(function (err) {
                 savehandler(res, err);
             });
@@ -41,7 +39,7 @@ var AddSeen = function (req, res, revised) {
                     return (seenobj.exerciseid == req.body.exerciseid);
                 })) {
                 //DOESNT EXIST, ADD
-                result.seenexercises.push({exerciseid: req.body.exerciseid, revised: revised});
+                result.seenexercises.push({exerciseid: req.body.exerciseid, revised: revised, dateseen: new Date()});
             }
             else {
                 //EXISTS, UPDATE SEEN

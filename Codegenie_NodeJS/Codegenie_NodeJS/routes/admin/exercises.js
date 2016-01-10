@@ -124,9 +124,12 @@ router.post("/exercises/", isAdmin, function (req, res) {
 
     if (!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).json(["No questions were sent. Please make at least one question!"]);
 
-    newexercise.deadline.setHours(23);
-    newexercise.deadline.setMinutes(59);
-    newexercise.deadline.setSeconds(59);
+    if (!deadline) newexercise.deadline = new Date();
+    else {
+        newexercise.deadline.setHours(23);
+        newexercise.deadline.setMinutes(59);
+        newexercise.deadline.setSeconds(59);
+    }
 
     if (newexercise.revealdate != undefined) {
         newexercise.revealdate.setHours(0);

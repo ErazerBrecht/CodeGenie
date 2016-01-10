@@ -91,7 +91,7 @@ router.post("/answers/edit", isAdmin, function (req, res) {
                         else {
                             for (var field in usobj) if (usobj.hasOwnProperty(field)) result[field] = usobj[field];
 
-                            result.save(function (saveError, affected) {
+                            result.save(function (saveError) {
                                 if (saveError) reject(saveError);
                                 totalAffected++;
                                 resolve();
