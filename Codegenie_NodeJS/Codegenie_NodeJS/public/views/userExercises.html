@@ -23,19 +23,28 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-success">
-            <div class="panel-heading">Filters</div>
-            <div class="panel-body">
-                <div>
-                    <span style="width: 200px; display: inline-block">Show solved exercises:</span>
-                    <checkbox ng-model="showSolved" class="btn-success left-30"/>
-                </div>
-                <div class="top-10">
-                    <span style="width: 200px; display: inline-block">Show expired exercises:</span>
-                    <checkbox ng-model="showExpired" class="btn-danger left-30"/>
-                </div>
-                <div class="top-10">
-                    <span style="width: 200px; display: inline-block">Show revised exercises:</span>
-                    <checkbox ng-model="showRevised" class="btn-lightblue left-30"/>
+            <div class="panel-heading">Filters
+                <span class="pull-right">
+                    <label data-toggle="collapse" data-target="#collapseOne">
+                        <checkbox ng-model="showAll" ng-init="showAll = true" class="btn-success"/>
+                    </label>
+                </span>
+
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in top-30 left-30 bottom-30">
+                <div class="panel-body">
+                    <div>
+                        <span style="width: 200px; display: inline-block">Show solved exercises:</span>
+                        <checkbox ng-model="showSolved" class="btn-success left-30"/>
+                    </div>
+                    <div class="top-10">
+                        <span style="width: 200px; display: inline-block">Show expired exercises:</span>
+                        <checkbox ng-model="showExpired" class="btn-danger left-30"/>
+                    </div>
+                    <div class="top-10">
+                        <span style="width: 200px; display: inline-block">Show revised exercises:</span>
+                        <checkbox ng-model="showRevised" class="btn-lightblue left-30"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,7 +52,9 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="exercise in exercises | userExercisesFilter: showSolved: showExpired: showRevised | orderBy: 'deadline'"  ng-click="select(exercise)">
+    <div class="col-sm-12 col-md-6 col-lg-4"
+         ng-repeat="exercise in exercises | userExercisesFilter: showAll: showSolved: showExpired: showRevised | orderBy: 'deadline'"
+         ng-click="select(exercise)">
 
         <div class="tile" ng-class="getTileClass(exercise)">
             <div class="triangle" ng-if="exercise.extra"></div>
@@ -67,7 +78,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title" ng-if="a.extra == true">
-                            <a style="display: inline-block; width: 100%" data-toggle="collapse" href="/#collapse{{$index}}"><span
+                            <a style="display: inline-block; width: 100%" data-toggle="collapse"
+                               href="/#collapse{{$index}}"><span
                                     style="color:red; font-weight:bolder">EXTRA: </span>{{a.questiontitle}}
                                 <span class="pull-right"> Points: <span
                                         ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span>
@@ -78,7 +90,8 @@
 
                         <h4 class="panel-title" ng-if="a.extra == false">
 
-                            <a style="display: inline-block; width: 100%" data-toggle="collapse" href="/#collapse{{$index}}">{{a.questiontitle}} <span
+                            <a style="display: inline-block; width: 100%" data-toggle="collapse"
+                               href="/#collapse{{$index}}">{{a.questiontitle}} <span
                                     class="pull-right"> Points: <span
                                     ng-if="selected.revised == true">{{a.received}}/</span>{{a.weight}} </span></a>
                         </h4>
@@ -122,10 +135,12 @@
                             </div>
 
                             <div ng-switch-when="Question">
-                                <textarea ng-if="selected.revised == false" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
+                                <textarea ng-if="selected.revised == false" class="animate msd-elastic: \n;"
+                                          style="resize: vertical; width: 100%"
                                           ng-model="a.result" cols="100" rows="10"></textarea>
 
-                                <textarea readonly ng-if="selected.revised == true" class="animate msd-elastic: \n;" style="resize: vertical; width: 100%"
+                                <textarea readonly ng-if="selected.revised == true" class="animate msd-elastic: \n;"
+                                          style="resize: vertical; width: 100%"
                                           ng-model="a.result" cols="100" rows="10"></textarea>
                             </div>
 
@@ -135,7 +150,8 @@
                                 </div>
 
                                 <div ng-if="selected.revised == true" ng-repeat="choice in a.choices" class="radio">
-                                    <label ng-if="a.result == choice.text" style="color:dodgerblue">{{choice.text}}</label>
+                                    <label ng-if="a.result == choice.text"
+                                           style="color:dodgerblue">{{choice.text}}</label>
                                     <label ng-if="a.result != choice.text">{{choice.text}}</label>
                                 </div>
                             </div>

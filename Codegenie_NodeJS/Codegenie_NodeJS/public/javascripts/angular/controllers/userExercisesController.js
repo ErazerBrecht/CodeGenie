@@ -117,9 +117,12 @@
 
     var userExercisesFilter = function()
     {
-        return function( items, solved, expired, revised) {
+        return function( items, all, solved, expired, revised) {
             var filtered = [];
             var today = new Date();
+
+            if(!all)
+                return items;
 
             angular.forEach(items, function(item) {
                 if(revised === true) {
