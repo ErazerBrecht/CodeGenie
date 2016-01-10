@@ -44,10 +44,12 @@
 
         $scope.discard = function(exercise)
         {
+            //Change it in our DB
             userRestData.addLastSeenNew.save({ exerciseid: exercise._id }, function (data) {
 
             });
 
+            //Also change this in local data
             var index = $scope.exercises.indexOf(exercise);
             if (index > -1)
             {
@@ -55,6 +57,23 @@
             }
 
             $scope.newExercises--;
+        };
+
+        $scope.discardRevised = function(exercise)
+        {
+            //Change it in our DB
+            userRestData.addLastSeenRevised.save({ exerciseid: exercise._id }, function (data) {
+
+            });
+
+            //Also change this in local data
+            var index = $scope.exercises.indexOf(exercise);
+            if (index > -1)
+            {
+                $scope.exercises[index].revisedseen = true;
+            }
+
+            $scope.newRevised--;
         };
     };
     

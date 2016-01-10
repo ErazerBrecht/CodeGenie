@@ -41,6 +41,8 @@ block content
                             div
                                 i.fa.fa-envelope.fa-fw
                                 | Exercise revised
+                                |TODO
+                                i.fa.fa-minus-circle.fa-fw.pull-right(ng-click='discardRevised(exercise)')
                                 time.pull-right.text-muted(am-time-ago="exercise.created")
             li.dropdown
                 a.dropdown-toggle(href='', data-toggle='dropdown')
