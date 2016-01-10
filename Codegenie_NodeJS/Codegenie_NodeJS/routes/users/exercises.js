@@ -85,8 +85,7 @@ router.get('/exercises', isLoggedIn, function (req, res) {
         });
     })
     ;
-})
-;
+});
 
 router.get('/exercises/:exerciseID', isLoggedIn, function (req, res) {
     var exerciseID = req.params.exerciseID;
@@ -143,7 +142,7 @@ router.get('/exercises/:exerciseID/answers', isLoggedIn, function (req, res) {
 
         AnswerModel.findOne({exerciseid: exerciseID, userid: req.user._id}).lean().exec(function (err, result) {
             if (err) return console.error(err);
-    
+
             res.status(200).json(result);
         })
     })

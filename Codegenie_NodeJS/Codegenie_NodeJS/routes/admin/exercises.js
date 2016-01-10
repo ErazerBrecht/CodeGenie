@@ -59,7 +59,7 @@ router.get("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
 
     ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
         if (err) return console.error(err);
-        if (result) return res.status(400).json(["Not an eligible exercise ID."]);
+        if (!result) return res.status(400).json(["Not an eligible exercise ID."]);
 
         ExerciseModel.find({_id: exerciseID}).remove(function (err, affected) {
             if (err) return res.status(400).json(["Exercise doesn't exist."]);

@@ -5,13 +5,14 @@ var auth = require('../passport/authlevels');
 var router = express.Router();
 var moment = require('moment');
 
-//TODO: split this like admin & users
+//TODO (maybe): split this like admin & users
 
 var UserModel = schemas.UserModel;
 var ExerciseModel = schemas.ExerciseModel;
 var AnswerModel = schemas.AnswerModel;
 
 var isLoggedIn = auth.isLoggedIn;
+var isAdmin = auth.isAdmin;
 
 
 router.get('/', isLoggedIn, function (req, res) {
@@ -77,27 +78,114 @@ router.get('/graph', isLoggedIn, function (req, res) {
         ],
         function (err, aggresult) {
             if (err) return console.error(err);
-            var response = [];
-            if (aggresult.length != 0) {
-
-                var first = aggresult[0].filter;
-                var last = aggresult[aggresult.length - 1].filter;
-
-                do {
-                    var found = false;
-                    for (var x = 0; x < aggresult.length; x++) {
-                        if (aggresult[x].filter == first) {
-                            response.push({"x": first, "y": aggresult[x].count});
-                            found = true;
+            AnswerModel.aggregate(
+                [
+                    {"$match": {"revised": true}},
+                    {
+                        $group: {
+                            "_id": {
+                                "exerciseid": "$exerciseid",
+                                "week": {$week: "$created"},
+                                "created": "$created",
+                                "course": "$course"
+                            },
+                            "answers": {$push: "$answers"}
+                        }
+                    },
+                    {
+                        $sort: {"_id.created": 1}
+                    },
+                    {$unwind: "$answers"},
+                    {$unwind: "$answers"},
+                    {
+                        $group: {
+                            "_id": {
+                                "questiontitle": "$answers.questiontitle",
+                                "exerciseid": "$_id.exerciseid",
+                                "week": "$_id.week"
+                            },
+                            "received": {$avg: "$answers.received"},
+                            "weight": {$avg: "$answers.weight"}
+                        }
+                    },
+                    {
+                        $group: {
+                            "_id": {
+                                "exerciseid": "$_id.exerciseid",
+                                "week": "$_id.week"
+                            },
+                            "received": {$sum: "$received"},
+                            "weight": {$sum: "$weight"}
+                        }
+                    },
+                    {
+                        $group: {
+                            "_id": {"week": "$_id.week"},
+                            "received": {$avg: "$received"},
+                            "weight": {$avg: "$weight"}
+                        }
+                    },
+                    {
+                        $group: {
+                            "_id": "$_id.week",
+                            "received": {$avg: "$received"},
+                            "weight": {$avg: "$weight"}
+                        }
+                    },
+                    {
+                        $project: {
+                            "_id": 0,
+                            "week": "$_id",
+                            "average": {$multiply: [{$divide: ["$received", "$weight"]}, 100]},
+                            "received": "$received",
+                            "weight": "$weight"
                         }
                     }
-                    if (!found) response.push({"x": first, "y": 0});
+                ],
+                function (err, aggresultAverageWeekly) {
+                    if (err) return console.error(err);
 
-                    filter == "year" ? first += 1 : first = (first % 52) + 1;
-                } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
-            }
+                    //RESPONSE
+                    var response = [];
+                    if (aggresult.length != 0) {
+                        var first = aggresult[0].filter;
+                        var last = aggresult[aggresult.length - 1].filter;
 
-            res.status(200).json(response);
+                        do {
+                            var found = false;
+                            for (var x = 0; x < aggresult.length; x++) {
+                                if (aggresult[x].filter == first) {
+                                    response.push({"x": first, "y": aggresult[x].count});
+                                    found = true;
+                                }
+                            }
+                            if (!found) response.push({"x": first, "y": 0});
+
+                            filter == "year" ? first += 1 : first = (first % 52) + 1;
+                        } while (first != (filter == "year" ? last + 1 : (last % 52) + 1));
+                    }
+
+                    var responseWeekly = [];
+                    if (aggresultAverageWeekly.length != 0) {
+                        var first = aggresultAverageWeekly[0].week;
+                        var last = aggresultAverageWeekly[aggresultAverageWeekly.length - 1].week;
+
+                        do {
+                            var found = false;
+                            for (var x = 0; x < aggresultAverageWeekly.length; x++) {
+                                if (aggresultAverageWeekly[x].week == first) {
+                                    responseWeekly.push({"x": first, "y": aggresultAverageWeekly[x].average});
+                                    found = true;
+                                }
+                            }
+                            if (!found) responseWeekly.push({"x": first, "y": 0});
+
+                            first = (first % 52) + 1;
+                        } while (first != (last % 52) + 1);
+                    }
+
+                    res.status(200).json({"graphWeekly": response, "graphAverageWeekly": responseWeekly});
+                });
         });
 });
 
@@ -221,7 +309,7 @@ router.get('/users/mine', isLoggedIn, function (req, res) {
     SendUserStatistic(userID, res);
 });
 
-router.get('/users/:userID', isLoggedIn, function (req, res) {
+router.get('/users/:userID', isAdmin, function (req, res) {
     var userID = req.params.userID;
 
     ExerciseModel.findById(userID).lean().exec(function (err, result) {
@@ -582,35 +670,56 @@ function SendUserStatistic(userID, res) {
             if (err) return console.error(err);
             AnswerModel.aggregate(
                 [
-                    {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
+                    {"$match": {"userid": mongoose.Types.ObjectId(userID), "revised": true}},
+                    {
+                        $group: {
+                            "_id": {"exerciseid": "$exerciseid", "week": {$week: "$created"}},
+                            "answers": {$push: "$answers"}
+                        }
+                    },
+                    {$unwind: "$answers"},
+                    {$unwind: "$answers"},
                     {
                         $group: {
                             "_id": {
-                                "exerciseid": "$exerciseid",
-                                "created": "$created",
-                                "week": {$week: "$created"}
-                            }
+                                "questiontitle": "$answers.questiontitle",
+                                "exerciseid": "$_id.exerciseid",
+                                "week": "$_id.week"
+                            },
+                            "received": {$avg: "$answers.received"},
+                            "weight": {$avg: "$answers.weight"}
                         }
                     },
                     {
-                        $sort: {"_id.created": -1}
+                        $group: {
+                            "_id": {"exerciseid": "$_id.exerciseid", "week": "$_id.week"},
+                            "received": {$sum: "$received"},
+                            "weight": {$sum: "$weight"}
+                        }
                     },
                     {
                         $group: {
                             "_id": "$_id.week",
-                            "count": {$sum: 1}
+                            "received": {$avg: "$received"},
+                            "weight": {$avg: "$weight"}
                         }
+                    },
+                    {
+                        $sort: {"_id": 1}
                     },
                     {
                         $project: {
                             "_id": 0,
-                            "filter": "$_id",
-                            "count": "$count"
+                            "week": "$_id",
+                            "average": {$multiply: [{$divide: ["$received", "$weight"]}, 100]},
+                            "received": "$received",
+                            "weight": "$weight"
                         }
                     }
                 ],
-                function (err, aggresultActivityWeekly) {
+                function (err, aggresultAverageWeekly) {
                     if (err) return console.error(err);
+
                     AnswerModel.aggregate(
                         [
                             {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
@@ -619,13 +728,16 @@ function SendUserStatistic(userID, res) {
                                     "_id": {
                                         "exerciseid": "$exerciseid",
                                         "created": "$created",
-                                        "hour": {$hour: "$created"},
+                                        "week": {$week: "$created"}
                                     }
                                 }
                             },
                             {
+                                $sort: {"_id.created": -1}
+                            },
+                            {
                                 $group: {
-                                    "_id": "$_id.hour",
+                                    "_id": "$_id.week",
                                     "count": {$sum: 1}
                                 }
                             },
@@ -637,87 +749,136 @@ function SendUserStatistic(userID, res) {
                                 }
                             }
                         ],
-                        function (err, aggresultActivityHourly) {
+                        function (err, aggresultActivityWeekly) {
                             if (err) return console.error(err);
-                            UserModel.aggregate(
+                            AnswerModel.aggregate(
                                 [
+                                    {"$match": {"userid": mongoose.Types.ObjectId(userID)}},
                                     {
                                         $group: {
-                                            "_id": "$_id",
-                                            "logins": {$avg: "$logins"}
+                                            "_id": {
+                                                "exerciseid": "$exerciseid",
+                                                "created": "$created",
+                                                "hour": {$hour: "$created"},
+                                            }
                                         }
                                     },
                                     {
                                         $group: {
-                                            "_id": 0,
-                                            "logins": {$avg: "$logins"}
+                                            "_id": "$_id.hour",
+                                            "count": {$sum: 1}
                                         }
                                     },
                                     {
                                         $project: {
                                             "_id": 0,
-                                            "logins": "$logins"
+                                            "filter": "$_id",
+                                            "count": "$count"
                                         }
                                     }
                                 ],
-                                function (err, aggresultLogins) {
+                                function (err, aggresultActivityHourly) {
                                     if (err) return console.error(err);
-                                    UserModel.findById(userID, function (err, result) {
-                                        if (err) return console.error(err);
-                                        var activityWeeklyArray = [];
-                                        var activityHourlyArray = [];
-                                        if (aggresultActivityWeekly.length != 0) {
-                                            var first = aggresultActivityWeekly[0].filter;
-                                            var last = aggresultActivityWeekly[aggresultActivityWeekly.length - 1].filter;
-
-                                            do {
-                                                var found = false;
-                                                for (var x = 0; x < aggresultActivityWeekly.length; x++) {
-                                                    if (aggresultActivityWeekly[x].filter == first) {
-                                                        activityWeeklyArray.push({
-                                                            "x": first,
-                                                            "y": aggresultActivityWeekly[x].count
-                                                        });
-                                                        found = true;
-                                                    }
+                                    UserModel.aggregate(
+                                        [
+                                            {
+                                                $group: {
+                                                    "_id": "$_id",
+                                                    "logins": {$avg: "$logins"}
                                                 }
-                                                if (!found) activityWeeklyArray.push({"x": first, "y": 0});
-
-                                                first = (first % 52) + 1;
-                                            } while (first != ((last % 52) + 1))
-                                        }
-
-                                        if (aggresultActivityHourly.length != 0) {
-                                            for (var i = 0; i < 24; i++) {
-                                                var found = false;
-                                                for (var x = 0; x < aggresultActivityHourly.length; x++) {
-                                                    if (aggresultActivityHourly[x].filter == i) {
-                                                        activityHourlyArray.push({
-                                                            "x": i,
-                                                            "y": aggresultActivityHourly[x].count
-                                                        });
-                                                        found = true;
-                                                    }
+                                            },
+                                            {
+                                                $group: {
+                                                    "_id": 0,
+                                                    "logins": {$avg: "$logins"}
                                                 }
-                                                if (!found) {
-                                                    activityHourlyArray.push({
-                                                        "x": i,
-                                                        "y": 0
-                                                    });
+                                            },
+                                            {
+                                                $project: {
+                                                    "_id": 0,
+                                                    "logins": "$logins"
                                                 }
                                             }
-                                        }
+                                        ],
+                                        function (err, aggresultLogins) {
+                                            if (err) return console.error(err);
+                                            UserModel.findById(userID, function (err, result) {
+                                                if (err) return console.error(err);
+                                                var activityWeeklyArray = [];
+                                                var activityHourlyArray = [];
+                                                if (aggresultActivityWeekly.length != 0) {
+                                                    var first = aggresultActivityWeekly[0].filter;
+                                                    var last = aggresultActivityWeekly[aggresultActivityWeekly.length - 1].filter;
 
-                                        res.status(200).json({
-                                            "received": aggresultReceived,
-                                            "activityWeekly": activityWeeklyArray,
-                                            "activityHourly": activityHourlyArray,
-                                            "logins": {
-                                                "average": aggresultLogins[0].logins,
-                                                "mylogins": result.logins
-                                            }
+                                                    do {
+                                                        var found = false;
+                                                        for (var x = 0; x < aggresultActivityWeekly.length; x++) {
+                                                            if (aggresultActivityWeekly[x].filter == first) {
+                                                                activityWeeklyArray.push({
+                                                                    "x": first,
+                                                                    "y": aggresultActivityWeekly[x].count
+                                                                });
+                                                                found = true;
+                                                            }
+                                                        }
+                                                        if (!found) activityWeeklyArray.push({"x": first, "y": 0});
+
+                                                        first = (first % 52) + 1;
+                                                    } while (first != ((last % 52) + 1))
+                                                }
+
+                                                if (aggresultActivityHourly.length != 0) {
+                                                    for (var i = 0; i < 24; i++) {
+                                                        var found = false;
+                                                        for (var x = 0; x < aggresultActivityHourly.length; x++) {
+                                                            if (aggresultActivityHourly[x].filter == i) {
+                                                                activityHourlyArray.push({
+                                                                    "x": i,
+                                                                    "y": aggresultActivityHourly[x].count
+                                                                });
+                                                                found = true;
+                                                            }
+                                                        }
+                                                        if (!found) {
+                                                            activityHourlyArray.push({
+                                                                "x": i,
+                                                                "y": 0
+                                                            });
+                                                        }
+                                                    }
+                                                }
+
+                                                var averageWeeklyArray = [];
+                                                if (aggresultAverageWeekly.length != 0) {
+                                                    var first = aggresultAverageWeekly[0].week;
+                                                    var last = aggresultAverageWeekly[aggresultAverageWeekly.length - 1].week;
+
+                                                    do {
+                                                        var found = false;
+                                                        for (var x = 0; x < aggresultAverageWeekly.length; x++) {
+                                                            if (aggresultAverageWeekly[x].week == first) {
+                                                                averageWeeklyArray.push({"x": first, "y": aggresultAverageWeekly[x].average});
+                                                                found = true;
+                                                            }
+                                                        }
+                                                        if (!found) averageWeeklyArray.push({"x": first, "y": 0});
+
+                                                        first = (first % 52) + 1;
+                                                    } while (first != (last % 52) + 1);
+                                                }
+
+                                                res.status(200).json({
+                                                    "received": aggresultReceived,
+                                                    "activityWeekly": activityWeeklyArray,
+                                                    "activityHourly": activityHourlyArray,
+                                                    "averageWeekly": averageWeeklyArray,
+                                                    "logins": {
+                                                        "average": aggresultLogins[0].logins,
+                                                        "mylogins": result.logins
+                                                    }
+                                                });
+                                            });
                                         });
-                                    });
                                 });
                         });
                 });
