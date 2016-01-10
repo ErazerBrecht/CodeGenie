@@ -52,7 +52,7 @@
                     <div class="col-xs-9 text-right">
                         <div class="huge">
                             <span ng-if="logins > loginsAverage">More</span>
-                            <span ng-if="logins <= loginsAverage">Less</span>
+                            <span ng-if="logins <= loginsAverage || logins == undefined">Less</span>
                         </div>
                         <div>logins than the average!</div>
                     </div>
