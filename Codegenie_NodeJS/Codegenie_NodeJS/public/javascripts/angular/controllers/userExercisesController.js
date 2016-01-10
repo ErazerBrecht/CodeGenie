@@ -7,21 +7,23 @@
         $scope.today = new Date();
 
         $scope.beautify = function (ans) {
-            var array = ans.result.split(/\n/);
-            array[0] = array[0].trim();
-            ans.result = array.join("\n");
-            var options =
-            {
-                "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
-            };
-            ans.result = js_beautify(ans.result, options);
+            if(ans.result != undefined) {
+                var array = ans.result.split(/\n/);
+                array[0] = array[0].trim();
+                ans.result = array.join("\n");
+                var options =
+                {
+                    "brace_style": "expand"             //Changed to braces on seperate line => C# STYLE
+                };
+                ans.result = js_beautify(ans.result, options);
 
-            angular.forEach($scope.selected.answers, function (value, key) {
-                if (value.questionid == ans.questionid) {
-                    $scope.selected.answers.result = ans.result;
-                }
+                angular.forEach($scope.selected.answers, function (value, key) {
+                    if (value.questionid == ans.questionid) {
+                        $scope.selected.answers.result = ans.result;
+                    }
 
-            });
+                });
+            }
 
         };
 
