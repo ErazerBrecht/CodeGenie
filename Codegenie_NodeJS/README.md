@@ -125,33 +125,43 @@ If you already have an account, you can of course login. You'll post your creden
 
 If everything was correct you will be routed to /home. This route (home.js) will render the correct panel. If you're an admin it will render the adminpanel if you're not it will render the userpanel. It also uses a *authlevel*,  these a clearance levels we defined. If you do not meet this clearance level there happens something (show error, redirect). You can find these in the passport/authlevels.js file. For the /home route we used *'isLoggedInRedirect'* like the name says if you're not logged in, you will be redirected to the index page (you'll see login.jade). This is to prevent that users try to login with manually changing the URL.
 
-When you login as an admin, *public/views/adminPanel.jade* and *public/javascripts/adminPanel.js* will be loaded. In the jade file is the shell of our application located. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that AngularJS knows which controller and view needs to be loaded. By default the route is "/". This will load the *public/views/adminDashboard.html* view together with the *public/javascripts/angular/controllers/adminDashBoardController.js* controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff aka the code begin). 
+When you login as an admin, *public/views/adminPanel.jade* and *public/javascripts/adminPanel.js* will be loaded. In the jade file is the shell of our application located. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that AngularJS knows which controller and view needs to be loaded. By default the route is "/". This will load the *public/views/adminDashboard.html* view together with the *public/javascripts/angular/controllers/adminDashBoardController.js* controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff aka the code begin). In simple words our adminPanel.jade is a wrapper server side view. By using AngularJS we wil change a part of our website with another view. This is called signe page. It's faster because we don't have to do a full request to the server. (?Gastles? AngularJS by Involved, previous academic year)
 
 Now we're in our actual application we will need to get out data from the database.
 To get this data we used our REST api. The endpoints are documented at the end of this document. To execute REST actions (GET, POST, ...) we made our own AngularJS servcice. A service is encapsulated code that can be reused. Our service will use the $resource factory. This is a module in AngularJS to make communication with RESTfull API's easier. We first used $http, this needs more code to work with our API. Our services can be found at /public/javascripts/angular/services/. We have seperated the admin RESTpoints (*restDataService*) and the user RESTpoints (*userRestDataService*). The code is quite forwarded, no explaination needed. 
 
-The admin dashboard will show several statistics. We splitted the statistics into 4 columns. The first row will show several general information. At the moment it's the total made exercises and the amount of unrevised exercises.
+The adminPanel.jade also has his own controller. It's located @ *"public/javascripts/angular/controllers/adminPanelController.js"*. This is a special controller. It's our parent controller. Every other admin controller will be able to get to the data of this controller. The adminPanelControler loads his user information in. This is needed for showing the user name in the top right corner. Our profile page will also use this data. We get the data from *"/users/mine"* (we used ofcourse our service to do this). The logic for this endpoint can be found at /routes/users/main.js.
+
+The admin dashboard will show several statistics. We splitted the statistics into 4 columns. The first row will show several general information. At the moment it's the total made exercises and the amount of unrevised exercises. The next rows are splitted into the 4 courses. And always show the same information, but for another course. It's 'Total answers' and 'Last answers'. Between them we show a graph showing the evolution of the amount of answers per week, and the average points per week (all revised answers). More information about how you use nvd3 graphs in AngularJS can de found [HERE](http://plnkr.co/edit/lBKFld?p=preview). We didn't use the same graph type as this example, but the graphdata notation is the same. More information can be found on [their page](http://krispo.github.io/angular-nvd3/#/). The documentation for using two different y-axis was rather low, so please check the source code. We commented it for a better understanding!
+
+![AdminDashBoard](http://i.imgur.com/HHpyv6i.png)
 
 Now let's press "Users" in the navigation. This will go to the url: #/users. The adminPanel.js sees this route and will load the public/views/adminUsers.html and the public/javascripts/angular/controllers/adminUsersController.js accordingly. 
 ![adminUsers](http://i.imgur.com/e33OUWu.png)
 The admin sees all the users that have an account on the application including in which course this user is located. The admin can see some general information about the user. Email, last time logged in and how active the user is. The admin can delete users, move them around through different courses. Last but not least there is a filter option on the course. So the admin can easily change a group of courses to a new course. 
 
+When going to 'Exericses' in the navigation, we will go to /home#/exercises. The 'codebehind' (AngularJS) of this view is loaded by our adminPanel.js file. The codebehind can be found at public/javascripts/angular/controllers/adminExercisesController.js. Ofcourse the view (html) is also loaded this one can be found in our public views folder. 
+
 TODO BRECHT
 
-Let's press answers in the navigation. This will go to the url: #/answers. The andminPanel.js sees this route and will load the public/views/adminAnswers.html and the public/javascripts/angular/controllers/adminAnswersController.js accordingly
+Let's press 'Answers' in the navigation. This will go to the url: #/answers. The andminPanel.js sees this route and will load the view adminAnswers.html (found in the public/views folder) and the controller adminAnswersController.js (found in our public/javascripts/angular/controllers folder).
+
 ![adminAnswers](http://i.imgur.com/RyVYcnX.png)
+
 This is the view where the admin can see all the exercises that need to be revised. There is also a filter which can be turned on and off. By default the filter is on and will only show the expired answers (deadline is over so admin can start correcting). 
 ![adminAnswersNoFilter](http://i.imgur.com/GVMcbQx.png)
 When the filter is off you see all the answers. Red tiles mean that the deadline is over and those can be corrected. Blue means deadline isn't over yet so answers can still be added. The admin can now chose to revise an answer. It will show all the users who answered the question.
 ![adminAnswersCorrecting](http://i.imgur.com/cofblJR.png)
 when opening a user it shows the answer the user gave to the questions. The admin can give the user all the points because everything is correct. Or give every question points separately. When the admin gave points to every user it can press submit and the points and comment will be saved.
 
-Let's press the profile button. This will go to the #/profile url. The adminpanel.js sees the route and will load the public/views/adminProfileEdit.html view and the public/javascripts/angular/controllers/adminProfileEditController.js accordingly
+There is also a profile button. This will go to the #/profile url. The adminpanel.js sees the route and will load the public/views/adminProfileEdit.html view and the public/javascripts/angular/controllers/adminProfileEditController.js accordingly
 ![adminProfie](http://i.imgur.com/qrPNbJD.png?1)
 
-That will show this view
+That will show this view:
+
 ![adminProfile2](http://i.imgur.com/nLUyNXy.png)
-The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible.
+
+The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible. The changes are send to the backend where we will verify the password. We also delete some variabeles. If someone with a bad intention uses Postman to send that he's admin we will ignore that! The backend logic can be found in /routes/user/main.js
 
 When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. 
 
