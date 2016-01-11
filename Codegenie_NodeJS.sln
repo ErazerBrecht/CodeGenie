@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Codegenie_NodeJS", "Codegenie_NodeJS\Codegenie_NodeJS.njsproj", "{AF308A60-05B2-4BFD-89F2-CCCCC85ABCD2}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Codegenie_NodeJS", "Codegenie_NodeJS.njsproj", "{AF308A60-05B2-4BFD-89F2-CCCCC85ABCD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
