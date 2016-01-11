@@ -123,6 +123,7 @@ router.post("/exercises/", isAdmin, function (req, res) {
     var newexercise = new ExerciseModel(req.body);
 
     if (!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).json(["No questions were sent. Please make at least one question!"]);
+    newexercise.created = new Date();
 
     if (!newexercise.deadline) newexercise.deadline = new Date();
     else {
