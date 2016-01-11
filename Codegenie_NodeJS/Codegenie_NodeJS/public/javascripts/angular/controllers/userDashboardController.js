@@ -3,20 +3,28 @@
     var app = angular.module("userApp");
     
     var userDashboardController = function ($scope, userRestData) {
+        //Get data from REST API
+        //statistics/graph
+        //Get answers data per week for in graph (x, y) notation
+        //Also contains the average score per week in graph notation
         userRestData.getStatisticsMyAnswersGraph.get(function (data)
         {
             $scope.logins = data.logins.mylogins;
             $scope.loginsAverage = data.logins.average;
             $scope.myAnswers = data.received.length;
 
+            //Variable to keep track of maximum amount answers in a week
             var max = 0;
 
+            //Calculate this maximum amount...
             for(var i = 0; i < data.activityWeekly.length; i++)
             {
                 if(data.activityWeekly[i].y > max)
                     max = data.activityWeekly[i].y;
             }
 
+            //Options for graph
+            //Check documentation of nvd3-angular (krispo)
             $scope.options = {
                 chart: {
                     type: 'multiChart',
@@ -27,6 +35,10 @@
                         bottom: 50,
                         left: 70
                     },
+                    //Use calculated max as max value in y - axis 1.
+                    // If we let nvd3 do this automatically, he will use the minimum value in the data array
+                    //Which means that there always will be a bar invisible
+                    //We want zero as begin point...
                     yDomain1: [0, max],
                     yDomain2: [0, 100],
                     color: d3.scale.category10().range(),
@@ -45,7 +57,7 @@
                         }
                     },
                     yAxis2: {
-                        "axisLabel": "Percent",
+                        "axisLabel": "Percent",           //This doesn't work, I should open a issue on their GitHub...
                         tickFormat: function(d){
                             return d3.format(',.f')(d);
                         }
@@ -57,20 +69,21 @@
             $scope.graphData = [
                 {
                     values: data.activityWeekly,      //values - represents the array of {x,y} data points
-                    key: 'Your answers', //key  - the name of the series.
-                    color: '#5cb85c',  //color - optional: choose your own line color.
+                    key: 'Your answers',              //key  - the name of the series.
+                    color: '#5cb85c',                 //color - optional: choose your own line color.
                     type: "bar",
                     yAxis: 1
                 },
                 {
                     values: data.averageWeekly,      //values - represents the array of {x,y} data points
-                    key: 'Your average', //key  - the name of the series.
-                    color: '#f0ad4e',  //color -
+                    key: 'Your average',             //key  - the name of the series.
+                    color: '#f0ad4e',                //color
                     type: "line",
                     yAxis: 2
                 }
             ];
 
+            //'Predefined' array layout (model)
             //This needs to be a 2 dimensional array!!
             $scope.punchCardData = [
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -86,53 +99,11 @@
                 else if ((value.x + offset) < 0)
                     offset += 24;               //-1 equals 23, -2 equals 22, ....
 
-
+                //Update data in the array to the correct value!
                 $scope.punchCardData[0][value.x + offset] = value.y;
             });
 
         });
-
-        $scope.options = {
-            "chart": {
-                "type": "multiBarChart",
-                "height": 450,
-                "margin": {
-                    "top": 20,
-                    "right": 20,
-                    "bottom": 40,
-                    "left": 55
-                },
-                "useInteractiveGuideline": true,
-                "dispatch": {},
-                "xAxis": {
-                    "axisLabel": "Week"
-                },
-                "yAxis": {
-                    "axisLabel": "Exercises",
-                    "axisLabelDistance": -10
-                }
-            },
-            "title": {
-                "enable": false,
-                "text": null
-            },
-            "subtitle": {
-                "enable": false,
-                "text": null,
-                "css": {
-                    "text-align": "center",
-                    "margin": "10px 13px 0px 7px"
-                }
-            },
-            "caption": {
-                "enable": false,
-                "html": null,
-                "css": {
-                    "text-align": "justify",
-                    "margin": "10px 13px 0px 7px"
-                }
-            }
-        };
     };
 
     app.controller("userDashboardController", userDashboardController);
