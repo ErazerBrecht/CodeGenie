@@ -145,10 +145,12 @@ Don't forget to setup the evironment variables. In our case db may not be missin
 
 ##NOTE BY BRECHT: 
 
-Today (11/01/2016). The day we have to present everything, Heroku decided to fuck off. Yeah, it couldn't find any new revisions while there where roughly 200 new commits. Looks like I'm not the only one who have this problem (google: no new revisions were found). It's 3 o'clock, my alarm is set in 4h. And we have no cloud on a cloud application...
-No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo now owned by me. And I guess the owned are not awake anymore... My only hope is the dropbox feature of Heroku. But it's still dropbox, it never works when it has to...
+Today (11/01/2016). The day we have to present everything, Heroku decided to fuck off. Yeah, it couldn't find any new revisions while there where roughly 200 new commits. Looks like I'm not the only one who have this problem (google: no new revisions were found). It's caused by our 'subtree'.
 
-After 5 tries uploading the code with Dropbox no success. It's time to move this project to the root folder... </br>
+It's 3 o'clock, my alarm is set in 4h. And we have no cloud on a cloud application...
+No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo not owned by me. And I guess the owned are not awake anymore... My only hope is the Dropbox feature of Heroku. But it's still Dropbox, it never works when it has to...
+
+After 5 tries uploading the code with Dropbox I had no success. It's time to move this project to the root folder... </br>
 I did it, was a painfull commit. I really wanted to avoid this. But time is running out!
 
 It worked from the first time, you can't believe how happy I am...
@@ -211,9 +213,21 @@ The admin (also user, view is the same) can change his password. It will only wo
 
 When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. The user will also gets it's information (username, e-mail, ...) from the server, this data is used for showing in the top-right corner. And ofcourse the user also has a profile page (same working as admin profile page).
 
-TODO BRECHT
+The default route is here also the dashboard (#/). The dashboard for the user includes statistics for the user himself. These are, his unseen new exercises, his total answers, how much he loged in compared to the average user and how many unseen recieved exercises.
 
-So we can press Exercises in the navigation. This will go to the URL: #/exercises. The userPanel.js will see the route and will load the right view and controller for this route. (public/view/userExercises.html and public/javascripts/angular/controller/userExercisesController.js). You will get to see this screen
+It also contains a graph for the users progression, we show his amount of exercises he solved per week (block) and his average of this exercises (line). We also show his activity per hour, we do this in a punchcard (same way as GitHub does).
+
+![userDashboard](http://i.imgur.com/H5AB7kY.png)
+
+There is also a statistics route (#/statistics. This will load userStatistics.html and userStatisticsController.js by our userPanel.js sketch. This view is to meant showing more global statistics. Like total answers of everyone, total answers of everyone in the same course. And again your own amount of answers.
+
+Here is also a graph, it shows the total amount of answers (everyone) per week and also the total global average per week.
+
+Last but not least we show the best users of the course the user is assigned to. We also show the users with the most answers.
+
+![userStatistics](http://i.imgur.com/LETOo8z.png)
+
+So we can also press 'Exercises' in the navigation. This will go to the URL: #/exercises. The userPanel.js will see the route and will load the right view and controller for this route. (public/view/userExercises.html and public/javascripts/angular/controller/userExercisesController.js). You will get to see this screen
 ![userExercise](http://i.imgur.com/qPF3pO2.png)
 When the filter is on and you don't filter anything it will show the exercises that still need to be made. You can also filter for the expired, solved and revised exercises. Exercise has his own tile with a color. 
 * blue: new exercises but the user hasn't looked at it yet
@@ -225,10 +239,11 @@ When the filter is on and you don't filter anything it will show the exercises t
 
 The user can also turn of the filter and this will show every exercise without any filter.
 
-when opening an exercise the user will get this added to his screen
+When opening an exercise the user will get this added to his screen
+
 ![userExercise2](http://i.imgur.com/35jtaBu.png)
 
-The user will be able to see all the questions and the points for each question. He can open every question and answer it. When the user is done he will submit the answer. When the answer is revised by the admin won't the user be able the edit the exercise afterwards. 
+The user will be able to see all the questions and the points for each question. He can open every question and answer it. When the user is done he will submit the answer. When the answer is revised by the admin won't the user be able the edit the exercise afterwards. But instead he will see he's recieved points and comments the teacher has added.
 
 ## Mongoose Schema layout
 For a post/edit to be accepted, the information must pass the validation, the following section will explain what is validated and how to pass it.
