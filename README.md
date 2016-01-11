@@ -9,11 +9,15 @@ The project is also online hosted!
 It's a view only project. It's allowed to to add issues, but only allowed people will have write access to this repo.
 This project is owned by [AP Hogeschool](https://www.ap.be). You're not allowed to use this code for any use!
 
-ANY modification / publication is **ILLEGAL**, **FORKING** this repo without acceptance is not allowed
-You don't have the right for using the code / idea for commercial purposes.
+This project is shared for educational purposes. 
 
-You accept this disclaimer before reading any further!
-Any legal questions about this code. Please contact Tim Dams (tim.dams@ap.be)
+ANY modification / publication is **ILLEGAL** without permission!</br>
+**FORKING** this repo without acceptance is not allowed!
+
+You don't have the right for using this code / idea for commercial purposes.
+
+You accept this disclaimer before reading any further! </br>
+Any legal questions about this code, please contact Tim Dams (tim.dams@ap.be).
 
 ###Introduction
 The idea of this project is invented by Tim Dams.
@@ -163,7 +167,7 @@ Don't forget to setup the evironment variables. In our case db may not be missin
 Today (11/01/2016). The day we have to present everything, Heroku decided to fuck off. Yeah, it couldn't find any new revisions while there where roughly 200 new commits. Looks like I'm not the only one who have this problem (google: no new revisions were found). It's caused by our 'subtree'.
 
 It's 3 o'clock, my alarm is set in 4h. And we have no cloud on a cloud application...
-No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo not owned by me. And I guess the owned are not awake any more... My only hope is the Dropbox feature of Heroku. But it's still Dropbox, it never works when it has to...
+No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo not owned by me. And I guess the owners are not awake any more... My only hope is the Dropbox feature of Heroku. But it's still Dropbox, it never works when it has to...
 
 After 5 tries uploading the code with Dropbox I had no success. It's time to move this project to the root folder... </br>
 I did it, was a painfull commit. I really wanted to avoid this. But time is running out!
@@ -581,3 +585,15 @@ Gives the amount of answers that have been revised and amount of revised answers
 **GET**: /statistics/answers/unrevised
 
 Gives the amount of answers that have not been revised yet and amount of unrevised answers per class.
+
+## Future
+There is still a lot to do: 
+- Color for revised exercises needs to be a lot better (it's ugly at the moment)
+- Filtering, now we load all data and filter this data. When we have much data this can take a long time. In the future this needs to be revaluate. 
+- Adding more statistics to frontend, the backend already have these (e.g. stats per exercise)
+- Add support for multiple domains (e.g. Electronics, Chemic, GDM'er). The global statistics shouldn't be totally global. The average score of someone ins Chemic shouldn't influence the average score off the students in Electronics). Multiple different admins (admin for programming, admin for electronics, admin for energymanagment, ...)
+  - Make it possible to add/edit courses as an admin... 
+- Change hardcoded strings to REST data, easy to change language of frontend.
+- Bug testing, there are problably some bugs left!
+- Use case, test this project on some people.
+- Add testing framework
