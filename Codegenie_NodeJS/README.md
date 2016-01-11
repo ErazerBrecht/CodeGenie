@@ -110,6 +110,23 @@ If you use Visual Studio and Node.JS tools you can also change the env variabele
 
 Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! WebStorm is also more lightweight, Visual Studio takes to long to boot and Visual Studio's support for Node is still youngh. The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
 
+##Deploy
+We are using Heroku as cloud provider. They have an excellent tuturial for starters.
+
+We had one problem, our project wasn't in our roor git folder. To solve this we had to make a subtree. This means making a subfolder 'root'.
+
+>  git subtree push --prefix CodeGenie_NodeJS/CodeGenie_NodeJS heroku master
+
+Don't forget to setup the evironment variables. In our case db may not be missing, otherwise you can't connect to our databse on MongoLabs. Like we said, don't hesitate to ask the connectionstring!
+
+##NOTE BY BRECHT: 
+
+Today (11/01/2016). The day we have to present everything, Heroku decided to fuck off. Yeah, it couldn't find any new revisions while there where roughly 200 new commits. Looks like I'm not the only one who have this problem (google: no new revisions were found). It's 3 o'clock, my alarm is set in 4h. And we have no cloud on a cloud application...
+No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo now owned by me. And I guess the owned are not awake anymore... My only hope is the dropbox feature of Heroku. But it's still dropbox, it never works when it has to...
+
+After 5 tries uploading the code with Dropbox no success. It's time to move this project to the roor folder...
+What did we learn today, never but really never put your project in a subfolder...
+
 ##Flow of the application
 The first route you connect to is our root route. We called this route index.js. This route will determine if your're already signed in. If you are, you're automatically redirected to the home.js route.
 
