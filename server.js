@@ -5,6 +5,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
+var forceSsl = require('force-ssl-heroku');
 
 //Mongoose
 var mongoose = require('./mongoose/dbconnection');
@@ -43,6 +44,7 @@ var homeRoutes = require('./routes/home');
 
 //Vars
 var app = express();
+app.use(forceSsl);
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
