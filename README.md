@@ -1,8 +1,19 @@
-[codegenie](https://codegenie.herokuapp.com/)
-
 # Project Cloud Applications CodeGenie
 
 This is our code for the Codegenie project made by Brecht, Arne and Matthew. It contains every thing, backend and frontend!
+
+The project is also online hosted!
+> [CodeGenie](https://codegenie.herokuapp.com/)
+
+###Legal disclaimer
+It's a view only project. It's allowed to to add issues, but only allowed people will have write access to this repo.
+This project is owned by [AP Hogeschool](https://www.ap.be). You're not allowed to use this code for any use!
+
+ANY modification / publication is **ILLEGAL**, **FORKING** this repo without acceptance is not allowed
+You don't have the right for using the code / idea for commercial purposes.
+
+You accept this disclaimer before reading any further!
+Any legal questions about this code. Please contact Tim Dams (tim.dams@ap.be)
 
 ###Introduction
 The idea of this project is invented by Tim Dams.
@@ -62,12 +73,12 @@ There are currently 4 pages: a login page, signup page, adminpanel and a userpan
 * Userpanel: The page for the students
   * Has the following views: 
     * Dashboard: Home page
-      * Shows some trivial inforamtion about yourself.
+      * Shows some trivial information about yourself.
         * Amount of new exercises
         * Amount of total exercises solved
         * Is your activity lower of higher than average?
         * Graph of total answers per week
-        * Punch card, shows acitity per day
+        * Punch card, shows activity per day
     * Staticstics
       * Shows statistics not specific to user
         * Total answers (every user)
@@ -83,11 +94,11 @@ There are currently 4 pages: a login page, signup page, adminpanel and a userpan
     * Profile
       * Change your settings (email / password) 
 
-Adminpanel has a javascript file at /public/javascripts/adminpanel.js that takes care of the intitalization of the AngularJS module. Also, in this file the routing of views takes place! Every view that is loaded in at the adminpanel has its own controller. The adminpanel himself also has a controller. All controllers are placed in /public/javascripts/controllers! The names of the controllers are self-explanatory.
+Adminpanel has a javascript file at /public/javascripts/adminpanel.js that takes care of the initialization of the AngularJS module. Also, in this file the routing of views takes place! Every view that is loaded in at the adminpanel has its own controller. The adminpanel himself also has a controller. All controllers are placed in /public/javascripts/controllers! The names of the controllers are self-explanatory.
 
 The same structure is used on the userpanel!
 
-Our 4 main views (seperate html pages), they can be found at /views/. They are loaded by our NodeJS code. They are build in JADE, this has as advantage that we can bind on server side variables! The views we load in our main views (loaded with AngularJS) are written in html and can be found at /public/views/
+Our 4 main views (separate html pages), they can be found at /views/. They are loaded by our NodeJS code. They are build in JADE, this has as advantage that we can bind on server side variables! The views we load in our main views (loaded with AngularJS) are written in html and can be found at /public/views/
 
 ##What are we doing now?
 Finishing the project...
@@ -124,20 +135,22 @@ Frontend:
 * Bootstrap checkbox: nicer checkboxes with more options than default ones
 
 
-##Bulding and using this project
+##Building and using this project
 First we used Visual Studio for this project. If you use Visual Studio we recommend [Node.js tools for Visual Studio](https://www.visualstudio.com/en-us/features/node-js-vs.aspx). This tool also makes it easier to publish on Azure...
 
 Like every NodeJS project we supply a packages.json file the install the correct dependencies you need. (npm install)
 If Mongoose doesn't work on your computer take a look at: https://github.com/AP-Elektronica-ICT/project-cloud-applications-codegenie_arnematthewbrecht/issues/2
 
-To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine (e.g. Heroku, Azure, Local, ...). This can easily be done by defining it in the cmd window where you will start your node server. In our project we used a startup script (startnodemon.cmd) that will do it for you! The only thing you need to do is make a file connectioninfo.config in the folder mongoose. It's important to use UTF-8 (Without BOM) as enconding for the file!
+To connect to our database you will need a connectionstring (don't hesitate to ask it). U need to put this in a environment variable. We used the db (process.env.db) variable. U need to set this on your server machine (e.g. Heroku, Azure, Local, ...). This can easily be done by defining it in the cmd window where you will start your node server. In our project we used a start-up script (startnodemon.cmd) that will do it for you! The only thing you need to do is make a file connectioninfo.config in the folder mongoose. It's important to use UTF-8 (Without BOM) as encoding for the file!
 
 If you use Visual Studio and Node.JS tools you can also change the env variabeles in the properties of the project! We recommend to do this. This is a better way of starting a node project, you start the project by pressing the green run button of Visual Studio (like you used to do with C# applications).
 
-Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! WebStorm is also more lightweight, Visual Studio takes to long to boot and Visual Studio's support for Node is still youngh. The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variabeles. There is no need anymore for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
+Later on we decided to change to WebStorm as our main IDE. This IDE has better support for Javascript. Because of that also better support for AngularJS and NodeJS. We now have better syntaxhighlighting and better code completion! WebStorm is also more lightweight, Visual Studio takes to long to boot and Visual Studio's support for Node is still young. The license for WebStorm is the same as the one for Resharper. Students just need to verify their academic status and you are good to roll. In WebStorm it's also quite easy to setup the environment variables. There is no need any more for the start up script. In fact the project will run in WebStorm you will not see a CMD console. This has a nice advantage, you can easily navigate to the correct line for solving node bug and errors!
 
 ##Deploy
-We are using Heroku as cloud provider. They have an excellent tuturial for starters.
+We are using Heroku as cloud provider. They have an excellent tutorial for starters. Our deployment url:
+
+> [CodeGenie](https://codegenie.herokuapp.com/)
 
 We had one problem, our project wasn't in our roor git folder. To solve this we had to make a subtree. This means making a subfolder 'root'.
 
@@ -150,14 +163,14 @@ Don't forget to setup the evironment variables. In our case db may not be missin
 Today (11/01/2016). The day we have to present everything, Heroku decided to fuck off. Yeah, it couldn't find any new revisions while there where roughly 200 new commits. Looks like I'm not the only one who have this problem (google: no new revisions were found). It's caused by our 'subtree'.
 
 It's 3 o'clock, my alarm is set in 4h. And we have no cloud on a cloud application...
-No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo not owned by me. And I guess the owned are not awake anymore... My only hope is the Dropbox feature of Heroku. But it's still Dropbox, it never works when it has to...
+No time for changing to another cloud provider. Heroku supports pushing code from GitHub. But one problem this repo is a private repo not owned by me. And I guess the owned are not awake any more... My only hope is the Dropbox feature of Heroku. But it's still Dropbox, it never works when it has to...
 
 After 5 tries uploading the code with Dropbox I had no success. It's time to move this project to the root folder... </br>
 I did it, was a painfull commit. I really wanted to avoid this. But time is running out!
 
 It worked from the first time, you can't believe how happy I am...
 
-What did we learn today, never but really never put your project in a subfolder. I hope this will be told in the future to students. I demolished our repo, in every file I'm the only contributor (bug from GitHub??). I appologize myself to my teammembers...
+What did we learn today, never but really never put your project in a sub-folder. I hope this will be told in the future to students. I demolished our repo, in every file I'm the only contributor (bug from GitHub??). I apologize myself to my team members...
 
 
 ##Flow of the application
@@ -167,9 +180,9 @@ If not the login.jade will be rendered in your browser (this file can found in /
 
 ![Index](http://i.imgur.com/BMEN0WR.png)
 
-This module takes care of our login / signup logic. Three main tasks, making a new user with a hashed (bcrypt) password, if the user credentials are corrent and check if the visitor is signed in / check if the visitor is an admin. The logic for this module can be found in the folder *passport*
+This module takes care of our login / signup logic. Three main tasks, making a new user with a hashed (bcrypt) password, if the user credentials are correct and check if the visitor is signed in / check if the visitor is an admin. The logic for this module can be found in the folder *passport*
 
-If you already have an account, you can of course login. You'll post your credentials to /login. It will check with our passport module if the credentails are correct. This logic can be found @ */pasport/login.js*. If it's not correct you will see a 'flash-message' (nothing to do with Adobe Flash).
+If you already have an account, you can of course login. You'll post your credentials to /login. It will check with our passport module if the credentials are correct. This logic can be found @ */pasport/login.js*. If it's not correct you will see a 'flash-message' (nothing to do with Adobe Flash).
 
 ![Wrong](http://i.imgur.com/6oj6zqJ.png)
 
@@ -178,11 +191,11 @@ If everything was correct you will be routed to /home. This route (home.js) will
 When you login as an admin, *public/views/adminPanel.jade* and *public/javascripts/adminPanel.js* will be loaded. In the jade file is the shell of our application located. The navigation will be there and also the title bar with some information on it. The adminPanel.js contains all the routes to the different views. A route is a way that AngularJS knows which controller and view needs to be loaded. By default the route is "/". This will load the *public/views/adminDashboard.html* view together with the *public/javascripts/angular/controllers/adminDashBoardController.js* controller. The controller describes how the react when you interact with your view (pressing buttons, clicking stuff aka the code begin). In simple words our adminPanel.jade is a wrapper server side view. By using AngularJS we wil change a part of our website with another view. This is called signe page. It's faster because we don't have to do a full request to the server. (?Gastles? AngularJS by Involved, previous academic year)
 
 Now we're in our actual application we will need to get out data from the database.
-To get this data we used our REST api. The endpoints are documented at the end of this document. To execute REST actions (GET, POST, ...) we made our own AngularJS servcice. A service is encapsulated code that can be reused. Our service will use the $resource factory. This is a module in AngularJS to make communication with RESTfull API's easier. We first used $http, this needs more code to work with our API. Our services can be found at /public/javascripts/angular/services/. We have seperated the admin RESTpoints (*restDataService*) and the user RESTpoints (*userRestDataService*). The code is quite forwarded, no explaination needed. 
+To get this data we used our REST api. The endpoints are documented at the end of this document. To execute REST actions (GET, POST, ...) we made our own AngularJS service. A service is encapsulated code that can be reused. Our service will use the $resource factory. This is a module in AngularJS to make communication with RESTfull API's easier. We first used $http, this needs more code to work with our API. Our services can be found at /public/javascripts/angular/services/. We have separated the admin RESTpoints (*restDataService*) and the user RESTpoints (*userRestDataService*). The code is quite forwarded, no explanation needed. 
 
 The adminPanel.jade also has his own controller. It's located @ *"public/javascripts/angular/controllers/adminPanelController.js"*. This is a special controller. It's our parent controller. Every other admin controller will be able to get to the data of this controller. The adminPanelControler loads his user information in. This is needed for showing the user name in the top right corner. Our profile page will also use this data. We get the data from *"/users/mine"* (we used ofcourse our service to do this). The logic for this endpoint can be found at /routes/users/main.js.
 
-The admin dashboard will show several statistics. We splitted the statistics into 4 columns. The first row will show several general information. At the moment it's the total made exercises and the amount of unrevised exercises. The next rows are splitted into the 4 courses. And always show the same information, but for another course. It's 'Total answers' and 'Last answers'. Between them we show a graph showing the evolution of the amount of answers per week, and the average points per week (all revised answers). More information about how you use nvd3 graphs in AngularJS can de found [HERE](http://plnkr.co/edit/lBKFld?p=preview). We didn't use the same graph type as this example, but the graphdata notation is the same. More information can be found on [their page](http://krispo.github.io/angular-nvd3/#/). The documentation for using two different y-axis was rather low, so please check the source code. We commented it for a better understanding!
+The admin dashboard will show several statistics. We splitted the statistics into 4 columns. The first row will show several general information. At the moment it's the total made exercises and the amount of unrevised exercises. The next rows are split into the 4 courses. And always show the same information, but for another course. It's 'Total answers' and 'Last answers'. Between them we show a graph showing the evolution of the amount of answers per week, and the average points per week (all revised answers). More information about how you use nvd3 graphs in AngularJS can de found [HERE](http://plnkr.co/edit/lBKFld?p=preview). We didn't use the same graph type as this example, but the graphdata notation is the same. More information can be found on [their page](http://krispo.github.io/angular-nvd3/#/). The documentation for using two different y-axis was rather low, so please check the source code. We commented it for a better understanding!
 
 ![AdminDashBoard](http://i.imgur.com/HHpyv6i.png)
 
@@ -190,7 +203,7 @@ Now let's press "Users" in the navigation. This will go to the url: #/users. The
 ![adminUsers](http://i.imgur.com/e33OUWu.png)
 The admin sees all the users that have an account on the application including in which course this user is located. The admin can see some general information about the user. Email, last time logged in and how active the user is. The admin can delete users, move them around through different courses. Last but not least there is a filter option on the course. So the admin can easily change a group of courses to a new course. 
 
-When going to 'Exericses' in the navigation, we will go to */home#/exercises*. The 'codebehind' (AngularJS) of this view is loaded by our adminPanel.js file. The codebehind can be found at *"public/javascripts/angular/controllers/adminExercisesController.js"*. Ofcourse the view (html) is also loaded this one can be found in our public views folder. This view is used for creating and modifying exercises. The code behind is well documented in the source code. We used ngDraggeble for deleting exersises on a intuitive way. Getting the exercises is done by a AJAX call to our REST API (*/admin/exercises*). Admins are the only people that can use this route. The logic for this route is found at following url: *"/admin/exercises"*. The logic for this route can be found in our project at *"/routes/admin/exercises.js"*. Maybe a small remark, when loading the exercise data you will have to cast the dates (deadline and revealdate) to a date type! Don't forget this, AngularJS doesn't like it otherwise...
+When going to 'Exericses' in the navigation, we will go to */home#/exercises*. The 'codebehind' (AngularJS) of this view is loaded by our adminPanel.js file. The codebehind can be found at *"public/javascripts/angular/controllers/adminExercisesController.js"*. Ofcourse the view (html) is also loaded this one can be found in our public views folder. This view is used for creating and modifying exercises. The code behind is well documented in the source code. We used ngDraggeble for deleting exercises on a intuitive way. Getting the exercises is done by a AJAX call to our REST API (*/admin/exercises*). Admins are the only people that can use this route. The logic for this route is found at following url: *"/admin/exercises"*. The logic for this route can be found in our project at *"/routes/admin/exercises.js"*. Maybe a small remark, when loading the exercise data you will have to cast the dates (deadline and revealdate) to a date type! Don't forget this, AngularJS doesn't like it otherwise...
 
 ![adminExercises](http://i.imgur.com/su6QLmO.png)
 
@@ -211,11 +224,11 @@ That will show this view:
 
 ![adminProfile2](http://i.imgur.com/nLUyNXy.png)
 
-The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible. The changes are send to the backend where we will verify the password. We also delete some variabeles. If someone with a bad intention uses Postman to send that he's admin we will ignore that! The backend logic can be found in /routes/user/main.js
+The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible. The changes are send to the backend where we will verify the password. We also delete some variables. If someone with a bad intention uses Postman to send that he's admin we will ignore that! The backend logic can be found in /routes/user/main.js
 
 When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. The user will also gets it's information (username, e-mail, ...) from the server, this data is used for showing in the top-right corner. And ofcourse the user also has a profile page (same working as admin profile page).
 
-The default route is here also the dashboard (#/). The dashboard for the user includes statistics for the user himself. These are, his unseen new exercises, his total answers, how much he loged in compared to the average user and how many unseen recieved exercises.
+The default route is here also the dashboard (#/). The dashboard for the user includes statistics for the user himself. These are, his unseen new exercises, his total answers, how much he loged in compared to the average user and how many unseen received exercises.
 
 It also contains a graph for the users progression, we show his amount of exercises he solved per week (block) and his average of this exercises (line). We also show his activity per hour, we do this in a punchcard (same way as GitHub does).
 
@@ -263,7 +276,7 @@ For a post/edit to be accepted, the information must pass the validation, the fo
 Required: 
 * name: string, name of the user (e.g. John Smith) *is unique field*
 * password: string, encrypted password (encrypted with bCrypt)
-* class: string, current class enrollment of the user (e.g. 1EA1)
+* class: string, current class enrolment of the user (e.g. 1EA1)
 * course: string, course the user is in. (e.g. Programming Principles)
 
 Defaults: 
