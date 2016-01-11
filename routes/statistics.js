@@ -311,12 +311,12 @@ router.get('/users/mine', isLoggedIn, function (req, res) {
 router.get('/users/:userID', isAdmin, function (req, res) {
     var userID = req.params.userID;
 
-    //ExerciseModel.findById(userID).lean().exec(function (err, result) {
-    //    if (err) return console.error(err);
-    //    if (!result) return res.status(400).json(["Not an eligible user ID."]);
+    UserModel.findById(userID).lean().exec(function (err, result) {
+        if (err) return console.error(err);
+        if (!result) return res.status(400).json(["Not an eligible user ID."]);
 
         SendUserStatistic(userID, res);
-    //});
+    });
 });
 
 router.get('/exercises', isLoggedIn, function (req, res) {
