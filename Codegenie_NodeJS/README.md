@@ -163,7 +163,9 @@ That will show this view:
 
 The admin (also user, view is the same) can change his password. It will only work if you first fill in your current password. Also changing your email is possible. The changes are send to the backend where we will verify the password. We also delete some variabeles. If someone with a bad intention uses Postman to send that he's admin we will ignore that! The backend logic can be found in /routes/user/main.js
 
-When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. 
+When logging in as a user the views/userpanel.jade and the public/javascripts/userPanel.js will be loaded. In userPanel.js the routes are defined. The working if the routes is the same as in adminPanel.js. The user will also gets it's information (username, e-mail, ...) from the server, this data is used for showing in the top-right corner. And ofcourse the user also has a profile page (same working as admin profile page).
+
+TODO BRECHT
 
 So we can press Exercises in the navigation. This will go to the URL: #/exercises. The userPanel.js will see the route and will load the right view and controller for this route. (public/view/userExercises.html and public/javascripts/angular/controller/userExercisesController.js). You will get to see this screen
 ![userExercise](http://i.imgur.com/qPF3pO2.png)
