@@ -71,10 +71,10 @@ strong {
   background: #626e7f;
 }
 .tile.yellow {
-  background: #f0d14e;
+  background: #E3CB46;
 }
 .tile.yellow:hover {
-  background: #f0ad4e;
+  background: #c2a93f;
 }
 
 .triangle {
