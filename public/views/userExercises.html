@@ -29,21 +29,23 @@
                         <checkbox ng-model="showAll" ng-init="showAll = true" class="btn-success"/>
                     </label>
                 </span>
-
             </div>
-            <div id="collapseOne" class="panel-collapse collapse in top-30 left-30 bottom-30">
+
+            <div id="collapseOne" class="panel-collapse collapse in ">
                 <div class="panel-body">
-                    <div>
-                        <span style="width: 200px; display: inline-block">Show solved exercises:</span>
-                        <checkbox ng-model="showSolved" class="btn-success left-30"/>
-                    </div>
-                    <div class="top-10">
-                        <span style="width: 200px; display: inline-block">Show expired exercises:</span>
-                        <checkbox ng-model="showExpired" class="btn-danger left-30"/>
-                    </div>
-                    <div class="top-10">
-                        <span style="width: 200px; display: inline-block">Show revised exercises:</span>
-                        <checkbox ng-model="showRevised" class="btn-lightblue left-30"/>
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="showUnsolved" uib-btn-checkbox>
+                            Unsolved
+                        </label>
+                        <label class="btn btn-default" ng-model="showUnrevised" uib-btn-checkbox>
+                            Unrevised
+                        </label>
+                        <label class="btn btn-default" ng-model="showExpired" uib-btn-checkbox>
+                            Expired
+                        </label>
+                        <label class="btn btn-default" ng-model="showRevised" uib-btn-checkbox>
+                            Revised
+                        </label>
                     </div>
                 </div>
             </div>
@@ -60,7 +62,8 @@
             <div class="triangle" ng-if="exercise.extra"></div>
             <div class="title">
                 <h3>{{exercise.title}}</h3>
-                <div ng-if="exercise.revised == true">{{exercise.totalpoints}}/{{exercise.totalAvailablePoints}}</div>
+                <div ng-if="exercise.revised == true">{{exercise.totalpoints}}/{{exercise.totalAvailablePoints}}
+                </div>
             </div>
             <div ng-if="exercise.revised == false">Deadline:
                 <time am-time-ago="exercise.deadline"></time>
@@ -113,7 +116,8 @@
                             <div ng-switch-when="Code">
                                 <div ng-if="selected.revised == false">
                                     <button type="button" ng-click="beautify(a)" class="btn btn-default"><i
-                                            class="fa fa-pencil" style="padding-right: 0px; !important;"></i></button>
+                                            class="fa fa-pencil" style="padding-right: 0px; !important;"></i>
+                                    </button>
                                     <div class="top-20" ng-model="a.result" style="height: 200px" ui-ace="{
                                   useWrapMode : false,
                                   theme:'sqlserver',
@@ -145,7 +149,8 @@
                             </div>
 
                             <div ng-switch-when="MultipleChoice">
-                                <div ng-if="selected.revised == false" ng-repeat="choice in a.choices" class="radio">
+                                <div ng-if="selected.revised == false" ng-repeat="choice in a.choices"
+                                     class="radio">
                                     <label><input type="radio" ng-model="a.result" ng-value="choice.text"/>{{choice.text}}</label>
                                 </div>
 
@@ -155,7 +160,8 @@
                                     <label ng-if="a.result != choice.text">{{choice.text}}</label>
                                 </div>
                             </div>
-                            <div class="alert alert-info top-10" ng-if="selected.revised == true && a.comment != ''">
+                            <div class="alert alert-info top-10"
+                                 ng-if="selected.revised == true && a.comment != ''">
                                 {{a.comment}}
                             </div>
 

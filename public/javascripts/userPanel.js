@@ -23,7 +23,7 @@ $(function () {
 
 (function () {
 
-    var userApp = angular.module('userApp', ['ngRoute', 'angularMoment', 'ngResource', 'ui.ace', 'ui.checkbox', 'ngAnimate', 'nvd3', 'punchCard', 'monospaced.elastic']);
+    var userApp = angular.module('userApp', ['ngRoute', 'angularMoment', 'ngResource', 'ui.ace', 'ui.checkbox', 'ngAnimate', 'nvd3', 'punchCard', 'monospaced.elastic', 'ui.bootstrap']);
 
     userApp.config(function ($routeProvider) {
         $routeProvider
@@ -55,6 +55,7 @@ $(function () {
 
     // Custom validator based on expressions.
     // see: https://docs.angularjs.org/guide/forms
+    // Used to check password on profile view!
     userApp.directive('wjValidationError', function () {
         return {
             require: 'ngModel',
