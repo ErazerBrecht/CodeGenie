@@ -74,12 +74,12 @@
         $scope.getTileClass = function (selected) {
             var tempExercise = selected;
             if(tempExercise.revised) {
-                return "lightblue";
+                return "green";
             }
             if (tempExercise.solved) {
                 if (tempExercise.answerDate > tempExercise.deadline)
                     return "orange";
-                return "green";
+                return "yellow";
             }
             else {
                 if (tempExercise.deadline < new Date()) {
@@ -119,7 +119,7 @@
 
     var userExercisesFilter = function()
     {
-        return function( items, all, solved, expired, revised) {
+        return function( items, all, filter) {
             var filtered = [];
             var today = new Date();
 
@@ -127,13 +127,31 @@
                 return items;
 
             angular.forEach(items, function(item) {
-                if(revised === true) {
-                    if(revised === item.revised)
+                if(filter === "Revised") {
+                    if(item.revised === true)
                         filtered.push(item);
                     return;
                 }
-                if(solved === item.solved && ((!expired && item.deadline > today) || (expired && item.deadline < today)))
+
+                if(filter === "Unsolved")
+                {
+                    if(item.solved != true && item.deadline > today)
+                        filtered.push(item);
+                    return;
+                }
+
+                if(filter === "Unrevised")
+                {
+                    if(item.solved === true && item.revised != true)
+                        filtered.push(item);
+                    return;
+                }
+
+                if(filter === "Expired")
+                {
+                    if(item.solved != true && item.deadline < today)
                     filtered.push(item);
+                }
             });
 
             return filtered;
