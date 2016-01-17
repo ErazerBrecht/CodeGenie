@@ -1,10 +1,14 @@
 ﻿(function () {
 
     var app = angular.module("userApp");
-    var newAnswer = {};
 
     var userExercisesController = function ($scope, userRestData) {
-        $scope.today = new Date();
+        init();
+
+        function init(){
+            $scope.today = new Date();
+            $scope.showFilter = "Unsolved";
+        }
 
         $scope.beautify = function (ans) {
             if(ans.result != undefined) {
