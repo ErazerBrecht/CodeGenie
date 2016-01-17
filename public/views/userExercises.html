@@ -34,16 +34,16 @@
             <div id="collapseOne" class="panel-collapse collapse in ">
                 <div class="panel-body">
                     <div class="btn-group">
-                        <label class="btn btn-default" ng-model="showUnsolved" uib-btn-checkbox>
+                        <label class="btn btn-default" ng-model="showFilter" uib-btn-radio="'Unsolved'">
                             Unsolved
                         </label>
-                        <label class="btn btn-default" ng-model="showUnrevised" uib-btn-checkbox>
+                        <label class="btn btn-default" ng-model="showFilter" uib-btn-radio="'Unrevised'">
                             Unrevised
                         </label>
-                        <label class="btn btn-default" ng-model="showExpired" uib-btn-checkbox>
+                        <label class="btn btn-default" ng-model="showFilter" uib-btn-radio="'Expired'">
                             Expired
                         </label>
-                        <label class="btn btn-default" ng-model="showRevised" uib-btn-checkbox>
+                        <label class="btn btn-default" ng-model="showFilter" uib-btn-radio="'Revised'">
                             Revised
                         </label>
                     </div>
@@ -55,7 +55,7 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-6 col-lg-4"
-         ng-repeat="exercise in exercises | userExercisesFilter: showAll: showSolved: showExpired: showRevised | orderBy: 'deadline'"
+         ng-repeat="exercise in exercises | userExercisesFilter: showAll: showFilter| orderBy: 'deadline'"
          ng-click="select(exercise)">
 
         <div class="tile" ng-class="getTileClass(exercise)">
