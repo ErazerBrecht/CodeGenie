@@ -2,15 +2,13 @@
 	
 	var app = angular.module("adminApp");
 	
-    var adminDashBoardController = function ($scope, restData) {
+    var adminDashBoardController = function ($scope, restData, Answers) {
 
-        //Get all Answers to calculate the count.
+        //Get all Answers
         //Future, use/make statistic to get the last 10 of every course
         //Now we load them all, with much Answers this can take a while
         //In the frontend we only show 10...
-        restData.getAllAnswers.query(function (data) {
-            $scope.allAnswers = data;
-        });
+        $scope.allAnswers = Answers.query();
 
         //Get all unrevised answers to calculate the count.
         //Future, use statistic to get the count
@@ -18,18 +16,7 @@
         restData.getNewAnswers.get(function (data)
         {
             $scope.new = data.count;
-            addUserNames();
         });
-
-        //Add usernames to NewAnswers
-        //Now we can show who made the last answers...
-        function addUserNames() {
-            angular.forEach($scope.allAnswers, function (answer) {
-                restData.getUserById.get({userid: answer.userid}, function (data) {
-                    answer.name = data.name;
-                });
-            });
-        }
 
         //Get statics for total answers and total answers per course
         restData.getAnswersStatistics.get(function (data)

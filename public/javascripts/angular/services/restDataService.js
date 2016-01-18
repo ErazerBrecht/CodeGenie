@@ -6,8 +6,6 @@
             //adminPanel
             getUser: $resource("/users/mine"),
             editUser: $resource("/users/edit"),
-            getAllUsers: $resource("/admin/users"),
-            getAllAnswers: $resource("/admin/answers"),
             getUserById: $resource('/admin/users/:userid', { userid: '@userid' }),
             getUserStatistic: $resource('/statistics/users/:userid', { userid: '@userid' }),
             removedUserById: $resource('/admin/users/:userid/delete', { userid: '@userid' }),
