@@ -139,7 +139,7 @@ router.post("/exercises/", isAdmin, function (req, res) {
     }
 
     newexercise.save(function (err) {
-        savehandler(res, err, "Exercise created.");
+        savehandler(res, err, "Exercise created.", newexercise);
     });
 });
 

@@ -124,9 +124,11 @@
 
                 restData.postExercise.save($scope.selected,
                     function (response) {
-                        //Reload all exercises, this is done to add new exercise with id from the server...
-                        //Otherwise this exercise can't be updated till the page is refreshed
-
+                        //Server responds with made exercise
+                        //We could use this to check if there where any changes (MITM)
+                        //But we use it for getting the correct id and deadline
+                        //We need the id for deleting and updating!
+                        Exercises.save(response.confirm);
                         $scope.selected = null;
                         $scope.message = response.data;
                     },

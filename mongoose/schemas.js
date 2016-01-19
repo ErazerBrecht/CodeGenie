@@ -81,7 +81,7 @@ exports.UserSeenModel = UserSeenModel;
 exports.ExerciseModel = ExerciseModel;
 exports.AnswerModel = AnswerModel;
 
-exports.savehandler = function (res, err, successMessage) {
+exports.savehandler = function (res, err, successMessage, confirm) {
     if (err) {
         var errorMessage = [];
         for (var field in err.errors)
@@ -90,6 +90,7 @@ exports.savehandler = function (res, err, successMessage) {
 
         return res.status(400).json(errorMessage);
     }
+    else if(confirm) return res.status(201).json({"confirm": confirm, "data": successMessage });
     else return res.status(201).json({ "data": successMessage });
 };
 

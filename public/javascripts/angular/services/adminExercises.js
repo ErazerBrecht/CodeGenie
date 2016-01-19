@@ -17,5 +17,10 @@ angular.module("adminApp").factory("Exercises", function ($resource) {
                 });
             return exercisesData;
         },
+        save: function(exercise){
+            //TODO: Also put the actual REST call here!!!
+            //@ The moment still @ restDataService
+            exercisesData.push(exercise);
+        }
     };
 });
