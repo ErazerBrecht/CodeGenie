@@ -4,13 +4,16 @@
 
     var adminUsersController = function ($scope, restData, adminRestDAL) {
 
-        ctor();
+        loadData();
 
-        function ctor() {
+        function loadData() {
+            //Loading our userdata
             adminRestDAL.getUsers().$promise.then(function (collection) {
                 $scope.users = collection;
 
                 //Add punchard data from statistics API
+                //TODO: Still not sure if I need to put this in our DAL!?!?
+
                 collection.forEach(function (user) {
                     restData.getUserStatistic.get({userid: user._id}, function (statistic) {
                         var punchCard =
@@ -42,27 +45,7 @@
             $scope.assign.users = [];
         }
 
-        $scope.checkboxUser = function (user) {
-            if (user.checkbox) {
-                $scope.assign.users.push(user._id);
-            }
-            else {
-                var index = $scope.assign.users.indexOf(user._id);
-                if (index > -1) {
-                    $scope.assign.users.splice(index, 1);
-                }
-            }
-        };
-
-        $scope.selectAll = function (user) {
-            angular.forEach($scope.filteredUsers, function (value, key) {
-                if (!value.checkbox) {
-                    value.checkbox = true;
-                    $scope.assign.users.push(value._id);
-                }
-            });
-        };
-
+        //Filter the users based on course
         $scope.courseFilter = function (data) {
             if (data.course === $scope.selectedCourse) {
                 return true;
@@ -78,29 +61,50 @@
             }
         };
 
+        //Add selected user to array
+        //Later we can send this array to back end for changes!
+        $scope.checkboxUser = function (user) {
+            if (user.checkbox) {
+                $scope.assign.users.push(user._id);
+            }
+            else {
+                var index = $scope.assign.users.indexOf(user._id);
+                if (index > -1) {
+                    $scope.assign.users.splice(index, 1);
+                }
+            }
+        };
+
+        //Select every user.
+        $scope.selectAll = function (user) {
+            angular.forEach($scope.filteredUsers, function (value, key) {
+                //Don't re-add already selected user(s)
+                if (!value.checkbox) {
+                    value.checkbox = true;
+                    $scope.assign.users.push(value._id);
+                }
+            });
+        };
+
+        //Rest call
+        //Move users to other course
+        //Will change in db
+        //Also changes in local list => No need to reload every thing!
         $scope.processForm = function () {
             //Clear error and message
             $scope.error = null;
             $scope.message = null;
 
-            restData.postAssignUser.save($scope.assign,
+            var promise = adminRestDAL.assignUsers($scope.assign);
+            promise.then(
                 function (response) {
-                    $scope.message = response.data;
-                    ctor();
+                    $scope.selected = null;
+                    $scope.message = response.message;
                 },
-                function (err) {
-                    $scope.error = err.data;
+                function (error) {
+                    $scope.error = error;
                 }
             );
-        };
-
-        $scope.cancel = function () {
-            angular.forEach($scope.users, function (value, key) {
-                value.checkbox = false;
-            });
-
-            $scope.assign = {};
-            $scope.assign.users = [];
         };
 
         $scope.remove = function (user) {
@@ -108,29 +112,30 @@
             $scope.error = null;
             $scope.message = null;
 
-            restData.removedUserById.get({userid: user._id},
+            var promise =adminRestDAL.removeUser(user._id);
+            promise.then(
                 function (response) {
-                    $scope.message = response.data;
-
-                    //Remove deleted user
-                    //We could also reload the data
-                    //But than our checkboxes values are lost
-                    var i = $scope.users.map(function (u) {
-                        return u._id
-                    }).indexOf(user._id);
-
-                    $scope.users.splice(i, 1);
-
                     //Remove user from assigned list
                     var index = $scope.assign.users.indexOf(user._id);
                     if (index > -1) {
                         $scope.assign.users.splice(index, 1);
                     }
+                    $scope.message = response.message;
                 },
-                function (err) {
-                    $scope.error = err.data;
+                function (error) {
+                    $scope.error = error;
                 }
             );
+        };
+
+        //Reset whole assign list + reset every checkbox
+        $scope.cancel = function () {
+            angular.forEach($scope.users, function (value, key) {
+                value.checkbox = false;
+            });
+
+            $scope.assign = {};
+            $scope.assign.users = [];
         };
 
     };

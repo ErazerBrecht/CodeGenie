@@ -8,8 +8,49 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
     this.getUsers = function () {
         if (!userData)
             userData = $resource("/admin/users").query();
-        console.log(userData);
         return userData;
+    }
+
+    this.assignUsers = function(assign)
+    {
+        var deferred = $q.defer();
+        $resource("/admin/users/assign").save(assign, function (success) {
+            assign.users.forEach(function (value)
+            {
+                var index = userData.map(function(e) {return e._id}).indexOf(value);
+                if(index > 0)
+                    userData[index].course = assign.course;
+            });
+            deferred.resolve({
+                message: success.data
+            });
+        }, function (error) {
+            deferred.reject(error.data);
+        });
+
+        return deferred.promise;
+    }
+
+    this.removeUser = function(userid)
+    {
+        var deferred = $q.defer();
+        $resource('/admin/users/:userid/delete', { userid: '@userid' }).get({userid: userid}, function (success) {
+            //Remove deleted user
+            //We could also reload the data
+            //But than our checkboxes values are lost (in adminUsers.html)
+            var i = userData.map(function (u) {
+                return u._id
+            }).indexOf(userid);
+            userData.splice(i, 1);
+
+            deferred.resolve({
+                message: success.data
+            });
+        }, function (error) {
+            deferred.reject(error.data);
+        });
+
+        return deferred.promise;
     }
 
     this.getExercises = function () {
