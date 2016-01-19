@@ -2,13 +2,15 @@
 
     var app = angular.module("adminApp");
 
-    var adminUsersController = function ($scope, restData, Users) {
+    var adminUsersController = function ($scope, restData, adminRestDAL) {
 
         ctor();
 
         function ctor() {
-            Users.query().$promise.then(function (collection) {
+            adminRestDAL.getUsers().$promise.then(function (collection) {
                 $scope.users = collection;
+
+                //Add punchard data from statistics API
                 collection.forEach(function (user) {
                     restData.getUserStatistic.get({userid: user._id}, function (statistic) {
                         var punchCard =

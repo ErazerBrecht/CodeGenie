@@ -3,6 +3,14 @@
  */
 angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
     var exercisesData;
+    var userData;
+
+    this.getUsers = function () {
+        if (!userData)
+            userData = $resource("/admin/users").query();
+        console.log(userData);
+        return userData;
+    }
 
     this.getExercises = function () {
         if (!exercisesData)
@@ -31,6 +39,19 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         });
 
         return deferred.promise;
+    }
 
+    this.getAnswers = function () {
+        //Always update answers!
+        //No need for manuel caching (no global variable)
+
+        var answersData = $resource("/admin/answers").query(function (data) {
+            data.forEach(function (answer) {
+                answer.name = userData.find(function (u) {
+                    return u._id === answer.userid;
+                }).name;
+            });
+        });
+        return answersData;
     }
 });

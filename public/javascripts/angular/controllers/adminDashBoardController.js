@@ -2,13 +2,13 @@
 	
 	var app = angular.module("adminApp");
 	
-    var adminDashBoardController = function ($scope, restData, Answers) {
+    var adminDashBoardController = function ($scope, restData, adminRestDAL) {
 
         //Get all Answers
         //Future, use/make statistic to get the last 10 of every course
         //Now we load them all, with much Answers this can take a while
         //In the frontend we only show 10...
-        $scope.allAnswers = Answers.query();
+        $scope.allAnswers = adminRestDAL.getAnswers();
 
         //Get all unrevised answers to calculate the count.
         //Future, use statistic to get the count
