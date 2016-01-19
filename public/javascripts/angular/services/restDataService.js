@@ -9,7 +9,6 @@
             getUserById: $resource('/admin/users/:userid', { userid: '@userid' }),
             getUserStatistic: $resource('/statistics/users/:userid', { userid: '@userid' }),
             removedUserById: $resource('/admin/users/:userid/delete', { userid: '@userid' }),
-            getExercises : $resource("/admin/exercises"),
             getNewAnswers: $resource("/statistics/answers/unrevised"),
             getAnswersStatistics: $resource("/statistics/answers"),
             getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'}),

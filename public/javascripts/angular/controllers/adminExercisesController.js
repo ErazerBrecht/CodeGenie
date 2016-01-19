@@ -2,24 +2,15 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, $location, $anchorScroll, $timeout) {
+    var adminExercisesController = function ($scope, $http, restData, Exercises) {
         //Constructor => Load all exercises
         loadData();
 
         //Get the exercises from our REST API
         function loadData() {
-            restData.getExercises.query(function (data) {
-                //Save exercises in a scope variable
-                //Now we can databind to this data!
-                $scope.exercises = data;
-
-                //Convert every field that is a date, to a data type
-                angular.forEach($scope.exercises, function (value, key) {
-                    value.deadline = new Date(value.deadline);
-                    if(value.revealdate != undefined)
-                        value.revealdate = new Date(value.revealdate);
-                });
-            });
+            //Save exercises in a scope variable
+            //Now we can databind to this data!
+            $scope.exercises = Exercises.query();
         }
 
         //Variable for getting the date of today
@@ -64,7 +55,7 @@
                 $scope.selected.questions = [];
 
             $scope.selected.questions.push(question);
-    };
+        };
 
         //Callback (onclick) Remove correct question from the selected exercise. UI aromatically updates (databindig)
         $scope.removeButton = function (id) {
@@ -132,14 +123,14 @@
             if ($scope.selected._id === undefined) {
 
                 restData.postExercise.save($scope.selected,
-                    function(response){
+                    function (response) {
                         //Reload all exercises, this is done to add new exercise with id from the server...
                         //Otherwise this exercise can't be updated till the page is refreshed
-                        loadData();
+
                         $scope.selected = null;
                         $scope.message = response.data;
                     },
-                    function(error){
+                    function (error) {
                         $scope.error = error.data;
                     }
                 );
@@ -147,11 +138,11 @@
 
             //If not selected is a existing exercise, that needs top be updated
             else {
-                restData.postUpdateExercise.save({id: $scope.selected._id},$scope.selected,
-                    function(response){
+                restData.postUpdateExercise.save({id: $scope.selected._id}, $scope.selected,
+                    function (response) {
                         $scope.message = response.data;
                     },
-                    function(error){
+                    function (error) {
                         $scope.error = error.data;
                     }
                 );
@@ -166,10 +157,10 @@
             $scope.error = null;
 
             restData.deleteExercise.get({id: deletedExercise._id}, deletedExercise,
-                function(response){
+                function (response) {
                     $scope.message = response.data;
                 },
-                function(error){
+                function (error) {
                     $scope.error = error.data;
                 }
             );
@@ -177,7 +168,7 @@
 
         //Function used by front end to determine color of tile
         $scope.getTileClass = function (exercise) {
-            if(exercise.revealed === false)
+            if (exercise.revealed === false)
                 return "grey";
             else if (exercise.deadline < new Date())
                 return "red";
@@ -186,14 +177,14 @@
 
 
         /*
-        Unused code:
-        Was used for scrolling to the Exercise form
-        Still here because maybe one day we'll need it again...
-        function scrollToExercise() {
-            $location.hash('exerciseRow');
-            $anchorScroll();
-        };
-        */
+         Unused code:
+         Was used for scrolling to the Exercise form
+         Still here because maybe one day we'll need it again...
+         function scrollToExercise() {
+         $location.hash('exerciseRow');
+         $anchorScroll();
+         };
+         */
     };
 
     app.controller("adminExercisesController", adminExercisesController);
