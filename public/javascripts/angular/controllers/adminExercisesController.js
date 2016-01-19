@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, Exercises) {
+    var adminExercisesController = function ($scope, $http, restData, adminRestDAL) {
         //Constructor => Load all exercises
         loadData();
 
@@ -10,7 +10,7 @@
         function loadData() {
             //Save exercises in a scope variable
             //Now we can databind to this data!
-            $scope.exercises = Exercises.query();
+            $scope.exercises = adminRestDAL.getExercises();
         }
 
         //Variable for getting the date of today
@@ -122,24 +122,21 @@
             //If id is undefined => selected is new exercise that needs to be added
             if ($scope.selected._id === undefined) {
 
-                restData.postExercise.save($scope.selected,
+                var promise = adminRestDAL.addExercise($scope.selected);
+                promise.then(
                     function (response) {
-                        //Server responds with made exercise
-                        //We could use this to check if there where any changes (MITM)
-                        //But we use it for getting the correct id and deadline
-                        //We need the id for deleting and updating!
-                        Exercises.save(response.confirm);
                         $scope.selected = null;
-                        $scope.message = response.data;
+                        $scope.message = response.message;
                     },
                     function (error) {
-                        $scope.error = error.data;
+                        $scope.error = error;
                     }
                 );
             }
 
             //If not selected is a existing exercise, that needs top be updated
             else {
+                //TODO: Change this to DAL
                 restData.postUpdateExercise.save({id: $scope.selected._id}, $scope.selected,
                     function (response) {
                         $scope.message = response.data;
@@ -158,6 +155,7 @@
             $scope.message = null;
             $scope.error = null;
 
+            //TODO: Change this to DAL
             restData.deleteExercise.get({id: deletedExercise._id}, deletedExercise,
                 function (response) {
                     $scope.message = response.data;

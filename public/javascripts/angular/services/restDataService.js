@@ -14,7 +14,6 @@
             getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'}),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
             updateAnswerById: $resource("/admin/answers/:id/edit/", {id: '@id'}),
-            postExercise: $resource("/admin/exercises"),
             postUpdateExercise: $resource("/admin/exercises/:id/edit/", {id: '@id'}),
             deleteExercise: $resource("/admin/exercises/:id/delete/", {id: '@id'}),
             postAssignUser: $resource("/admin/users/assign"),
