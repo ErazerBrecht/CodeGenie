@@ -24,8 +24,10 @@
 
         //Function for adding a new exercise
         $scope.add = function () {
-            $scope.selected = {};                       //Make new exercise
+            //Make new exercise
+            $scope.selected = {};
             $scope.selected.deadline = new Date();
+            $scope.selected.questions = [];
             $scope.error = null;
             $scope.message = null;
         };
@@ -48,12 +50,6 @@
         //Callback (onclick) for adding a extra question to the selected exercise
         $scope.addButton = function () {
             var question = {};
-
-            //A new exercises doesn't have this array => Make it
-            //TODO: Make it when we init a new exercise
-            if ($scope.selected.questions == null)
-                $scope.selected.questions = [];
-
             $scope.selected.questions.push(question);
         };
 
