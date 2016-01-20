@@ -9,7 +9,6 @@
             getUserStatistic: $resource('/statistics/users/:userid', { userid: '@userid' }),
             getNewAnswers: $resource("/statistics/answers/unrevised"),
             getAnswersStatistics: $resource("/statistics/answers"),
-            getAnswersByExerciseid: $resource("/admin/exercises/:id/answers", {id: '@id'}),
             getStatisticsAnswersGraph: $resource("statistics/graph"),
             updateAnswerById: $resource("/admin/answers/:id/edit/", {id: '@id'}),
             postCorrectedAnswers: $resource("/admin/answers/edit")

@@ -112,6 +112,9 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         //Always update answers!
         //No need for manuel caching (no global variable)
 
+        //Make sure we have our users loaded!
+        this.getUsers();
+
         var answersData = $resource("/admin/answers").query(function (data) {
             data.forEach(function (answer) {
                 answer.name = userData.find(function (u) {
@@ -120,5 +123,34 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
             });
         });
         return answersData;
-    }
+    };
+
+    this.getAnswersByExerciseid = function(exercise) {
+        //Make sure we have our users loaded!
+        this.getUsers();
+
+        var anwersData = $resource("/admin/exercises/:id/answers", {id: '@id'}).query({id: exercise._id}, function (data) {
+            data.forEach(function (answer) {
+                answer.name = userData.find(function (u) {
+                    return u._id === answer.userid;
+                }).name;
+
+                answer.totalPoints = 0;
+                answer.checkTotalpoints = 0;
+                answer.answers.forEach(function (a) {
+                    answer.totalPoints += parseInt(a.weight);
+                    answer.checkTotalpoints += a.received;
+
+                    if (a.received != 0) {
+                        a.checkQuestion = true;
+                        answer.totalCheck = true;
+                    }
+                    if (a.comment == undefined) {
+                        a.comment = "";
+                    }
+                });
+            });
+        });
+        return anwersData;
+    };
 });

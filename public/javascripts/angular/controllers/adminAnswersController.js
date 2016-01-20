@@ -57,43 +57,8 @@
             }
         };
 
-
-        addUserNamesToSelected = function () {
-            angular.forEach($scope.selected, function (answer) {
-                restData.getUserById.get({userid: answer.userid}, function (data) {
-                    answer.name = data.name;
-                });
-
-            });
-            calcTotalPoints();
-        };
-
-        calcTotalPoints = function(){
-            angular.forEach($scope.selected, function (answer) {
-                answer.totalPoints = 0;
-                answer.checkTotalpoints = 0;
-                angular.forEach(answer.answers, function (a) {
-                    answer.totalPoints += parseInt(a.weight);
-                    answer.checkTotalpoints += a.received;
-
-                    if(a.received != 0){
-                        a.checkQuestion = true;
-                        answer.totalCheck = true;
-                    }
-                    if(a.comment == undefined){
-                        a.comment = "";
-                    }
-                });
-            });
-
-        };
-
-
-        $scope.select = function (answer) {
-            restData.getAnswersByExerciseid.query({id: answer._id}, function (data) {
-                $scope.selected = data;
-                addUserNamesToSelected();
-            });
+        $scope.select = function (exercise) {
+            $scope.selected = adminRestDAL.getAnswersByExerciseid(exercise);
         };
 
         $scope.cancel = function () {
