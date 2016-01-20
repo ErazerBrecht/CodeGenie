@@ -31,25 +31,23 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
     };
 
     this.removeUser = function (userid) {
-        var deferred = $q.defer();
-        $resource('/admin/users/:userid/delete', {userid: '@userid'}).get({userid: userid}, function (success) {
-            //Remove deleted user
-            //We could also reload the data
-            //But than our checkboxes values are lost (in adminUsers.html)
-            var i = userData.map(function (u) {
-                return u._id
-            }).indexOf(userid);
-            userData.splice(i, 1);
+        return $resource('/admin/users/:userid/delete', {userid: '@userid'}).get({userid: userid}).$promise
+            .then(
+                function (success) {
+                    //Remove deleted user
+                    //We could also reload the data
+                    //But than our checkboxes values are lost (in adminUsers.html)
+                    var i = userData.map(function (u) {
+                        return u._id
+                    }).indexOf(userid);
+                    userData.splice(i, 1);
 
-            deferred.resolve({
-                message: success.data
-            });
-        }, function (error) {
-            deferred.reject(error.data);
-        });
-
-        return deferred.promise;
-    }
+                    return success.data
+                },
+                function (error) {
+                    throw error.data;
+                });
+    };
 
     this.getExercises = function () {
         if (!exercisesData)
@@ -65,20 +63,20 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
     }
 
     this.addExercise = function (exercise) {
-        var deferred = $q.defer();
-        $resource("/admin/exercises").save(exercise, function (success) {
-            success.confirm.deadline = new Date(success.confirm.deadline);
-            success.confirm.revealdate = new Date(success.confirm.revealdate);
-            exercisesData.push(success.confirm);
-            deferred.resolve({
-                message: success.data
-            });
-        }, function (error) {
-            deferred.reject(error.data);
-        });
+        return $resource("/admin/exercises").save(exercise).$promise
+            .then(
+                function (success) {
+                    success.confirm.deadline = new Date(success.confirm.deadline);
+                    success.confirm.revealdate = new Date(success.confirm.revealdate);
+                    exercisesData.push(success.confirm);
 
-        return deferred.promise;
-    }
+                    return success.data;
+
+                },
+                function (error) {
+                    throw error.data;
+                });
+    };
 
     this.getAnswers = function () {
         //Always update answers!

@@ -122,11 +122,11 @@
             //If id is undefined => selected is new exercise that needs to be added
             if ($scope.selected._id === undefined) {
 
-                var promise = adminRestDAL.addExercise($scope.selected);
-                promise.then(
+                adminRestDAL.addExercise($scope.selected)
+                .then(
                     function (response) {
                         $scope.selected = null;
-                        $scope.message = response.message;
+                        $scope.message = response;
                     },
                     function (error) {
                         $scope.error = error;

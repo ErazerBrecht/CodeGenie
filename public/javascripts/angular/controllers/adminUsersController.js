@@ -112,15 +112,15 @@
             $scope.error = null;
             $scope.message = null;
 
-            var promise =adminRestDAL.removeUser(user._id);
-            promise.then(
+            adminRestDAL.removeUser(user._id)
+            .then(
                 function (response) {
                     //Remove user from assigned list
                     var index = $scope.assign.users.indexOf(user._id);
                     if (index > -1) {
                         $scope.assign.users.splice(index, 1);
                     }
-                    $scope.message = response.message;
+                    $scope.message = response;
                 },
                 function (error) {
                     $scope.error = error;
