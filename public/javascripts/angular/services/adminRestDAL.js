@@ -93,6 +93,21 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
             });
     };
 
+    this.deleteExercise = function(exercise) {
+        return $resource("/admin/exercises/:id/delete/", {id: '@id'}).delete({id: exercise._id}).$promise
+            .then(
+                //This in not strictly necessary
+                //Did it because every request returns on the same way
+                //Without this our controller has to get the data of the succesmessage/error
+                //Our 'DAL' should always respond on the same way!
+                function (success) {
+                    return success.data;
+                },
+                function (error) {
+                    throw error.data;
+                });
+    };
+
     this.getAnswers = function () {
         //Always update answers!
         //No need for manuel caching (no global variable)

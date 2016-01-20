@@ -151,15 +151,15 @@
             $scope.message = null;
             $scope.error = null;
 
-            //TODO: Change this to DAL
-            restData.deleteExercise.get({id: deletedExercise._id}, deletedExercise,
-                function (response) {
-                    $scope.message = response.data;
-                },
-                function (error) {
-                    $scope.error = error.data;
-                }
-            );
+            adminRestDAL.deleteExercise(deletedExercise)
+                .then(
+                    function (response) {
+                        $scope.message = response;
+                    },
+                    function (error) {
+                        $scope.error = error;
+                    }
+                );
         };
 
         //Function used by front end to determine color of tile

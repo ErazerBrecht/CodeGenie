@@ -54,7 +54,7 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     })
 });
 
-router.get("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
+router.delete("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
     ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
