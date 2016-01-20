@@ -146,6 +146,8 @@ router.post("/exercises/", isAdmin, function (req, res) {
 router.post("/exercises/:exerciseID/edit", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
+    if(!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).json(["No questions were sent. Please make at least one question!"]);
+
     ExerciseModel.findOne({_id: exerciseID}, function (err, result) {
         if (err || !result) return res.status(400).json(["Exercise doesn't exist."]);
 

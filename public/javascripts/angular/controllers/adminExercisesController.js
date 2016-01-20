@@ -119,28 +119,28 @@
             if ($scope.selected._id === undefined) {
 
                 adminRestDAL.addExercise($scope.selected)
-                .then(
-                    function (response) {
-                        $scope.selected = null;
-                        $scope.message = response;
-                    },
-                    function (error) {
-                        $scope.error = error;
-                    }
-                );
+                    .then(
+                        function (response) {
+                            $scope.selected = null;
+                            $scope.message = response;
+                        },
+                        function (error) {
+                            $scope.error = error;
+                        }
+                    );
             }
 
-            //If not selected is a existing exercise, that needs top be updated
+            //If not selected is a existing exercise, that needs to be updated
             else {
-                //TODO: Change this to DAL
-                restData.postUpdateExercise.save({id: $scope.selected._id}, $scope.selected,
-                    function (response) {
-                        $scope.message = response.data;
-                    },
-                    function (error) {
-                        $scope.error = error.data;
-                    }
-                );
+                adminRestDAL.updateExercise($scope.selected)
+                    .then(
+                        function (response) {
+                            $scope.message = response;
+                        },
+                        function (error) {
+                            $scope.error = error;
+                        }
+                    );
 
             }
         };
