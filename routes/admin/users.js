@@ -41,7 +41,7 @@ router.get('/users/:userID/delete', isAdmin, function (req, res) {
 
         AnswerModel.find({userid: userID}).remove(function (err, affected) {
             if (err) return console.error(err);
-            savehandler(res, err, "Successfully deleted user and his " + affected.result.n + (affected.result.n == 1 ? " answer." : " answers."));
+            savehandler(res, err, "Successfully deleted user" + (affected.result.n == 0 ? ', user had no answers' :  ' and his ' + affected.result.n + (affected.result.n == 1 ? " answer." : " answers.")));
         });
     });
 });
