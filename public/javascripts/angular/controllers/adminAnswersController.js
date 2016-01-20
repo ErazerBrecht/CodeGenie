@@ -4,27 +4,16 @@
 
 
 
-    var adminAnswersController = function ($scope, restData) {
+    var adminAnswersController = function ($scope, restData, adminRestDAL) {
+        //Constructor => Load all exercises
+        loadData();
 
-        restData.getExercises.query(function (data) {
-            $scope.exercises = data;
-
-            angular.forEach($scope.exercises, function(value, key)
-            {
-                value.deadline = new Date(value.deadline);
-                value.gotAnswers = false;
-                restData.getAnswersByExerciseid.query({id: value._id}, function(data){
-                    if(data.length == 0){
-                        value.gotAnswers = false;
-                    }
-                    else{
-                        value.gotAnswers = true;
-                    }
-                });
-            });
-
-        });
-
+        //Get the exercises from our REST API
+        function loadData() {
+            //Save exercises in a scope variable
+            //Now we can databind to this data!
+            $scope.exercises = adminRestDAL.getExercises();
+        }
 
         //checkbox logic
         $scope.change = function(answer) {
