@@ -95,11 +95,11 @@
             $scope.error = null;
             $scope.message = null;
 
-            var promise = adminRestDAL.assignUsers($scope.assign);
-            promise.then(
+            adminRestDAL.assignUsers($scope.assign)
+            .then(
                 function (response) {
                     $scope.selected = null;
-                    $scope.message = response.message;
+                    $scope.message = response;
                 },
                 function (error) {
                     $scope.error = error;

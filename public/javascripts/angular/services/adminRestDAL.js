@@ -11,30 +11,28 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         return userData;
     }
 
-    this.assignUsers = function(assign)
-    {
-        var deferred = $q.defer();
-        $resource("/admin/users/assign").save(assign, function (success) {
-            assign.users.forEach(function (value)
-            {
-                var index = userData.map(function(e) {return e._id}).indexOf(value);
-                if(index > 0)
-                    userData[index].course = assign.course;
-            });
-            deferred.resolve({
-                message: success.data
-            });
-        }, function (error) {
-            deferred.reject(error.data);
-        });
+    this.assignUsers = function (assign) {
+        return $resource("/admin/users/assign").save(assign).$promise
+            .then(
+                function (success) {
+                    assign.users.forEach(function (value) {
+                        var index = userData.map(function (e) {
+                            return e._id
+                        }).indexOf(value);
+                        if (index > 0)
+                            userData[index].course = assign.course;
+                    });
 
-        return deferred.promise;
-    }
+                    return success.data
+                },
+                function (error) {
+                    throw error.data;
+                });
+    };
 
-    this.removeUser = function(userid)
-    {
+    this.removeUser = function (userid) {
         var deferred = $q.defer();
-        $resource('/admin/users/:userid/delete', { userid: '@userid' }).get({userid: userid}, function (success) {
+        $resource('/admin/users/:userid/delete', {userid: '@userid'}).get({userid: userid}, function (success) {
             //Remove deleted user
             //We could also reload the data
             //But than our checkboxes values are lost (in adminUsers.html)
