@@ -1,7 +1,7 @@
 /**
  * Created by Brecht on 19/01/2016.
  */
-angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
+angular.module("adminApp").service("adminRestDAL", function ($resource) {
     var exercisesData;
     var userData;
     var myUserData;
@@ -12,10 +12,17 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         return myUserData;
     };
 
-    this.getUsers = function () {
+    //Private function
+    //Had to do this because if need to access this function inside a callback
+    //this doesn't point to this service anymore but to the callback...
+    function getUsersAsync() {
         if (!userData)
             userData = $resource("/admin/users").query();
         return userData;
+    };
+
+    this.getUsers = function () {
+        return getUsersAsync();
     };
 
     //Will execute a post to the back end
@@ -123,44 +130,52 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         //Always update answers!
         //No need for manuel caching (no global variable)
 
-        //Make sure we have our users loaded!
-        this.getUsers();
-
         var answersData = $resource("/admin/answers").query(function (data) {
-            data.forEach(function (answer) {
-                answer.name = userData.find(function (u) {
-                    return u._id === answer.userid;
-                }).name;
-            });
+            //Make sure we have our users loaded!
+            //This is exactly why I <3 C#
+            //I could reuse my existing function (getUsers) and just put 'await' before it...
+            getUsersAsync().$promise
+                .then(
+                    function () {
+                        data.forEach(function (answer) {
+                            answer.name = userData.find(function (u) {
+                                return u._id === answer.userid;
+                            }).name;
+                        });
+                    }
+                )
         });
         return answersData;
     };
 
     this.getAnswersByExerciseid = function (exercise) {
-        //Make sure we have our users loaded!
-        this.getUsers();
-
         var anwersData = $resource("/admin/exercises/:id/answers", {id: '@id'}).query({id: exercise._id}, function (data) {
-            data.forEach(function (answer) {
-                answer.name = userData.find(function (u) {
-                    return u._id === answer.userid;
-                }).name;
+            //Make sure we have our users loaded!
+            getUsersAsync().$promise
+                .then(
+                    function () {
+                        data.forEach(function (answer) {
+                            answer.name = userData.find(function (u) {
+                                return u._id === answer.userid;
+                            }).name;
 
-                answer.totalPoints = 0;
-                answer.checkTotalpoints = 0;
-                answer.answers.forEach(function (a) {
-                    answer.totalPoints += parseInt(a.weight);
-                    answer.checkTotalpoints += a.received;
+                            answer.totalPoints = 0;
+                            answer.checkTotalpoints = 0;
+                            answer.answers.forEach(function (a) {
+                                answer.totalPoints += parseInt(a.weight);
+                                answer.checkTotalpoints += a.received;
 
-                    if (a.received != 0) {
-                        a.checkQuestion = true;
-                        answer.totalCheck = true;
+                                if (a.received != 0) {
+                                    a.checkQuestion = true;
+                                    answer.totalCheck = true;
+                                }
+                                if (a.comment == undefined) {
+                                    a.comment = "";
+                                }
+                            });
+                        });
                     }
-                    if (a.comment == undefined) {
-                        a.comment = "";
-                    }
-                });
-            });
+                )
         });
         return anwersData;
     };
