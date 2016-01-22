@@ -588,12 +588,21 @@ Gives the amount of answers that have not been revised yet and amount of unrevis
 
 ## Future
 There is still a lot to do: 
-- Color for revised exercises needs to be a lot better (it's ugly at the moment)
 - Filtering, now we load all data and filter this data. When we have much data this can take a long time. In the future this needs to be revaluate. 
+  - Add more REST endpoints for filtering on backend
 - Adding more statistics to frontend, the backend already have these (e.g. stats per exercise)
 - Add support for multiple domains (e.g. Electronics, Chemic, GDM'er). The global statistics shouldn't be totally global. The average score of someone ins Chemic shouldn't influence the average score off the students in Electronics). Multiple different admins (admin for programming, admin for electronics, admin for energymanagment, ...)
   - Make it possible to add/edit courses as an admin... 
 - Change hardcoded strings to REST data, easy to change language of frontend.
-- Bug testing, there are problably some bugs left!
+- Realtime. The last thing we added is 'caching'. We never 're ask' the users and exercises on the adminPanel...
+  - This has as advantage that everything is faster (smoother, less waiting on the backend)
+  - But the biggest disadvantage is that data could already be updated (we only implemented caching on data that doesn't change a lot).
+  - But still it would be better to work realtime! Also for the data we ask every time (e.g. answers). This should result is a much smoother webapp! E.g. answer should only be updated when there are new answers (same with the statistics)!
+  - You could solve this by using socket.io in NodeJS or you could port this project to MeteorJS!!!   
+- Bug testing, there are probably some bugs left! (There also )
 - Use case, test this project on some people.
+  - Users (students)
+  - But especially Admin (Tim Dams).
+    - There are probably some changes needed to make it more use able (faster, less clicks). Better filter for solved answers, ...
 - Add testing framework
+  - This should be a really nice feature! There are some unit testing frameworks around for NodeJS / AngularJS!!
