@@ -11,6 +11,10 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         return userData;
     }
 
+    //Will execute a post to the back end
+    //This post will change the course of the selected users
+    //It will also change it on our local list!
+    //This is better, because we don't need to reload every user now! (faster/ smoother)
     this.assignUsers = function (assign) {
         return $resource("/admin/users/assign").save(assign).$promise
             .then(
@@ -78,22 +82,22 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
                 });
     };
 
-    this.updateExercise = function(exercise) {
+    this.updateExercise = function (exercise) {
         return $resource("/admin/exercises/:id/edit/", {id: '@id'}).save({id: exercise._id}, exercise).$promise
-        .then(
-            //This in not strictly necessary
-            //Did it because every request returns on the same way
-            //Without this our controller has to get the data of the succesmessage/error
-            //Our 'DAL' should always respond on the same way!
-            function (success) {
-                return success.data;
-            },
-            function (error) {
-                throw error.data;
-            });
+            .then(
+                //This in not strictly necessary
+                //Did it because every request returns on the same way
+                //Without this our controller has to get the data of the succesmessage/error
+                //Our 'DAL' should always respond on the same way!
+                function (success) {
+                    return success.data;
+                },
+                function (error) {
+                    throw error.data;
+                });
     };
 
-    this.deleteExercise = function(exercise) {
+    this.deleteExercise = function (exercise) {
         return $resource("/admin/exercises/:id/delete/", {id: '@id'}).delete({id: exercise._id}).$promise
             .then(
                 //This in not strictly necessary
@@ -125,7 +129,7 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         return answersData;
     };
 
-    this.getAnswersByExerciseid = function(exercise) {
+    this.getAnswersByExerciseid = function (exercise) {
         //Make sure we have our users loaded!
         this.getUsers();
 
@@ -153,4 +157,19 @@ angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
         });
         return anwersData;
     };
+
+    this.updateAnswers = function (answerArray) {
+        return $resource("/admin/answers/edit").save(answerArray).$promise
+            .then(
+                //This in not strictly necessary
+                //Did it because every request returns on the same way
+                //Without this our controller has to get the data of the succesmessage/error
+                //Our 'DAL' should always respond on the same way!
+                function (success) {
+                    return success.data;
+                },
+                function (error) {
+                    throw error.data;
+                });
+    }
 });
