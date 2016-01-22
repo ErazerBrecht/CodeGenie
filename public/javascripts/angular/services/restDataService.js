@@ -2,9 +2,7 @@
     
 	var restData = function ($resource) {
         return {
-            
             //adminPanel
-            getUser: $resource("/users/mine"),
             editUser: $resource("/users/edit"),
             getUserStatistic: $resource('/statistics/users/:userid', { userid: '@userid' }),
             getNewAnswers: $resource("/statistics/answers/unrevised"),

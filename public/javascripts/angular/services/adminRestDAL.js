@@ -4,12 +4,19 @@
 angular.module("adminApp").service("adminRestDAL", function ($resource, $q) {
     var exercisesData;
     var userData;
+    var myUserData;
+
+    this.getMyself = function () {
+        if (!myUserData)
+            myUserData = $resource("/users/mine").get();
+        return myUserData;
+    };
 
     this.getUsers = function () {
         if (!userData)
             userData = $resource("/admin/users").query();
         return userData;
-    }
+    };
 
     //Will execute a post to the back end
     //This post will change the course of the selected users
