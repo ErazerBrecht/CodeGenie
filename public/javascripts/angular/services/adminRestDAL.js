@@ -12,6 +12,21 @@ angular.module("adminApp").service("adminRestDAL", function ($resource) {
         return myUserData;
     };
 
+    this.editMyself = function (userData) {
+        return $resource("/users/edit").save(userData).$promise
+            .then(
+                //This in not strictly necessary
+                //Did it because every request returns on the same way
+                //Without this our controller has to get the data of the succesmessage/error
+                //Our 'DAL' should always respond on the same way!
+                function (success) {
+                    return success.data;
+                },
+                function (error) {
+                    throw error.data;
+                });
+    };
+
     //Private function
     //Had to do this because if need to access this function inside a callback
     //this doesn't point to this service anymore but to the callback...

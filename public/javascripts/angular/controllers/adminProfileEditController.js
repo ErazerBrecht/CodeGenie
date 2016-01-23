@@ -2,19 +2,21 @@
 
     var adminApp = angular.module("adminApp");
 
-    var adminProfileEditController = function ($scope, restData) {
+    var adminProfileEditController = function ($scope, adminRestDAL) {
         $scope.editProfile = function () {
             $scope.message = null;
             $scope.error = null;
 
-            restData.editUser.save($scope.user,
-                function(response) {
-                    $scope.message = response.data;
-                },
-                function (error) {
-                    $scope.error = error.data;
-                }
-            )};
+            adminRestDAL.editMyself($scope.user)
+                .then(
+                    function (response) {
+                        $scope.message = response;
+                    },
+                    function (error) {
+                        $scope.error = error;
+                    }
+                )
+        };
     };
 
     adminApp.controller("adminProfileEditController", adminProfileEditController);
