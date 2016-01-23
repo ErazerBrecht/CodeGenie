@@ -40,6 +40,11 @@ angular.module("adminApp").service("adminRestDAL", function ($resource) {
         return getUsersAsync();
     };
 
+    this.getUserStatistic = function(uid)
+    {
+        return $resource('/statistics/users/:userid', { userid: '@userid' }).get({userid: uid});
+    };
+
     //Will execute a post to the back end
     //This post will change the course of the selected users
     //It will also change it on our local list!

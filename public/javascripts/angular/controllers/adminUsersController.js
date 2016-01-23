@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminUsersController = function ($scope, restData, adminRestDAL) {
+    var adminUsersController = function ($scope, adminRestDAL) {
 
         loadData();
 
@@ -15,29 +15,31 @@
                 //TODO: Still not sure if I need to put this in our DAL!?!?
 
                 collection.forEach(function (user) {
-                    restData.getUserStatistic.get({userid: user._id}, function (statistic) {
-                        var punchCard =
-                            [
-                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            ];
+                    adminRestDAL.getUserStatistic(user._id).$promise
+                        .then(
+                            function (statistic) {
+                                var punchCard =
+                                    [
+                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    ];
 
-                        //Calculate offset of local time with GMT time
-                        //DB sends hours back in GMT
-                        var offset = -parseInt(((new Date().getTimezoneOffset()) / 60));
+                                //Calculate offset of local time with GMT time
+                                //DB sends hours back in GMT
+                                var offset = -parseInt(((new Date().getTimezoneOffset()) / 60));
 
-                        for (var i = 0; i < statistic.activityHourly.length; i++) {
-                            if ((statistic.activityHourly[i].x + offset) > 23)
-                                offset -= 24;               //24 equals 0, 25 equals 1, ....
+                                for (var i = 0; i < statistic.activityHourly.length; i++) {
+                                    if ((statistic.activityHourly[i].x + offset) > 23)
+                                        offset -= 24;               //24 equals 0, 25 equals 1, ....
 
-                            else if ((statistic.activityHourly[i].x + offset) < 0)
-                                offset += 24;               //-1 equals 23, -2 equals 22, ....
+                                    else if ((statistic.activityHourly[i].x + offset) < 0)
+                                        offset += 24;               //-1 equals 23, -2 equals 22, ....
 
-                            punchCard[0][statistic.activityHourly[i].x + offset] = statistic.activityHourly[i].y;
-                        }
+                                    punchCard[0][statistic.activityHourly[i].x + offset] = statistic.activityHourly[i].y;
+                                }
 
-                        user.punchCardData = punchCard;
+                                user.punchCardData = punchCard;
 
-                    });
+                            });
                 });
             });
 
@@ -96,15 +98,15 @@
             $scope.message = null;
 
             adminRestDAL.assignUsers($scope.assign)
-            .then(
-                function (response) {
-                    $scope.selected = null;
-                    $scope.message = response;
-                },
-                function (error) {
-                    $scope.error = error;
-                }
-            );
+                .then(
+                    function (response) {
+                        $scope.selected = null;
+                        $scope.message = response;
+                    },
+                    function (error) {
+                        $scope.error = error;
+                    }
+                );
         };
 
         $scope.remove = function (user) {
@@ -113,19 +115,19 @@
             $scope.message = null;
 
             adminRestDAL.removeUser(user._id)
-            .then(
-                function (response) {
-                    //Remove user from assigned list
-                    var index = $scope.assign.users.indexOf(user._id);
-                    if (index > -1) {
-                        $scope.assign.users.splice(index, 1);
+                .then(
+                    function (response) {
+                        //Remove user from assigned list
+                        var index = $scope.assign.users.indexOf(user._id);
+                        if (index > -1) {
+                            $scope.assign.users.splice(index, 1);
+                        }
+                        $scope.message = response;
+                    },
+                    function (error) {
+                        $scope.error = error;
                     }
-                    $scope.message = response;
-                },
-                function (error) {
-                    $scope.error = error;
-                }
-            );
+                );
         };
 
         //Reset whole assign list + reset every checkbox
