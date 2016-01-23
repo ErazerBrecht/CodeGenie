@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, adminRestDAL) {
+    var adminExercisesController = function ($scope, $http, adminRestDAL) {
         //Constructor => Load all exercises
         loadData();
 

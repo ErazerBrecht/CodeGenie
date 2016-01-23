@@ -3,7 +3,7 @@
     var app = angular.module("adminApp");
 
 
-    var adminAnswersController = function ($scope, restData, adminRestDAL) {
+    var adminAnswersController = function ($scope, adminRestDAL) {
         //Constructor => Load all exercises
         loadData();
 

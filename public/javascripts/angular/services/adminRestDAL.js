@@ -213,5 +213,17 @@ angular.module("adminApp").service("adminRestDAL", function ($resource) {
                 function (error) {
                     throw error.data;
                 });
-    }
+    };
+
+    this.getNewAnswers = function() {
+        return $resource("/statistics/answers/unrevised").get();
+    };
+
+    this.getAnswersStatistics = function() {
+       return $resource("/statistics/answers").get();
+    };
+
+    this.getAnswersStatisticsGraph = function(){
+       return $resource("statistics/graph").get();
+    };
 });
