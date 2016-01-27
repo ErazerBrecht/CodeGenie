@@ -2,7 +2,7 @@
 
     var app = angular.module("adminApp");
 
-    var adminExercisesController = function ($scope, $http, restData, Exercises) {
+    var adminExercisesController = function ($scope, $http, adminRestDAL) {
         //Constructor => Load all exercises
         loadData();
 
@@ -10,7 +10,7 @@
         function loadData() {
             //Save exercises in a scope variable
             //Now we can databind to this data!
-            $scope.exercises = Exercises.query();
+            $scope.exercises = adminRestDAL.getExercises();
         }
 
         //Variable for getting the date of today
@@ -24,8 +24,10 @@
 
         //Function for adding a new exercise
         $scope.add = function () {
-            $scope.selected = {};                       //Make new exercise
+            //Make new exercise
+            $scope.selected = {};
             $scope.selected.deadline = new Date();
+            $scope.selected.questions = [];
             $scope.error = null;
             $scope.message = null;
         };
@@ -48,12 +50,6 @@
         //Callback (onclick) for adding a extra question to the selected exercise
         $scope.addButton = function () {
             var question = {};
-
-            //A new exercises doesn't have this array => Make it
-            //TODO: Make it when we init a new exercise
-            if ($scope.selected.questions == null)
-                $scope.selected.questions = [];
-
             $scope.selected.questions.push(question);
         };
 
@@ -122,32 +118,29 @@
             //If id is undefined => selected is new exercise that needs to be added
             if ($scope.selected._id === undefined) {
 
-                restData.postExercise.save($scope.selected,
-                    function (response) {
-                        //Server responds with made exercise
-                        //We could use this to check if there where any changes (MITM)
-                        //But we use it for getting the correct id and deadline
-                        //We need the id for deleting and updating!
-                        Exercises.save(response.confirm);
-                        $scope.selected = null;
-                        $scope.message = response.data;
-                    },
-                    function (error) {
-                        $scope.error = error.data;
-                    }
-                );
+                adminRestDAL.addExercise($scope.selected)
+                    .then(
+                        function (response) {
+                            $scope.selected = null;
+                            $scope.message = response;
+                        },
+                        function (error) {
+                            $scope.error = error;
+                        }
+                    );
             }
 
-            //If not selected is a existing exercise, that needs top be updated
+            //If not selected is a existing exercise, that needs to be updated
             else {
-                restData.postUpdateExercise.save({id: $scope.selected._id}, $scope.selected,
-                    function (response) {
-                        $scope.message = response.data;
-                    },
-                    function (error) {
-                        $scope.error = error.data;
-                    }
-                );
+                adminRestDAL.updateExercise($scope.selected)
+                    .then(
+                        function (response) {
+                            $scope.message = response;
+                        },
+                        function (error) {
+                            $scope.error = error;
+                        }
+                    );
 
             }
         };
@@ -158,14 +151,15 @@
             $scope.message = null;
             $scope.error = null;
 
-            restData.deleteExercise.get({id: deletedExercise._id}, deletedExercise,
-                function (response) {
-                    $scope.message = response.data;
-                },
-                function (error) {
-                    $scope.error = error.data;
-                }
-            );
+            adminRestDAL.deleteExercise(deletedExercise)
+                .then(
+                    function (response) {
+                        $scope.message = response;
+                    },
+                    function (error) {
+                        $scope.error = error;
+                    }
+                );
         };
 
         //Function used by front end to determine color of tile

@@ -21,11 +21,22 @@ router.get('/exercises', isAdmin, function (req, res) {
     ExerciseModel.find().lean().exec(function (err, result) {
         if (err) return console.error(err);
 
-        for (var index in result)
-            if (result.hasOwnProperty(index))
-                result[index].revealed = !(result[index].revealdate && new Date() < result[index].revealdate);
+        var promises = result.map(function (exercise) {
+            return new Promise(function (resolve, reject) {
+                exercise.revealed = !(exercise.revealdate && new Date() < exercise.revealdate);
+                exercise.solved = false;
 
-        res.status(200).json(result);
+                AnswerModel.find({exerciseid: exercise._id}).lean().exec(function (err, answerdata) {
+                    if (err) return console.error(err);
+                    if (answerdata != undefined && answerdata.length > 0) exercise.solved = true;
+                    resolve();
+                });
+            });
+        });
+
+        Promise.all(promises).then(function () {
+            res.status(200).json(result);
+        }).catch(console.error);
     })
 });
 
@@ -35,8 +46,15 @@ router.get('/exercises/:exerciseID', isAdmin, function (req, res) {
     ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
         if (err) return console.error(err);
 
-        res.status(200).json(result);
-    })
+        result.solved = false;
+
+        AnswerModel.find({exerciseid: exerciseID}).lean().exec(function (err, answerdata) {
+            if (err) return console.error(err);
+            if (answerdata != undefined && answerdata.length > 0) result.solved = true;
+
+            res.status(200).json(result);
+        });
+    });
 });
 
 router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
@@ -54,7 +72,7 @@ router.get('/exercises/:exerciseID/answers', isAdmin, function (req, res) {
     })
 });
 
-router.get("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
+router.delete("/exercises/:exerciseID/delete", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
 
     ExerciseModel.findById(exerciseID).lean().exec(function (err, result) {
@@ -145,6 +163,8 @@ router.post("/exercises/", isAdmin, function (req, res) {
 
 router.post("/exercises/:exerciseID/edit", isAdmin, function (req, res) {
     var exerciseID = req.params.exerciseID;
+
+    if (!req.body.hasOwnProperty("questions") || req.body.questions.length == 0) return res.status(400).json(["No questions were sent. Please make at least one question!"]);
 
     ExerciseModel.findOne({_id: exerciseID}, function (err, result) {
         if (err || !result) return res.status(400).json(["Exercise doesn't exist."]);
